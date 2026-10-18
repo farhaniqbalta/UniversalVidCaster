@@ -1,0 +1,26 @@
+{
+  "name": "universal-vid-caster",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @uvc/harness",
+    "build": "npm run build -w @uvc/harness",
+    "typecheck": "tsc -p packages/core && tsc -p packages/cast-web && tsc -p packages/detector && tsc -p apps/web-test-harness",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.0",
+    "@types/chromecast-caf-sender": "^1.0.11",
+    "jsdom": "^26.1.0",
+    "typescript": "~5.9.3",
+    "vite": "^6.4.1",
+    "vitest": "^5.0.5"
+  },
+  "engines": {
+    "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
+  }
+}

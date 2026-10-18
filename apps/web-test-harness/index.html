@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Universal VidCaster · Cast test</title>
+  </head>
+  <body>
+    <main>
+      <header><p class="eyebrow">UNIVERSAL VIDCASTER / M0</p><h1>Send a video to your TV.</h1>
+        <p>Desktop Chrome test harness · Google Cast Default Media Receiver</p></header>
+      <section aria-labelledby="session-heading">
+        <h2 id="session-heading">1. Connect a Cast device</h2>
+        <p>Use desktop Chrome and an existing Google Cast device on your local network.</p>
+        <button id="connect" disabled>Select device / Connect</button>
+        <button id="disconnect" disabled>Disconnect</button>
+        <p class="hint">Disconnect leaves playback running. Use Stop first to stop the video.</p>
+        <p id="status" role="status" aria-live="polite">Initializing Cast SDK…</p>
+        <p id="error" role="alert" hidden></p>
+      </section>
+      <section aria-labelledby="detection-heading">
+        <h2 id="detection-heading">Inspect page video (optional)</h2>
+        <p>This inspects this harness document only, including the sample below. It cannot inspect other tabs. Manual URL entry remains available.</p>
+        <video id="sample-video" controls preload="none" title="Flower — MDN sample">
+          <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
+        </video>
+        <button id="inspect" type="button">Inspect page videos</button>
+        <p id="detection-status" role="status"></p>
+        <div id="candidates"></div>
+        <ul id="detection-limitations"></ul>
+      </section>
+      <section aria-labelledby="media-heading">
+        <h2 id="media-heading">2. Load direct media</h2>
+        <form id="media-form">
+          <label>Media URL<input id="url" type="url" required value="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" /></label>
+          <div class="fields"><label>MIME type<input id="mime" value="video/mp4" placeholder="video/mp4" /></label>
+            <label>Title<input id="title" value="Flower — MDN sample" /></label>
+            <label>Start at (seconds)<input id="start" type="number" min="0" step="any" value="0" required /></label></div>
+          <button id="load" disabled>Load &amp; play</button>
+        </form>
+        <p class="hint">The TV fetches this URL directly. Cookie-bound, protected, and blob URLs cannot be assumed playable.</p>
+      </section>
+      <section aria-labelledby="playback-heading">
+        <h2 id="playback-heading">3. Control playback</h2>
+        <div class="controls"><button id="play" disabled>Play</button><button id="pause" disabled>Pause</button><button id="stop" disabled>Stop</button></div>
+        <form id="seek-form"><label>Seek to (seconds)<input id="position" type="number" min="0" step="any" value="0" required /></label><button id="seek" disabled>Seek</button></form>
+        <p id="playback">Receiver playback: UNKNOWN</p><p id="timeline">0 / 0 seconds</p>
+      </section>
+      <section aria-labelledby="logs-heading"><h2 id="logs-heading">Diagnostics</h2>
+        <p>Media URLs are omitted from logs. Receiver status and a visual TV check are both required for M0 acceptance.</p>
+        <pre id="logs" aria-label="Diagnostic log"></pre></section>
+      <footer>M0 proves the Cast media path only. iPhone Safari integration is a later feasibility gate.</footer>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

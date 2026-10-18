@@ -1,0 +1,1 @@
+export { GoogleCastWebAdapter } from './GoogleCastWebAdapter';

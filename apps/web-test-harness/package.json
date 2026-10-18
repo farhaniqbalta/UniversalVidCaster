@@ -1,0 +1,16 @@
+{
+  "name": "@uvc/harness",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "dependencies": {
+    "@uvc/core": "*",
+    "@uvc/cast-web": "*",
+    "@uvc/detector": "*"
+  },
+  "scripts": {
+    "dev": "vite --host localhost",
+    "build": "vite build",
+    "preview": "vite preview --host localhost"
+  }
+}

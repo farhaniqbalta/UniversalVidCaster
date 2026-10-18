@@ -1,0 +1,83 @@
+import { CastController, errorMessage } from '@uvc/core';
+import { GoogleCastWebAdapter } from '@uvc/cast-web';
+import { HtmlVideoDetector } from '@uvc/detector';
+import './styles.css';
+
+const controller = new CastController(new GoogleCastWebAdapter());
+const element = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+const input = (id: string) => element<HTMLInputElement>(id).value;
+const button = (id: string) => element<HTMLButtonElement>(id);
+const lines: string[] = [];
+function log(message: string) {
+  lines.push(`${new Date().toLocaleTimeString()}  ${message}`);
+  if (lines.length > 100) lines.shift();
+  element('logs').textContent = lines.join('\n');
+}
+function perform(label: string, operation: () => Promise<void>) {
+  // Call immediately so connect preserves the click's user activation.
+  void operation().then(() => log(`${label}: request completed`))
+    .catch(error => {
+      element('error').hidden = false;
+      element('error').textContent = errorMessage(error);
+      log(`${label}: ${errorMessage(error)}`);
+    });
+}
+let lastSummary = '';
+controller.subscribe(state => {
+  button('connect').disabled = !state.available || state.busy || state.connected;
+  button('disconnect').disabled = !state.connected || state.busy;
+  button('load').disabled = !state.connected || state.busy;
+  for (const id of ['play', 'pause', 'stop']) button(id).disabled = !state.hasMedia || state.busy;
+  button('seek').disabled = !state.hasMedia || !state.canSeek || state.busy;
+  element('error').hidden = !state.error;
+  element('error').textContent = state.error ?? '';
+  element('status').textContent = state.connected ? `Connected to ${state.deviceName ?? 'Cast device'}` :
+    state.available ? 'Cast SDK ready. Select a device to connect.' : 'Cast SDK not ready.';
+  element('playback').textContent = `Receiver playback: ${state.playback}${state.idleReason ? ` (${state.idleReason})` : ''}`;
+  element('timeline').textContent = `${(state.positionMs / 1000).toFixed(1)} / ${(state.durationMs / 1000).toFixed(1)} seconds`;
+  const summary = `${state.connected ? 'Connected' : 'Disconnected'} · ${state.playback}${state.idleReason ? ` · ${state.idleReason}` : ''}`;
+  if (summary !== lastSummary) { log(summary); lastSummary = summary; }
+});
+button('connect').onclick = () => perform('Connect', () => controller.connect());
+button('disconnect').onclick = () => perform('Disconnect', () => controller.disconnect());
+for (const action of ['play', 'pause', 'stop'] as const) {
+  button(action).onclick = () => perform(action, () => controller[action]());
+}
+element<HTMLFormElement>('media-form').onsubmit = event => {
+  event.preventDefault();
+  perform('Load', () => controller.load({ url: input('url'), mimeType: input('mime'), title: input('title'), startPositionMs: Number(input('start')) * 1000 }));
+};
+element<HTMLFormElement>('seek-form').onsubmit = event => {
+  event.preventDefault(); perform('Seek', () => controller.seek(Number(input('position')) * 1000));
+};
+window.addEventListener('pagehide', event => { if (!event.persisted) controller.dispose(); });
+perform('Initialize', () => controller.initialize());
+
+// Detection is independent of Cast initialization and never starts playback.
+button('inspect').onclick = () => {
+  const result = new HtmlVideoDetector().detect(document);
+  const container = element('candidates');
+  container.replaceChildren();
+  element('detection-status').textContent = `${result.candidates.length} possible media source(s) found. Playback compatibility is unverified.`;
+  for (const candidate of result.candidates) {
+    const row = document.createElement('div');
+    row.className = 'candidate';
+    const details = document.createElement('p');
+    details.textContent = `${candidate.url} · ${candidate.mimeType ?? 'MIME unknown — enter manually'} · ${candidate.sources.map(source => `video ${source.videoIndex + 1}: ${source.method}`).join(', ')}`;
+    const select = document.createElement('button');
+    select.type = 'button'; select.textContent = 'Use this source';
+    select.onclick = () => {
+      element<HTMLInputElement>('url').value = candidate.url;
+      element<HTMLInputElement>('mime').value = candidate.mimeType ?? '';
+      element<HTMLInputElement>('title').value = candidate.title ?? '';
+      element<HTMLInputElement>('start').value = String((candidate.startPositionMs ?? 0) / 1000);
+      element('detection-status').textContent = 'Source selected. Review the form, then use Load & play when connected.';
+    };
+    row.append(details, select); container.append(row);
+  }
+  const limitations = element('detection-limitations');
+  limitations.replaceChildren();
+  for (const reason of result.limitations) {
+    const item = document.createElement('li'); item.textContent = reason; limitations.append(item);
+  }
+};
