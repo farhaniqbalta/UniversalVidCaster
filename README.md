@@ -70,9 +70,16 @@ final platform check. Standalone native sender app development is deferred;
 Apple-required extension packaging hosts are included only as infrastructure.
 The finished product must keep device selection and controls in Safari.
 
-Next: investigate a supported macOS Safari Cast transport for discovery,
-connection, media loading, controls, and live receiver status. Successful native
-messaging or iOS SDK compilation does not establish that transport.
+Current M2 blocker: no supported macOS Safari Cast transport has been identified.
+The reviewed official iOS SDK has no macOS binary. See the
+[transport assessment](docs/M2_SAFARI_FEASIBILITY.md).
+
+Next proposed action: an isolated desktop PyChromecast feasibility experiment,
+following the [third-party source review](docs/THIRD_PARTY_CAST_REVIEW.md).
+Nothing has been installed or integrated; installation awaits explicit go-ahead.
+The experiment must prove discovery, media loading, playback controls, and live
+status before any Safari integration decision. Safari remains the interface;
+no TV installation is permitted, and iPhone checks remain deferred.
 
 Use **Inspect page videos** in the Chrome harness to discover its local flower
 video; **Use this source** fills the manual form without starting playback.

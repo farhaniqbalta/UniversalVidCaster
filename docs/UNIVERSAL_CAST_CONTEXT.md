@@ -4,6 +4,27 @@
 **Version:** 0.8  
 **Last updated:** 2026-10-18
 
+## Latest session decisions — 2026-10-19
+
+These updates supersede the earlier milestone work order where it differs:
+
+- Safari is the user-facing priority; desktop Safari testing comes first and
+  physical iPhone validation is deferred until the final platform check.
+- M0 Chrome playback and M1 normal-flow checks passed per user report. Desktop
+  Safari DOM inspection and native messaging also passed; Safari casting has not.
+- Proposed flow: Safari page -> permitted extension detection/UI -> native sender
+  bridge -> existing Google Cast receiver. No project-specific TV installation.
+- The native app cannot automatically inspect the current Safari tab; the extension
+  supplies permitted candidates and keeps selection/controls in Safari.
+- Standalone sender-app work and app handoff are deferred. Required extension
+  packaging hosts are infrastructure, not a replacement product.
+- Third-party sender library research is authorized because a supported desktop
+  Safari transport was not identified. This does not authorize installation,
+  integration, production adoption, or custom protocol implementation.
+- Proposed next test: isolated desktop PyChromecast experiment, pending explicit
+  go-ahead. See [third-party review](THIRD_PARTY_CAST_REVIEW.md) and
+  [M2 checklist](M2_IMPLEMENTATION_CHECKLIST.md).
+
 ## 1. Product vision
 
 Build a reusable system that lets a user watching a video in **Safari on

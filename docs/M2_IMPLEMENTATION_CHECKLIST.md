@@ -24,11 +24,26 @@ macOS transport.
 - [x] Verify the unsigned macOS Xcode build (Xcode 27.1, 2026-10-19).
 - [x] Run the packaging host and enable the extension in desktop Safari (user-reported working popup).
 - [x] Confirm page inspection and native request/reply in desktop Safari (user supplied flower MP4 candidate and native response).
-- [ ] Investigate a supported macOS Safari Cast sender path independently of the iOS SDK.
+- [x] Investigate current official macOS Safari sender options: no supported transport identified; inspected 4.8.6 archive has iOS-only variants.
+- [ ] Resolve the desktop transport blocker with supported integration evidence or an explicitly approved architecture change.
 - [ ] Prove discovery, connection, load, controls, and live receiver status while remaining in Safari.
 - [ ] Perform iPhone compatibility and physical checks last.
 
 Desktop setup: [probe README](../spikes/safari-google-cast/README.md).
+
+## Next action — isolated desktop transport experiment (pending)
+
+- [x] Review third-party library metadata, runtime requirements, dependencies, and selected connection source.
+- [x] Report findings before importing or installing anything.
+- [x] Document the proposed Safari/extension/native flow and the experiment boundary.
+- [ ] Obtain go-ahead to install a pinned PyChromecast version in an isolated environment outside the repository.
+- [ ] Locate Python 3.11+ and record the experiment's resolved dependencies.
+- [ ] Discover/select a real Cast device and test the MDN flower MP4 without TV-side installation.
+- [ ] Confirm receiver playback, controls, and fresh status; document device/test results.
+- [ ] Decide whether the experimental transport merits a Safari/native bridge integration design.
+
+See [third-party review](THIRD_PARTY_CAST_REVIEW.md). No library has been installed,
+imported, or integrated. The research recommendation is not production approval.
 
 ## 1. Establish architecture and prerequisites
 
@@ -122,3 +137,5 @@ setup. Safari/macOS versions were not supplied. Discovery, connection, load,
 playback controls, and live Cast receiver status remain unimplemented/unproven.
 Next: investigate a supported macOS Safari Cast sender transport without changing
 the no-TV-install or in-Safari interaction requirements.
+
+Desktop transport assessment is recorded in [feasibility findings](M2_SAFARI_FEASIBILITY.md). M2 remains incomplete; no discovery/playback implementation can yet be claimed under the current supported-integration requirement.

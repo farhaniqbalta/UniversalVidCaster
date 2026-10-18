@@ -4,6 +4,10 @@ Research started: 2026-10-18. Last summarized: 2026-10-19.
 
 ## Current result
 
+Third-party source review is complete for the initial shortlist; an isolated
+PyChromecast experiment is proposed but not started. See the
+[review and authorization boundary](THIRD_PARTY_CAST_REVIEW.md).
+
 - Desktop Safari DOM inspection and native request/reply: **user-confirmed pass**.
 - JavaScript builds, 40 tests, and TypeScript checks: **pass**.
 - Unsigned macOS/iOS probe builds: **pass**.
@@ -142,3 +146,47 @@ User supplied successful flower MP4 inspection (`video/mp4`) and the native repl
 working DOM inspection and extension/native request-reply on the tested Mac.
 It does not establish a macOS Cast transport or iPhone compatibility. The next
 open gate is a supported desktop Safari sender path for actual Cast sessions.
+
+## Desktop Cast transport assessment — 2026-10-19
+
+**Result: transport implementation is blocked pending a supported integration.**
+This is a scoped finding about the reviewed APIs/artifacts, not proof that every
+possible Safari solution is impossible.
+
+| Candidate | Evidence | Decision |
+| --- | --- | --- |
+| Official Web Sender in Safari | Google's setup requires a Cast-supported browser; integration guide describes Chrome. No supported Safari sender integration was identified. | Cannot claim a supported Safari transport. |
+| Official iOS SDK in the macOS native handler | Verified 4.8.6 dynamic XCFramework metadata contains only `ios-arm64` and `ios-arm64_x86_64-simulator`. There is no macOS binary. | Cannot link the reviewed SDK as a native macOS Safari sender. |
+| Mac Catalyst reuse | Google's current setup instructions say to exclude the SDK from the Mac target; the inspected archive has no Catalyst variant. | Not an established workaround. |
+| Existing Safari native messaging | User-confirmed request/reply transport, with no Cast session implementation. | Useful infrastructure, insufficient for casting. |
+
+Sources reviewed:
+
+- [Google Web Sender setup](https://developers.google.com/cast/docs/web_sender)
+- [Google Web Sender integration](https://developers.google.com/cast/docs/web_sender/integrate)
+- [Google iOS setup, including Mac Catalyst section](https://developers.google.com/cast/docs/ios_sender/)
+- [Official SDK package manifest](https://github.com/googlecast/google-cast-ios-sdk/blob/main/Package.swift)
+
+Artifact inspected: checksum-verified official 4.8.6 dynamic archive documented
+in the probe README. `GoogleCast.xcframework/Info.plist` reports only the two iOS
+variants above. Arm64 CPU support is not macOS platform compatibility. Likewise,
+`APP_EXTENSION_SAFE` does not change a binary's supported platform.
+
+### Next decision
+
+Keep the working Safari inspection/native-message probe and the working Chrome
+Cast harness. Before further Cast implementation, obtain evidence of a supported
+macOS Safari/native sender integration from Google or evaluate an explicitly
+approved change to the transport requirements. Do not substitute a third-party
+protocol implementation, a Chrome-dependent helper, app handoff, AirPlay, or a
+custom receiver as though it meets the current architecture.
+
+Questions for a Google Cast support inquiry (not sent):
+
+1. Is there a supported macOS Safari Web Extension sender integration?
+2. Is a macOS/Catalyst Cast sender binary available outside the reviewed 4.8.6 package?
+3. Is hosting discovery and sessions in a Safari native extension supported, and
+   what process lifetime and UI restrictions apply?
+
+No new casting code was added during this assessment. iPhone remains deferred;
+this macOS limitation does not establish whether the iOS extension runtime works.

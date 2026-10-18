@@ -4,6 +4,15 @@ This contains macOS and iOS Safari Web Extension test targets with Apple's requi
 It is not a standalone Cast sender app. **Casting is not implemented.** The
 containing host only provides Apple's generated extension setup screen.
 
+## Next step: desktop Cast transport experiment
+
+Inspection and native messaging have passed in desktop Safari. Casting remains
+unimplemented. A [third-party source review](../../docs/THIRD_PARTY_CAST_REVIEW.md)
+recommends an isolated PyChromecast experiment before designing any Safari bridge
+integration. Nothing has been installed or imported. Installation awaits explicit
+go-ahead; iPhone work remains deferred. The finished flow must keep controls in
+Safari and use the TV's existing Google Cast receiver without TV installation.
+
 ## Current test: desktop Safari on macOS
 
 The current priority is desktop Safari. iPhone testing is deferred until the last
