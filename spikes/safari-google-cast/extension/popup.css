@@ -1,0 +1,4 @@
+body { font: 14px system-ui; width: 320px; padding: 12px; color-scheme: light dark; }
+h1 { font-size: 18px; }
+button { padding: 8px; margin-bottom: 8px; }
+li { overflow-wrap: anywhere; margin-bottom: 8px; }

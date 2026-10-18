@@ -11,3 +11,10 @@ coverage/
 .idea/
 .vscode/
 
+
+# Xcode local state and output
+DerivedData/
+xcuserdata/
+*.xcuserstate
+*.xcarchive
+*.ipa

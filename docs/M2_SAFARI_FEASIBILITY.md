@@ -1,6 +1,19 @@
 # M2 Safari sender feasibility
 
-Research date: 2026-10-18. Status: **not proven on iPhone**.
+Research started: 2026-10-18. Last summarized: 2026-10-19.
+
+## Current result
+
+- Desktop Safari DOM inspection and native request/reply: **user-confirmed pass**.
+- JavaScript builds, 40 tests, and TypeScript checks: **pass**.
+- Unsigned macOS/iOS probe builds: **pass**.
+- Selected iOS Cast SDK API type-check with extension restrictions: **pass**, iOS-only compile evidence.
+- Actual Cast discovery, connection, playback, controls, and live status in Safari: **not implemented/proven**.
+- Current priority: desktop Safari first. iPhone runtime tests are deferred until the final platform check.
+- No standalone sender app work or app handoff is planned now. Generated hosts only package the extension.
+
+The dated sections below retain the research sequence; this summary and the latest
+user direction supersede earlier native-first or iPhone-first work orders.
 
 ## Findings
 
@@ -81,3 +94,51 @@ Investigate that requirement as a separate gate and report unsupported behavior
 rather than delivering app-only controls as a completed Safari product.
 
 Detailed tasks: [M2 checklist](M2_IMPLEMENTATION_CHECKLIST.md).
+
+## Update — 2026-10-19
+
+The user has deferred standalone iPhone app development and native app-first
+spikes. Prioritize the Safari extension's supported sender/bridge feasibility;
+only an Apple-required extension packaging host is within that Safari scope.
+The earlier native-first sequence is superseded. No Cast-in-Safari capability
+is established by this change in work order.
+
+Xcode is now installed at `/Applications/Xcode.app`: per-command developer
+selection reports Xcode 27.1 (27A9275), and `safari-web-extension-converter` is
+available. Global `xcode-select` still points to Command Line Tools. No global
+settings were changed, no app was generated, and no iPhone build was performed.
+
+## Compile-gate evidence — 2026-10-19
+
+The official [Google package manifest](https://github.com/googlecast/google-cast-ios-sdk/blob/main/Package.swift)
+currently specifies Cast 4.8.6. Its dynamic archive was downloaded outside the
+repository and verified against the manifest SHA-256. The device framework's
+Mach-O header has `APP_EXTENSION_SAFE`. A reproducible Swift probe type-checks
+context initialization and discovery API calls using `-application-extension`.
+These observations remove an immediate import-level blocker but do not establish
+that discovery, permissions, native UI, sessions, or lifecycle work in Safari.
+
+A minimal Safari test project now exists under `spikes/safari-google-cast/`,
+superseding the earlier no-project status. Its popup inspects permitted page DOM
+and requests a native transport diagnostic. The native handler reports casting
+as unimplemented. It does not link the Cast SDK or initialize discovery. See the
+[probe README](../spikes/safari-google-cast/README.md) for build and physical test steps.
+
+## Latest priority — desktop Safari first (2026-10-19)
+
+User deferred iPhone validation until the final platform check. The immediate
+target is Safari on this Mac. A macOS-only extension project now shares the
+existing DOM inspector and native diagnostic popup. Its native handler returns
+`castImplemented: false`; it does not use the iOS framework on macOS.
+
+The iOS SDK compile evidence above remains iOS-only. Desktop Safari Cast discovery,
+sessions, and controls require their own supported transport investigation.
+Native messaging success alone will not establish that transport.
+
+## Desktop Safari probe pass — 2026-10-19
+
+User supplied successful flower MP4 inspection (`video/mp4`) and the native reply
+`{"castImplemented":false,"version":1,"nativeMessaging":true}`. This establishes
+working DOM inspection and extension/native request-reply on the tested Mac.
+It does not establish a macOS Cast transport or iPhone compatibility. The next
+open gate is a supported desktop Safari sender path for actual Cast sessions.

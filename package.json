@@ -9,8 +9,9 @@
   "scripts": {
     "dev": "npm run dev -w @uvc/harness",
     "build": "npm run build -w @uvc/harness",
-    "typecheck": "tsc -p packages/core && tsc -p packages/cast-web && tsc -p packages/detector && tsc -p apps/web-test-harness",
-    "test": "vitest run"
+    "typecheck": "tsc -p packages/core && tsc -p packages/cast-web && tsc -p packages/detector && tsc -p apps/web-test-harness && tsc -p spikes/safari-google-cast",
+    "test": "vitest run",
+    "build:safari-probe": "node spikes/safari-google-cast/build-extension.mjs"
   },
   "devDependencies": {
     "@types/chrome": "^0.1.0",

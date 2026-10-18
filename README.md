@@ -41,7 +41,8 @@ does not establish Cast support.
 
 Use HTTPS when hosting outside localhost. Do not open `index.html` as a file or
 substitute an insecure LAN IP URL. The SDK loader checks secure-context support;
-localhost casting still needs physical Chrome/device validation.
+normal localhost Chrome playback was confirmed by the user; detailed test records
+and physical error-case validation remain open.
 
 ## Checks
 
@@ -56,24 +57,29 @@ GitHub Actions runs the same checks on pushes and pull requests using Node.js 24
 
 ## Current status and next milestone
 
-The user reports the M0 harness's normal functions working with the MDN flower
-MP4. Hardware versions, exact receiver status, and physical error-case results
-remain to be recorded in `docs/M0_PHYSICAL_VALIDATION.md`.
+As of 2026-10-19:
 
-M1 adds controller lifecycle hardening and permitted DOM video/source detection.
-Use **Inspect page videos** to inspect the harness's local flower video fixture;
-**Use this source** fills the manual form without starting playback. See the
-[detector guide](docs/MEDIA_DETECTION.md) and
-[M1 checklist](docs/M1_IMPLEMENTATION_CHECKLIST.md) for verification and limits.
-The user confirmed the updated harness’s six normal-flow manual checks, including casting without detection. M2 is the separate physical-iPhone feasibility
-gate for a Safari extension and a supported Cast sender path; Chrome success
-does not establish that path.
+| Milestone | Status |
+| --- | --- |
+| M0 — Chrome Cast media path | Normal playback and controls passed per user report with the MDN flower MP4. Detailed hardware/telemetry and physical error cases remain undocumented. |
+| M1 — Core hardening and DOM detection | Complete for planned scope: 40 tests, type checks, and web build pass; all six normal-flow manual checks passed per user report. |
+| M2 — Safari feasibility | In progress. Desktop Safari inspection and native request/reply passed per user report. Safari Cast transport is not implemented or proven. |
 
-M2 research and prerequisites are tracked in the
-[Safari feasibility findings](docs/M2_SAFARI_FEASIBILITY.md) and
-[M2 checklist](docs/M2_IMPLEMENTATION_CHECKLIST.md). Full Xcode and physical-iPhone
-validation are required. A containing-app handoff is allowed for testing only;
-the finished product must keep device selection and controls in Safari.
+Safari on macOS is the immediate target. iPhone validation is deferred until the
+final platform check. Standalone native sender app development is deferred;
+Apple-required extension packaging hosts are included only as infrastructure.
+The finished product must keep device selection and controls in Safari.
+
+Next: investigate a supported macOS Safari Cast transport for discovery,
+connection, media loading, controls, and live receiver status. Successful native
+messaging or iOS SDK compilation does not establish that transport.
+
+Use **Inspect page videos** in the Chrome harness to discover its local flower
+video; **Use this source** fills the manual form without starting playback.
+See the [detector guide](docs/MEDIA_DETECTION.md),
+[M1 checklist](docs/M1_IMPLEMENTATION_CHECKLIST.md),
+[M2 checklist](docs/M2_IMPLEMENTATION_CHECKLIST.md), and
+[Safari feasibility findings](docs/M2_SAFARI_FEASIBILITY.md).
 
 ## Layout
 
@@ -96,3 +102,15 @@ URLs and private addresses may also be inaccessible or expire.
 
 Unit tests use sender SDK doubles, not a simulated TV receiver. They cannot
 satisfy the physical M0 acceptance gate.
+
+## Safari feasibility test target
+
+A minimal Safari extension inspection/native-messaging probe is available under
+[`spikes/safari-google-cast`](spikes/safari-google-cast/README.md). Run
+`npm run build:safari-probe` before opening its Xcode project. Casting is not
+implemented there. Desktop Safari inspection/native messaging passed per user
+report; Cast runtime feasibility remains open.
+
+Current M2 priority: test the [desktop Safari probe](spikes/safari-google-cast/README.md)
+on macOS first. iPhone validation is deferred until the final platform check.
+The macOS probe tests inspection/native messaging only; Cast transport is unproven.

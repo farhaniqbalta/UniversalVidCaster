@@ -1,0 +1,593 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 110;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CE407A5930853C9F004E4B59 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE407A5830853C9F004E4B59 /* AppDelegate.swift */; };
+		CE407A5D30853C9F004E4B59 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = CE407A5B30853C9F004E4B59 /* Main.html */; };
+		CE407A5F30853C9F004E4B59 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CE407A5E30853C9F004E4B59 /* Icon.png */; };
+		CE407A6130853C9F004E4B59 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = CE407A6030853C9F004E4B59 /* Style.css */; };
+		CE407A6330853C9F004E4B59 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = CE407A6230853C9F004E4B59 /* Script.js */; };
+		CE407A6530853C9F004E4B59 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE407A6430853C9F004E4B59 /* ViewController.swift */; };
+		CE407A6830853C9F004E4B59 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE407A6630853C9F004E4B59 /* Main.storyboard */; };
+		CE407A6A30853CA0004E4B59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE407A6930853CA0004E4B59 /* Assets.xcassets */; };
+		CE407A7130853CA0004E4B59 /* UniversalVidCaster Safari Probe Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CE407A7030853CA0004E4B59 /* UniversalVidCaster Safari Probe Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CE407A7630853CA0004E4B59 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE407A7530853CA0004E4B59 /* SafariWebExtensionHandler.swift */; };
+		CE407A8730853CA0004E4B59 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = CE407A8230853CA0004E4B59 /* popup.js */; };
+		CE407A8830853CA0004E4B59 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = CE407A8330853CA0004E4B59 /* popup.html */; };
+		CE407A8930853CA0004E4B59 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = CE407A8430853CA0004E4B59 /* manifest.json */; };
+		CE407A8A30853CA0004E4B59 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = CE407A8530853CA0004E4B59 /* popup.css */; };
+		CE407A8B30853CA0004E4B59 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = CE407A8630853CA0004E4B59 /* content.js */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CE407A7230853CA0004E4B59 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE407A4D30853C9F004E4B59 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE407A6F30853CA0004E4B59;
+			remoteInfo = "UniversalVidCaster Safari Probe Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CE407A7D30853CA0004E4B59 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = PlugIns;
+			files = (
+				CE407A7130853CA0004E4B59 /* UniversalVidCaster Safari Probe Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		CE407A5530853C9F004E4B59 /* UniversalVidCaster Safari Probe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "UniversalVidCaster Safari Probe.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE407A5830853C9F004E4B59 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		CE407A5C30853C9F004E4B59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
+		CE407A5E30853C9F004E4B59 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		CE407A6030853C9F004E4B59 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		CE407A6230853C9F004E4B59 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		CE407A6430853C9F004E4B59 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		CE407A6730853C9F004E4B59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		CE407A6930853CA0004E4B59 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CE407A6B30853CA0004E4B59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE407A7030853CA0004E4B59 /* UniversalVidCaster Safari Probe Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "UniversalVidCaster Safari Probe Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE407A7530853CA0004E4B59 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		CE407A7730853CA0004E4B59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE407A8230853CA0004E4B59 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.js; path = ../../../dist/popup.js; sourceTree = "<group>"; };
+		CE407A8330853CA0004E4B59 /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = ../../../dist/popup.html; sourceTree = "<group>"; };
+		CE407A8430853CA0004E4B59 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../dist/manifest.json; sourceTree = "<group>"; };
+		CE407A8530853CA0004E4B59 /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = popup.css; path = ../../../dist/popup.css; sourceTree = "<group>"; };
+		CE407A8630853CA0004E4B59 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = ../../../dist/content.js; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CE407A5230853C9F004E4B59 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		CE407A6D30853CA0004E4B59 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CE407A4C30853C9F004E4B59 = {
+			isa = PBXGroup;
+			children = (
+				CE407A5730853C9F004E4B59 /* UniversalVidCaster Safari Probe */,
+				CE407A7430853CA0004E4B59 /* UniversalVidCaster Safari Probe Extension */,
+				CE407A5630853C9F004E4B59 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CE407A5630853C9F004E4B59 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CE407A5530853C9F004E4B59 /* UniversalVidCaster Safari Probe.app */,
+				CE407A7030853CA0004E4B59 /* UniversalVidCaster Safari Probe Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CE407A5730853C9F004E4B59 /* UniversalVidCaster Safari Probe */ = {
+			isa = PBXGroup;
+			children = (
+				CE407A5830853C9F004E4B59 /* AppDelegate.swift */,
+				CE407A6430853C9F004E4B59 /* ViewController.swift */,
+				CE407A6630853C9F004E4B59 /* Main.storyboard */,
+				CE407A6930853CA0004E4B59 /* Assets.xcassets */,
+				CE407A6B30853CA0004E4B59 /* Info.plist */,
+				CE407A5A30853C9F004E4B59 /* Resources */,
+			);
+			path = "UniversalVidCaster Safari Probe";
+			sourceTree = "<group>";
+		};
+		CE407A5A30853C9F004E4B59 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CE407A5B30853C9F004E4B59 /* Main.html */,
+				CE407A5E30853C9F004E4B59 /* Icon.png */,
+				CE407A6030853C9F004E4B59 /* Style.css */,
+				CE407A6230853C9F004E4B59 /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		CE407A7430853CA0004E4B59 /* UniversalVidCaster Safari Probe Extension */ = {
+			isa = PBXGroup;
+			children = (
+				CE407A8130853CA0004E4B59 /* Resources */,
+				CE407A7530853CA0004E4B59 /* SafariWebExtensionHandler.swift */,
+				CE407A7730853CA0004E4B59 /* Info.plist */,
+			);
+			path = "UniversalVidCaster Safari Probe Extension";
+			sourceTree = "<group>";
+		};
+		CE407A8130853CA0004E4B59 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CE407A8230853CA0004E4B59 /* popup.js */,
+				CE407A8330853CA0004E4B59 /* popup.html */,
+				CE407A8430853CA0004E4B59 /* manifest.json */,
+				CE407A8530853CA0004E4B59 /* popup.css */,
+				CE407A8630853CA0004E4B59 /* content.js */,
+			);
+			name = Resources;
+			path = "UniversalVidCaster Safari Probe Extension";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CE407A5430853C9F004E4B59 /* UniversalVidCaster Safari Probe */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE407A7E30853CA0004E4B59 /* Build configuration list for PBXNativeTarget "UniversalVidCaster Safari Probe" */;
+			buildPhases = (
+				CE407A5130853C9F004E4B59 /* Sources */,
+				CE407A5230853C9F004E4B59 /* Frameworks */,
+				CE407A5330853C9F004E4B59 /* Resources */,
+				CE407A7D30853CA0004E4B59 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CE407A7330853CA0004E4B59 /* PBXTargetDependency */,
+			);
+			name = "UniversalVidCaster Safari Probe";
+			productName = "UniversalVidCaster Safari Probe";
+			productReference = CE407A5530853C9F004E4B59 /* UniversalVidCaster Safari Probe.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CE407A6F30853CA0004E4B59 /* UniversalVidCaster Safari Probe Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE407A7A30853CA0004E4B59 /* Build configuration list for PBXNativeTarget "UniversalVidCaster Safari Probe Extension" */;
+			buildPhases = (
+				CE407A6C30853CA0004E4B59 /* Sources */,
+				CE407A6D30853CA0004E4B59 /* Frameworks */,
+				CE407A6E30853CA0004E4B59 /* Resources */,
+			);
+			buildRules = (
+			);
+			name = "UniversalVidCaster Safari Probe Extension";
+			productName = "UniversalVidCaster Safari Probe Extension";
+			productReference = CE407A7030853CA0004E4B59 /* UniversalVidCaster Safari Probe Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CE407A4D30853C9F004E4B59 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2710;
+				LastUpgradeCheck = 2710;
+				TargetAttributes = {
+					CE407A5430853C9F004E4B59 = {
+						CreatedOnToolsVersion = 27.1;
+					};
+					CE407A6F30853CA0004E4B59 = {
+						CreatedOnToolsVersion = 27.1;
+					};
+				};
+			};
+			buildConfigurationList = CE407A5030853C9F004E4B59 /* Build configuration list for PBXProject "UniversalVidCaster Safari Probe" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CE407A4C30853C9F004E4B59;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = CE407A5630853C9F004E4B59 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CE407A5430853C9F004E4B59 /* UniversalVidCaster Safari Probe */,
+				CE407A6F30853CA0004E4B59 /* UniversalVidCaster Safari Probe Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CE407A5330853C9F004E4B59 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+				CE407A5F30853C9F004E4B59 /* Icon.png in Resources */,
+				CE407A6830853C9F004E4B59 /* Main.storyboard in Resources */,
+				CE407A6330853C9F004E4B59 /* Script.js in Resources */,
+				CE407A5D30853C9F004E4B59 /* Main.html in Resources */,
+				CE407A6A30853CA0004E4B59 /* Assets.xcassets in Resources */,
+				CE407A6130853C9F004E4B59 /* Style.css in Resources */,
+			);
+		};
+		CE407A6E30853CA0004E4B59 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+				CE407A8A30853CA0004E4B59 /* popup.css in Resources */,
+				CE407A8730853CA0004E4B59 /* popup.js in Resources */,
+				CE407A8930853CA0004E4B59 /* manifest.json in Resources */,
+				CE407A8830853CA0004E4B59 /* popup.html in Resources */,
+				CE407A8B30853CA0004E4B59 /* content.js in Resources */,
+			);
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CE407A5130853C9F004E4B59 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+				CE407A6530853C9F004E4B59 /* ViewController.swift in Sources */,
+				CE407A5930853C9F004E4B59 /* AppDelegate.swift in Sources */,
+			);
+		};
+		CE407A6C30853CA0004E4B59 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+				CE407A7630853CA0004E4B59 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CE407A7330853CA0004E4B59 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE407A6F30853CA0004E4B59 /* UniversalVidCaster Safari Probe Extension */;
+			targetProxy = CE407A7230853CA0004E4B59 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		CE407A5B30853C9F004E4B59 /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CE407A5C30853C9F004E4B59 /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		CE407A6630853C9F004E4B59 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CE407A6730853C9F004E4B59 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CE407A7830853CA0004E4B59 /* Debug configuration for PBXProject "UniversalVidCaster Safari Probe" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CE407A7930853CA0004E4B59 /* Release configuration for PBXProject "UniversalVidCaster Safari Probe" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		CE407A7B30853CA0004E4B59 /* Debug configuration for PBXNativeTarget "UniversalVidCaster Safari Probe Extension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "UniversalVidCaster Safari Probe Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "UniversalVidCaster Safari Probe Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.universalvidcaster.safariprobe.Extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		CE407A7C30853CA0004E4B59 /* Release configuration for PBXNativeTarget "UniversalVidCaster Safari Probe Extension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "UniversalVidCaster Safari Probe Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "UniversalVidCaster Safari Probe Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.universalvidcaster.safariprobe.Extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		CE407A7F30853CA0004E4B59 /* Debug configuration for PBXNativeTarget "UniversalVidCaster Safari Probe" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "UniversalVidCaster Safari Probe/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "UniversalVidCaster Safari Probe";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_NSViewGestureRecognizerIsExclusive = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.universalvidcaster.safariprobe;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		CE407A8030853CA0004E4B59 /* Release configuration for PBXNativeTarget "UniversalVidCaster Safari Probe" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "UniversalVidCaster Safari Probe/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "UniversalVidCaster Safari Probe";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_NSViewGestureRecognizerIsExclusive = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.universalvidcaster.safariprobe;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CE407A5030853C9F004E4B59 /* Build configuration list for PBXProject "UniversalVidCaster Safari Probe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE407A7830853CA0004E4B59 /* Debug configuration for PBXProject "UniversalVidCaster Safari Probe" */,
+				CE407A7930853CA0004E4B59 /* Release configuration for PBXProject "UniversalVidCaster Safari Probe" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		CE407A7A30853CA0004E4B59 /* Build configuration list for PBXNativeTarget "UniversalVidCaster Safari Probe Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE407A7B30853CA0004E4B59 /* Debug configuration for PBXNativeTarget "UniversalVidCaster Safari Probe Extension" */,
+				CE407A7C30853CA0004E4B59 /* Release configuration for PBXNativeTarget "UniversalVidCaster Safari Probe Extension" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		CE407A7E30853CA0004E4B59 /* Build configuration list for PBXNativeTarget "UniversalVidCaster Safari Probe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE407A7F30853CA0004E4B59 /* Debug configuration for PBXNativeTarget "UniversalVidCaster Safari Probe" */,
+				CE407A8030853CA0004E4B59 /* Release configuration for PBXNativeTarget "UniversalVidCaster Safari Probe" */,
+			);
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CE407A4D30853C9F004E4B59 /* Project object */;
+	validationLevel = 1;
+}
