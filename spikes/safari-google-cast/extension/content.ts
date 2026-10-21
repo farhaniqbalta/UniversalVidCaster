@@ -1,5 +1,11 @@
 import { collectPageDiagnostics, redactReport } from '@uvc/detector';
+import type { DiagnosticSnapshot } from './snapshot';
 
-// Only a redacted snapshot crosses from the isolated page script to the popup.
-const report = redactReport(collectPageDiagnostics(document));
-(globalThis as typeof globalThis & { __uvcSafariProbe?: unknown }).__uvcSafariProbe = report;
+// The report is redacted. Exact HTTP(S) candidates travel separately, in memory
+// only, for the user's explicit Copy original URL action.
+const raw = collectPageDiagnostics(document);
+const snapshot: DiagnosticSnapshot = {
+  report: redactReport(raw),
+  originalCandidateUrls: raw.candidates.map(candidate => candidate.url),
+};
+(globalThis as typeof globalThis & { __uvcSafariProbe?: DiagnosticSnapshot }).__uvcSafariProbe = snapshot;

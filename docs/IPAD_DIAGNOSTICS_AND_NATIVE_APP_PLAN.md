@@ -1,6 +1,6 @@
 # Plan: Safari diagnostics, then an iPad native Cast app
 
-Date: 2026-10-21. Status: Part 1 software implemented (2026-10-21), physical iPad/target-site validation pending. Part 2 not started. See [diagnostic run guide](SAFARI_DIAGNOSTICS.md).
+Date: 2026-10-21. Status: Part 1 software implemented (2026-10-21), physical iPad/target-site validation pending. Part 2 software implemented; physical native-iPad validation pending. See [diagnostic run guide](SAFARI_DIAGNOSTICS.md).
 Target hardware: user's M1 iPad Pro, reported iPadOS 27.0.1.
 
 This plan supersedes the earlier desktop-first M2 work order. Pause macOS/Python
@@ -88,13 +88,13 @@ extension, to isolate SDK/media compatibility from Safari permissions.
 
 ### Checklist
 
-- [ ] Inspect the existing iOS packaging project and choose a dedicated iPad test target/scheme, preserving diagnostic extension behavior.
-- [ ] Verify and pin the official SDK version, deployment requirements, licenses/resources, and supported dependency setup before integration.
-- [ ] Configure Default Media Receiver, local-network usage description, required Bonjour services, and native SDK discovery UI.
-- [ ] Add public flower MP4 preset plus manual HTTP(S) URL, MIME, title, and start position input. Validate without importing Safari cookies or private headers.
-- [ ] Implement discovery/selection, connection, load, play, pause, seek, stop, disconnect, and receiver status/error display in Swift.
-- [ ] Separate connection success, accepted load, and receiver-reported PLAYING. Use a visual TV check as separate evidence.
-- [ ] Keep native SDK/session code separate from the app UI; reuse TypeScript media semantics where practical without forcing a Dart/Python/JavaScript runtime into the app.
+- [x] Inspect the existing iOS packaging project and choose a dedicated iPad test target/scheme, preserving diagnostic extension behavior.
+- [x] Verify and pin the official SDK version, deployment requirements, licenses/resources, and supported dependency setup before integration.
+- [x] Configure Default Media Receiver, local-network usage description, required Bonjour services, and native SDK discovery UI.
+- [x] Add public flower MP4 preset plus manual HTTP(S) URL, MIME, title, and start position input. Validate without importing Safari cookies or private headers.
+- [x] Implement discovery/selection, connection, load, play, pause, seek, stop, disconnect, and receiver status/error display in Swift.
+- [x] Separate connection success, accepted load, and receiver-reported PLAYING. Use a visual TV check as separate evidence.
+- [x] Keep native SDK/session code separate from the app UI; reuse TypeScript media semantics where practical without forcing a Dart/Python/JavaScript runtime into the app.
 - [ ] Test flower playback and controls on the physical iPad and Cast TV with zero TV-side installation.
 - [ ] Test permission denial/recovery, unreachable media, background/foreground transitions, and reconnection; describe observed failures without guessing DRM/authentication causes.
 - [ ] If Part 1 exposes a legitimate direct URL on the target site, test that exact unredacted URL through explicit user input. Do not reconstruct redacted URLs or persist signed URLs in test logs.
@@ -129,3 +129,7 @@ casting or silently replace Safari controls with native-app controls.
 Implementation order: report contract and export privacy -> collection and tests
 -> popup -> physical iPad diagnostics -> native SDK app -> physical native Cast
 validation -> Safari/native feasibility decision.
+
+Part 2 implementation: [native app guide](../spikes/ipad-cast/README.md), with
+six native input tests and an unsigned generic-iOS build passing. Physical
+results are tracked in [IPAD_NATIVE_CAST_RESULTS.md](IPAD_NATIVE_CAST_RESULTS.md).

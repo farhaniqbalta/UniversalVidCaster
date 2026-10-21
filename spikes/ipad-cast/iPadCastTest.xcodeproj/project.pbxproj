@@ -1,0 +1,41 @@
+// !$*UTF8*$!
+{ archiveVersion = 1; classes = {}; objectVersion = 56; objects = {
+00000000000000000000000A = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeCastApp.swift; sourceTree = "<group>"; };
+000000000000000000000014 = { isa = PBXBuildFile; fileRef = 00000000000000000000000A; };
+00000000000000000000000B = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastService.swift; sourceTree = "<group>"; };
+000000000000000000000015 = { isa = PBXBuildFile; fileRef = 00000000000000000000000B; };
+00000000000000000000000C = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaInput.swift; sourceTree = "<group>"; };
+000000000000000000000016 = { isa = PBXBuildFile; fileRef = 00000000000000000000000C; };
+00000000000000000000001E = { isa = PBXFileReference; explicitFileType = wrapper.application; path = iPadCastTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+00000000000000000000001F = { isa = PBXGroup; children = (000000000000000000000020, 000000000000000000000021); sourceTree = "<group>"; };
+000000000000000000000020 = { isa = PBXGroup; path = Sources; sourceTree = "<group>"; children = (00000000000000000000000A, 00000000000000000000000B, 00000000000000000000000C); };
+000000000000000000000021 = { isa = PBXGroup; name = Products; sourceTree = "<group>"; children = (00000000000000000000001E); };
+000000000000000000000028 = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (000000000000000000000014, 000000000000000000000015, 000000000000000000000016); runOnlyForDeploymentPostprocessing = 0; };
+000000000000000000000029 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (00000000000000000000003E); runOnlyForDeploymentPostprocessing = 0; };
+00000000000000000000002A = { isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+00000000000000000000003C = { isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/googlecast/google-cast-ios-sdk"; requirement = { kind = exactVersion; version = 4.8.6; }; };
+00000000000000000000003D = { isa = XCSwiftPackageProductDependency; package = 00000000000000000000003C; productName = GoogleCastDynamic; };
+00000000000000000000003E = { isa = PBXBuildFile; productRef = 00000000000000000000003D; };
+000000000000000000000046 = { isa = XCBuildConfiguration; name = Debug; buildSettings = { SDKROOT = iphoneos; IPHONEOS_DEPLOYMENT_TARGET = 17.0; CLANG_ENABLE_MODULES = YES; SWIFT_VERSION = 5.0; }; };
+000000000000000000000047 = { isa = XCBuildConfiguration; name = Release; buildSettings = { SDKROOT = iphoneos; IPHONEOS_DEPLOYMENT_TARGET = 17.0; CLANG_ENABLE_MODULES = YES; SWIFT_VERSION = 5.0; }; };
+000000000000000000000048 = { isa = XCBuildConfiguration; name = Debug; buildSettings = { PRODUCT_BUNDLE_IDENTIFIER = dev.universalvidcaster.ipadcasttest;
+PRODUCT_NAME = "$(TARGET_NAME)"; CODE_SIGN_STYLE = Automatic;
+GENERATE_INFOPLIST_FILE = YES; INFOPLIST_FILE = Info.plist;
+INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+TARGETED_DEVICE_FAMILY = 2; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+SUPPORTS_MACCATALYST = NO; MARKETING_VERSION = 0.1.0; CURRENT_PROJECT_VERSION = 1;
+LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+SWIFT_EMIT_LOC_STRINGS = YES; }; };
+000000000000000000000049 = { isa = XCBuildConfiguration; name = Release; buildSettings = { PRODUCT_BUNDLE_IDENTIFIER = dev.universalvidcaster.ipadcasttest;
+PRODUCT_NAME = "$(TARGET_NAME)"; CODE_SIGN_STYLE = Automatic;
+GENERATE_INFOPLIST_FILE = YES; INFOPLIST_FILE = Info.plist;
+INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+TARGETED_DEVICE_FAMILY = 2; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+SUPPORTS_MACCATALYST = NO; MARKETING_VERSION = 0.1.0; CURRENT_PROJECT_VERSION = 1;
+LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+SWIFT_EMIT_LOC_STRINGS = YES; }; };
+00000000000000000000004A = { isa = XCConfigurationList; buildConfigurations = (000000000000000000000046, 000000000000000000000047); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+00000000000000000000004B = { isa = XCConfigurationList; buildConfigurations = (000000000000000000000048, 000000000000000000000049); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+000000000000000000000050 = { isa = PBXNativeTarget; buildConfigurationList = 00000000000000000000004B; buildPhases = (000000000000000000000028, 000000000000000000000029, 00000000000000000000002A); buildRules = (); dependencies = (); name = iPadCastTest; productName = iPadCastTest; productReference = 00000000000000000000001E; productType = "com.apple.product-type.application"; packageProductDependencies = (00000000000000000000003D); };
+000000000000000000000001 = { isa = PBXProject; attributes = { LastUpgradeCheck = 1600; }; buildConfigurationList = 00000000000000000000004A; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; knownRegions = (en, Base); mainGroup = 00000000000000000000001F; productRefGroup = 000000000000000000000021; projectDirPath = ""; projectRoot = ""; targets = (000000000000000000000050); packageReferences = (00000000000000000000003C); };
+}; rootObject = 000000000000000000000001; }

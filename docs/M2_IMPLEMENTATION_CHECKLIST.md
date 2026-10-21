@@ -1,9 +1,29 @@
 # M2 implementation checklist — Safari feasibility first
 
+Current focus (2026-10-21): user prioritized the site's HLS playback before
+iPad testing. The Chrome harness has a bounded child-access diagnostic and
+explicit fMP4 format hints. The Mac manifest bridge is implemented with six
+additional rewrite tests (64 existing tests also pass). The user confirmed the
+correct video, audio, and Pause/Play/Seek worked in the TV test. Full-duration,
+expiry/recovery, and iPad validation remain pending. See [HLS site test](HLS_SITE_TEST.md).
+
+Earlier site diagnostic update (superseded by bridge result above): desktop analysis is recorded in
+[SITE_MEDIA_DIAGNOSTIC_FINDINGS.md](SITE_MEDIA_DIAGNOSTIC_FINDINGS.md). The bare
+initialization-resource request returned 401; the current direct-URL Cast path
+does not work for this site. No token values or full media URLs are retained.
+The website can be closed; continue native iPad testing with the flower baseline.
+
+
+Latest Part 2 update (2026-10-21): a dedicated native iPad Cast test app is
+implemented under `spikes/ipad-cast`, pinned to official Cast SDK 4.8.6. Unsigned
+build and six input tests pass. Signing/install and receiver playback remain
+pending. This supersedes earlier Part 2 not-started statements below. See the
+[native app guide](../spikes/ipad-cast/README.md).
+
 Part 1 update (2026-10-21): Safari diagnostics software is implemented with 53
 passing tests, type checks, web/Safari builds, and unsigned iPadOS/macOS packaging
-builds. Physical iPad/site checks are pending; Part 2 native Cast app has not
-started. See [diagnostic guide](SAFARI_DIAGNOSTICS.md) and
+builds. Physical iPad/site checks are pending; Part 2 native app software is now
+implemented with physical validation pending. See [diagnostic guide](SAFARI_DIAGNOSTICS.md) and
 [results sheet](IPAD_DIAGNOSTIC_RESULTS.md). This supersedes earlier plan-only
 status below.
 

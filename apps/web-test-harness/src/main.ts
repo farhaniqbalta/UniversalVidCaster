@@ -2,6 +2,7 @@ import { CastController, errorMessage } from '@uvc/core';
 import { GoogleCastWebAdapter } from '@uvc/cast-web';
 import { HtmlVideoDetector } from '@uvc/detector';
 import './styles.css';
+import { diagnoseHls } from './hlsDiagnostics';
 
 const controller = new CastController(new GoogleCastWebAdapter());
 const element = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -45,13 +46,26 @@ for (const action of ['play', 'pause', 'stop'] as const) {
 }
 element<HTMLFormElement>('media-form').onsubmit = event => {
   event.preventDefault();
-  perform('Load', () => controller.load({ url: input('url'), mimeType: input('mime'), title: input('title'), startPositionMs: Number(input('start')) * 1000 }));
+  perform('Load', () => controller.load({ url: input('url'), mimeType: input('mime'), title: input('title'), startPositionMs: Number(input('start')) * 1000,
+    hlsSegmentFormat: element<HTMLInputElement>('hls-fmp4').checked ? 'FMP4' : undefined }));
 };
 element<HTMLFormElement>('seek-form').onsubmit = event => {
   event.preventDefault(); perform('Seek', () => controller.seek(Number(input('position')) * 1000));
 };
 window.addEventListener('pagehide', event => { if (!event.persisted) controller.dispose(); });
 perform('Initialize', () => controller.initialize());
+
+button('check-hls').onclick = async () => {
+  button('check-hls').disabled = true;
+  element('hls-results').textContent = 'Checking playlist and listed child URLs…';
+  const render = (results: Awaited<ReturnType<typeof diagnoseHls>>) => {
+    element('hls-results').textContent = results.map(result => `${result.kind}: HTTP ${result.status ?? 'unknown'}; ${result.contentType ?? 'type unknown'}\n${result.url}\n${result.observation}`).join('\n\n');
+  };
+  try {
+    render(await diagnoseHls(input('url'), fetch, render));
+  } catch { element('hls-results').textContent = 'Enter a fresh original HTTPS media URL, without redaction placeholders or embedded credentials.'; }
+  finally { button('check-hls').disabled = false; }
+};
 
 // Detection is independent of Cast initialization and never starts playback.
 button('inspect').onclick = () => {

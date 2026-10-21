@@ -6,6 +6,13 @@
 <button id="inspect">Inspect / Refresh page</button>
 <p id="status" role="status" aria-live="polite">Start the page's video, then inspect. Only the permitted main document is inspected.</p>
 <h2>Direct media candidates</h2><ul id="candidates"></ul>
+<p>Copy original URL is for local playback testing. It includes any private query values and is separate from the redacted report.</p>
+<p id="original-status" role="status" aria-live="polite"></p>
+<div id="original-panel" hidden>
+<label for="original-url">Original URL — local use only, not part of the report</label>
+<textarea id="original-url" readonly spellcheck="false" rows="3"></textarea>
+<button id="hide-original" type="button">Hide and clear original URL</button>
+</div>
 <h2>Video observations</h2><ul id="videos"></ul>
 <h2>Limitations</h2><ul id="limitations"></ul>
 <h2>Share a diagnostic report</h2>

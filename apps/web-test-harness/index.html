@@ -37,8 +37,17 @@
             <label>Title<input id="title" value="Flower — MDN sample" /></label>
             <label>Start at (seconds)<input id="start" type="number" min="0" step="any" value="0" required /></label></div>
           <button id="load" disabled>Load &amp; play</button>
+          <label class="inline-check"><input id="hls-fmp4" type="checkbox" /> HLS uses fragmented MP4 audio/video (explicit Cast format hint)</label>
+          <p class="hint">This changes format handling only; it does not change server authorization.</p>
         </form>
         <p class="hint">The TV fetches this URL directly. Cookie-bound, protected, and blob URLs cannot be assumed playable.</p>
+      </section>
+      <section aria-labelledby="hls-heading">
+        <h2 id="hls-heading">Check HLS playlist access</h2>
+        <p>Uses the original HTTPS URL in the media form. Checks the first video/audio playlists and samples their initialization/first segments exactly as listed, without cookies, referrer, or query rewriting. No TV commands are sent.</p>
+        <button id="check-hls" type="button">Check playlist and child access</button>
+        <p>These are Chrome-origin checks, not receiver network logs. CORS/network failures do not establish an HTTP status. Displayed URLs have query values redacted.</p>
+        <pre id="hls-results" role="status" aria-live="polite"></pre>
       </section>
       <section aria-labelledby="playback-heading">
         <h2 id="playback-heading">3. Control playback</h2>

@@ -1,12 +1,15 @@
 # iPad diagnostic validation
 
-Status: pending physical test. No target-site diagnostic report collected yet.
+Status: physical iPad validation pending. Desktop Safari target-site reports
+were collected and assessed separately in
+[SITE_MEDIA_DIAGNOSTIC_FINDINGS.md](SITE_MEDIA_DIAGNOSTIC_FINDINGS.md).
+Do not treat those Mac observations as iPad results.
 
 | Field | Result |
 | --- | --- |
 | iPad | M1 iPad Pro (user-reported) |
 | iPadOS | 27.0.1 (user-reported) |
-| Diagnostic extension | 0.0.2 |
+| Diagnostic extension | 0.0.3 |
 | Date tested | Pending |
 | Signing/install and enablement | Pending |
 | Website access prompt | Pending |

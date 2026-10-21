@@ -1,8 +1,8 @@
 # Safari video diagnostics
 
 Part 1 implementation, 2026-10-21. Diagnostics do not require native messaging
-or a working Cast transport. The native iPad Cast test app is Part 2 and has
-not been implemented under the new plan.
+or a working Cast transport. Part 2 is now a separate
+[native iPad test app](../spikes/ipad-cast/README.md), with physical validation pending.
 
 ## What is collected
 
@@ -25,8 +25,10 @@ manifest download, DRM workaround, or receiver compatibility assertion.
 ## Privacy and export
 
 Raw observations exist transiently inside the isolated injected script. The
-snapshot is redacted before crossing to the popup, which redacts it again before
-rendering/export. No report is sent to native code or persisted by this feature.
+report is redacted before crossing to the popup, which redacts it again before
+rendering/export. Exact direct-candidate URLs now travel separately in memory
+for the explicit Copy original URL action. They are not stored in DOM attributes,
+report JSON, logs, native messages, or persistent storage by this feature.
 
 Query values are replaced; URL credentials/fragments and titles are removed.
 Opaque non-HTTP source contents and invalid URLs are omitted. This applies to
@@ -38,6 +40,13 @@ The report is not a playable media manifest: redacted URLs cannot be used to
 reconstruct signed links. Copy uses the clipboard only after a user click. If
 clipboard access fails, the readonly report field is selected for manual copying.
 Browser exceptions are not printed verbatim because they may contain URLs.
+
+For a local Cast test, select **Copy original URL** on the desired candidate.
+This copies the original query values and any fragment. Paste it only into the
+local test harness or native test app. If clipboard access fails, a separate
+original-URL field is revealed and selected; **Hide and clear original URL** clears
+that field. A new inspection also clears it. This field is not included in the
+redacted JSON report. Reports remain redacted even after copying an original URL.
 
 ## Build and install on the iPad
 
@@ -76,9 +85,10 @@ authorization headers, passwords, or a private signed media URL.
 
 ## Verification
 
-The TypeScript suite has 53 passing tests, including diagnostics collection,
+The TypeScript suite has 56 passing tests, including diagnostics collection,
 URL redaction/non-mutation, dynamic currentSrc snapshots, source provenance,
 non-finite values, attached media keys, iframe limits, popup permission failure,
-native-independent inspection, and clipboard fallback. Type checks and Safari
+native-independent inspection, clipboard fallback, and explicit original-URL copy
+without leaking originals into the report. Type checks and Safari
 resources/web harness builds and unsigned iPadOS/macOS packaging builds pass.
 Actual device/site results are tracked separately; automated success is not a compatibility claim.

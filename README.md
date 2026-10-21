@@ -4,6 +4,28 @@ Google Cast test harness for desktop Chrome with optional DOM media inspection. 
 intended for reuse by a later iPhone Safari extension. Safari sender feasibility
 has not been established.
 
+## Native iPad Cast test app — Part 2
+
+The [native iPad test app](spikes/ipad-cast/README.md) now builds with Google's
+pinned official Cast SDK. Open
+`spikes/ipad-cast/iPadCastTest.xcodeproj`, select your signing team and iPad, and
+run the flower preset first. Six offline native validation tests pass; physical
+iPad discovery/playback and the target website's media remain unverified.
+This is a separate native test client, not a completed Safari bridge.
+
+Target-site diagnostic outcome: the current direct-URL path does not play the
+site's HLS stream; a query-free initialization request returned 401. See
+[the findings](docs/SITE_MEDIA_DIAGNOSTIC_FINDINGS.md). No site workaround is
+implemented. Continue native iPad validation with the public flower MP4 first.
+
+## Current site investigation
+
+The user has prioritized the target site's playback before physical iPad testing.
+The Chrome harness includes **Check playlist and child access** and an explicit
+**HLS fragmented MP4** load option. Follow [the local site test](docs/HLS_SITE_TEST.md).
+The original child-resource authorization finding remains open; this update does
+not establish working site playback or change server access requirements.
+
 ## Run
 
 Install Node.js 22.12+ or 24 LTS, then run from the repository root:
@@ -60,7 +82,7 @@ GitHub Actions runs the same checks on pushes and pull requests using Node.js 24
 The extension now inspects page video metadata and provides a redacted JSON
 preview/copy action, independently of casting. See [installation and test steps](docs/SAFARI_DIAGNOSTICS.md).
 Software checks pass; physical iPad and target-site tests remain pending.
-Part 2, the native iPad Cast app, has not started.
+Part 2 software is now implemented; physical iPad validation is pending.
 
 ## Current priority — iPad diagnostics and native Cast test
 
@@ -148,3 +170,11 @@ report; Cast runtime feasibility remains open.
 Current M2 priority: test the [desktop Safari probe](spikes/safari-google-cast/README.md)
 on macOS first. iPhone validation is deferred until the final platform check.
 The macOS probe tests inspection/native messaging only; Cast transport is unproven.
+
+## Local HLS bridge test
+
+For the current site-specific playback experiment, run `npm run bridge:hls` and
+open http://localhost:8787. Follow the [Mac manifest bridge instructions](spikes/hls-manifest-bridge/README.md)
+to prepare a fresh signed master playlist for the Chrome Cast harness.
+The user confirmed correct video, audio, and Pause/Play/Seek in a Mac bridge TV
+test. Endurance, token expiry/recovery, and iPad playback remain unverified.
