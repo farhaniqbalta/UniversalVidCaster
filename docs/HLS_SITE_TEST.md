@@ -1,7 +1,21 @@
 # Local HLS site test
 
-Updated 2026-10-21. User priority: investigate site playback first; iPad tests
-are deferred. The Mac manifest bridge playback test passed per user report.
+Updated 2026-10-21. User priority: age-test the working site playback path,
+then validate iPad casting. The Mac manifest bridge playback test passed per user report.
+
+## Latest priority — subtitles deferred
+
+As of 2026-10-21, the user has deferred subtitle work. Continue video/audio aging
+tests on the Mac bridge, then physical iPad Cast validation. External subtitle
+loading, subtitle URL discovery/copying in Safari, language selection, TV display,
+and synchronization are future work and do not block these tests.
+
+The user observed separate WebVTT requests returning HTTP 200 with `text/vtt` and
+cross-origin access headers. The English and Indonesian examples used different
+video IDs/tokens, so they must not be assumed to belong to the same video. This
+is diagnostic evidence only: subtitle display/synchronization on the TV remains
+unconfirmed. Do not retain signed subtitle URLs or token values in documentation.
+For the current aging test, keep the established video/audio session unchanged.
 
 ## Physical result — 2026-10-21
 

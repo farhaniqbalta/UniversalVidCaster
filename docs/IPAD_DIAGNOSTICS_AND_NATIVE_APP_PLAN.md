@@ -3,6 +3,13 @@
 Date: 2026-10-21. Status: Part 1 software implemented (2026-10-21), physical iPad/target-site validation pending. Part 2 software implemented; physical native-iPad validation pending. See [diagnostic run guide](SAFARI_DIAGNOSTICS.md).
 Target hardware: user's M1 iPad Pro, reported iPadOS 27.0.1.
 
+Latest priority update (2026-10-21): finish the Mac HLS bridge aging test, then
+continue physical native iPad validation. Subtitle support and subtitle-specific
+Safari diagnostic enhancements are **deferred** and are not acceptance criteria
+for the initial iPad video/audio test. Start with the public flower MP4, then
+evaluate the working Mac bridge playlist on iPad. A Mac-free playlist solution
+and Safari integration remain separate design/validation gates.
+
 This plan supersedes the earlier desktop-first M2 work order. Pause macOS/Python
 bridge integration. Retain existing probes and results as supporting evidence.
 

@@ -99,6 +99,13 @@ supporting evidence, not the current implementation order.
 
 ## Current status and next milestone
 
+Latest priority update (2026-10-21): subtitle support and subtitle-specific
+Safari extension enhancements are **deferred**. Continue the Mac HLS bridge
+aging test, then physical native iPad Cast validation. Subtitles are not required
+for those gates, and TV subtitle display/synchronization has not been confirmed.
+See [HLS testing](docs/HLS_SITE_TEST.md) and the
+[iPad plan](docs/IPAD_DIAGNOSTICS_AND_NATIVE_APP_PLAN.md).
+
 As of 2026-10-19:
 
 | Milestone | Status |

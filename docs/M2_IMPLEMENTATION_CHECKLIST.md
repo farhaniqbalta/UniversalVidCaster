@@ -1,5 +1,17 @@
 # M2 implementation checklist — Safari feasibility first
 
+## Latest priority update — 2026-10-21
+
+- [ ] Complete the Mac HLS bridge aging test; record duration, stalls, seek behavior, and expiry/recovery results.
+- [ ] Continue physical native iPad Cast validation after the Mac baseline check.
+- [ ] **Deferred:** external WebVTT subtitle loading, selection, display, and synchronization validation.
+- [ ] **Deferred:** subtitle URL detection/copying enhancements in the Safari extension.
+
+Subtitle work is parked at the user's request and does not block video/audio
+reliability or iPad testing. Earlier discussions of subtitle implementation do
+not establish physical subtitle support. The video MIME-copy enhancement can be
+revisited independently; it is not required for the bridge's automatic HLS settings.
+
 Current focus (2026-10-21): user prioritized the site's HLS playback before
 iPad testing. The Chrome harness has a bounded child-access diagnostic and
 explicit fMP4 format hints. The Mac manifest bridge is implemented with six

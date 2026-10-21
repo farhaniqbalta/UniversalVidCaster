@@ -92,3 +92,12 @@ native-independent inspection, clipboard fallback, and explicit original-URL cop
 without leaking originals into the report. Type checks and Safari
 resources/web harness builds and unsigned iPadOS/macOS packaging builds pass.
 Actual device/site results are tracked separately; automated success is not a compatibility claim.
+
+## Subtitle enhancements — deferred
+
+Priority update (2026-10-21): the user has deferred subtitle work, including
+subtitle URL discovery/copying enhancements and TV subtitle validation. These
+are not required for the current Mac bridge aging test or initial native iPad
+video/audio validation. Existing video inspection and original video URL copying
+remain the baseline. Subtitle requests observed manually are not proof that an
+extension can discover them or that the TV can display them in sync.
