@@ -70,6 +70,18 @@ export class GoogleCastWebAdapter implements CastSenderAdapter {
   async load(media: MediaCandidate) {
     const session = this.session();
     const info = new chrome.cast.media.MediaInfo(media.url, media.mimeType!);
+    if (media.hlsSegmentFormat === 'FMP4') {
+      // Official sender properties are absent from the installed declaration version.
+      const hlsInfo = info as typeof info & { hlsSegmentFormat?: string; hlsVideoSegmentFormat?: string };
+      const formats = chrome.cast.media as typeof chrome.cast.media & {
+        HlsSegmentFormat?: { FMP4: string }; HlsVideoSegmentFormat?: { FMP4: string };
+      };
+      if (!formats.HlsSegmentFormat?.FMP4 || !formats.HlsVideoSegmentFormat?.FMP4) {
+        throw new Error('This Cast SDK runtime does not expose HLS fragmented MP4 format options.');
+      }
+      hlsInfo.hlsSegmentFormat = formats.HlsSegmentFormat.FMP4;
+      hlsInfo.hlsVideoSegmentFormat = formats.HlsVideoSegmentFormat.FMP4;
+    }
     const metadata = new chrome.cast.media.GenericMediaMetadata();
     metadata.title = media.title ?? 'Direct video';
     info.metadata = metadata;

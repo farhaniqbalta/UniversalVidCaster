@@ -1,5 +1,25 @@
 # Safari feasibility probe
 
+## Target-site investigation recorded
+
+See [the sanitized diagnostic findings](../../docs/SITE_MEDIA_DIAGNOSTIC_FINDINGS.md).
+The site's playlist references omit parameters that appear in successful browser
+media requests; the user received 401 for a query-free initialization request.
+Current direct-URL casting is not working for this site. No further website data
+is needed now. Native iPad tests should start with the known flower MP4.
+
+
+## Local candidate test — version 0.0.3
+
+After inspecting the website, select **Copy original URL** on the HTTPS candidate.
+Paste into the Chrome localhost harness with the candidate's MIME type and test
+Cast playback. This copies private query values for local use; do not share them.
+**Copy redacted report** remains separate and redacted. If clipboard access fails,
+the original URL is selected in a separate field with a Hide and clear button.
+Rebuild with `npm run build:safari-probe`, then rebuild/run the macOS Xcode target
+to load the update. No native app or Cast-session code was changed by this feature.
+
+
 ## Part 1 diagnostics implemented — 2026-10-21
 
 The popup is now **Video diagnostics**, version 0.0.2. It collects page video
@@ -20,8 +40,8 @@ The main target is M1 iPad Pro, reported iPadOS 27.0.1. The
 desktop-first work order: Safari diagnostics first, iPad native Cast test app
 second. Mac/Python bridge integration is paused. Earlier results remain valid
 within their tested platform. End-to-end casting while staying in Safari is
-still unproven. This update is planning only; Part 1 software is now implemented; Part 2 and physical iPad/site validation
-remain pending.
+still unproven. Part 1 diagnostics and Part 2 native app software are now implemented. Physical
+iPad/site validation remains pending. See [the native app guide](../ipad-cast/README.md).
 
 
 This contains macOS and iOS Safari Web Extension test targets with Apple's required packaging hosts.

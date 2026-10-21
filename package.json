@@ -7,6 +7,8 @@
     "apps/*"
   ],
   "scripts": {
+    "bridge:hls": "node spikes/hls-manifest-bridge/server.mjs",
+    "test:bridge": "node --test spikes/hls-manifest-bridge/playlist.test.mjs",
     "dev": "npm run dev -w @uvc/harness",
     "build": "npm run build -w @uvc/harness",
     "typecheck": "tsc -p packages/core && tsc -p packages/cast-web && tsc -p packages/detector && tsc -p apps/web-test-harness && tsc -p spikes/safari-google-cast",

@@ -1,9 +1,20 @@
 # M2 Safari sender feasibility
 
+## Latest site diagnostic outcome — 2026-10-21
+
+Desktop Safari inspection established HLS master/media playlists and browser
+requests carrying query parameters absent from child-resource playlist URLs.
+A query-free initialization request returned 401 per user report. The site is
+authorization-dependent and not working with the current direct-URL Cast path;
+DRM and the exact receiver failure remain unproven. See the
+[sanitized findings](SITE_MEDIA_DIAGNOSTIC_FINDINGS.md). No more website data is
+needed for this diagnostic step. Next: native iPad public flower-MP4 validation.
+
+
 Part 1 update (2026-10-21): Safari diagnostics software is implemented with 53
 passing tests, type checks, web/Safari builds, and unsigned iPadOS/macOS packaging
-builds. Physical iPad/site checks are pending; Part 2 native Cast app has not
-started. See [diagnostic guide](SAFARI_DIAGNOSTICS.md) and
+builds. Physical iPad/site checks are pending; Part 2 native app software is now
+implemented with physical validation pending. See [diagnostic guide](SAFARI_DIAGNOSTICS.md) and
 [results sheet](IPAD_DIAGNOSTIC_RESULTS.md). This supersedes earlier plan-only
 status below.
 
@@ -14,11 +25,11 @@ The main target is M1 iPad Pro, reported iPadOS 27.0.1. The
 desktop-first work order: Safari diagnostics first, iPad native Cast test app
 second. Mac/Python bridge integration is paused. Earlier results remain valid
 within their tested platform. End-to-end casting while staying in Safari is
-still unproven. This update is planning only; no new app or diagnostic code has
-been implemented under this plan yet.
+still unproven. Diagnostics and native iPad test app software have since been implemented.
+Physical native iPad validation remains pending.
 
 
-Research started: 2026-10-18. Last summarized: 2026-10-19.
+Research started: 2026-10-18. Last summarized: 2026-10-21.
 
 ## Current result
 

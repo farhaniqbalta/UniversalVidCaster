@@ -42,6 +42,7 @@ function setup() {
   } });
   vi.stubGlobal('chrome', { cast: { AutoJoinPolicy: { ORIGIN_SCOPED: 'origin' }, media: {
     DEFAULT_MEDIA_RECEIVER_APP_ID: 'DEFAULT', MediaInfo, LoadRequest,
+    HlsSegmentFormat: { FMP4: 'fmp4' }, HlsVideoSegmentFormat: { FMP4: 'fmp4' },
     GenericMediaMetadata: Request, PlayRequest: Request, PauseRequest: Request, StopRequest: Request, SeekRequest: Request,
   } } });
   const adapter = new GoogleCastWebAdapter(async () => {});
@@ -52,6 +53,13 @@ function setup() {
 }
 afterEach(() => vi.unstubAllGlobals());
 describe('GoogleCastWebAdapter', () => {
+  it('sends explicit audio/video format hints for an HLS fragmented MP4 request', async () => {
+    const test = setup(); await test.adapter.initialize(); await test.adapter.connect();
+    await test.adapter.load({ url: 'https://example.test/master.json', mimeType: 'application/vnd.apple.mpegurl', hlsSegmentFormat: 'FMP4' });
+    expect(test.session.loadMedia).toHaveBeenCalledWith(expect.objectContaining({
+      media: expect.objectContaining({ hlsSegmentFormat: 'fmp4', hlsVideoSegmentFormat: 'fmp4' }),
+    }));
+  });
   it('uses SDK chooser and maps receiver state including external disconnect', async () => {
     const test = setup(); await test.adapter.initialize();
     expect(test.state()).toMatchObject({ connected: false, playback: 'UNKNOWN' });

@@ -9,10 +9,12 @@ p, footer { color: #aebbd0; }
 .eyebrow { color: #72dfcc; font-size: .75rem; letter-spacing: .15em; }
 section { background: #131e30; border: 1px solid #2b3b52; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
 label { display: grid; gap: 6px; font-size: .875rem; margin-bottom: 16px; }
-input { width: 100%; border: 1px solid #4c5e79; background: #0b1220; color: #e2e8f0; border-radius: 6px; padding: 10px; font: inherit; }
+input, select { width: 100%; border: 1px solid #4c5e79; background: #0b1220; color: #e2e8f0; border-radius: 6px; padding: 10px; font: inherit; }
 button { font: inherit; font-weight: 600; border: 1px solid #72dfcc; border-radius: 6px; padding: 9px 16px; margin: 0 8px 8px 0; background: #72dfcc; color: #082923; cursor: pointer; }
 button:disabled { opacity: .4; cursor: default; }
 :focus-visible { outline: 3px solid #b9a5ff; outline-offset: 3px; }
+.inline-check { display: flex; align-items: center; gap: 10px; }
+.inline-check input { width: auto; }
 .fields { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .hint, footer { font-size: .8rem; }
 #error { background: #491f2b; color: #ffd5de; border-radius: 6px; padding: 12px; overflow-wrap: anywhere; }

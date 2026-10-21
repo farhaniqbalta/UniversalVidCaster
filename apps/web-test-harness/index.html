@@ -30,15 +30,31 @@
         <ul id="detection-limitations"></ul>
       </section>
       <section aria-labelledby="media-heading">
-        <h2 id="media-heading">2. Load direct media</h2>
+        <h2 id="media-heading">2. Load media</h2>
         <form id="media-form">
+          <label>Playback mode<select id="media-mode"><option value="direct">Direct media</option><option value="mac-hls-bridge">Mac HLS bridge</option></select></label>
           <label>Media URL<input id="url" type="url" required value="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" /></label>
+          <div id="bridge-options" hidden>
+            <p>Paste the original master URL with t and pm above. HLS MIME and fragmented MP4 are set automatically. The Mac prepares the playlist and sends it to your connected TV.</p>
+            <label>Mac address on the TV’s network<select id="bridge-address"></select></label>
+            <button id="refresh-bridge" type="button">Retry network addresses</button>
+            <p id="bridge-status" role="status" aria-live="polite"></p>
+          </div>
           <div class="fields"><label>MIME type<input id="mime" value="video/mp4" placeholder="video/mp4" /></label>
             <label>Title<input id="title" value="Flower — MDN sample" /></label>
             <label>Start at (seconds)<input id="start" type="number" min="0" step="any" value="0" required /></label></div>
           <button id="load" disabled>Load &amp; play</button>
+          <label class="inline-check"><input id="hls-fmp4" type="checkbox" /> HLS uses fragmented MP4 audio/video (explicit Cast format hint)</label>
+          <p class="hint">This changes format handling only; it does not change server authorization.</p>
         </form>
         <p class="hint">The TV fetches this URL directly. Cookie-bound, protected, and blob URLs cannot be assumed playable.</p>
+      </section>
+      <section aria-labelledby="hls-heading">
+        <h2 id="hls-heading">Check HLS playlist access</h2>
+        <p>Uses the original HTTPS URL in the media form. Checks the first video/audio playlists and samples their initialization/first segments exactly as listed, without cookies, referrer, or query rewriting. No TV commands are sent.</p>
+        <button id="check-hls" type="button">Check playlist and child access</button>
+        <p>These are Chrome-origin checks, not receiver network logs. CORS/network failures do not establish an HTTP status. Displayed URLs have query values redacted.</p>
+        <pre id="hls-results" role="status" aria-live="polite"></pre>
       </section>
       <section aria-labelledby="playback-heading">
         <h2 id="playback-heading">3. Control playback</h2>
