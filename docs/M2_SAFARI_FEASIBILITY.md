@@ -1,11 +1,31 @@
 # M2 Safari sender feasibility
 
+Part 1 update (2026-10-21): Safari diagnostics software is implemented with 53
+passing tests, type checks, web/Safari builds, and unsigned iPadOS/macOS packaging
+builds. Physical iPad/site checks are pending; Part 2 native Cast app has not
+started. See [diagnostic guide](SAFARI_DIAGNOSTICS.md) and
+[results sheet](IPAD_DIAGNOSTIC_RESULTS.md). This supersedes earlier plan-only
+status below.
+
+## Priority update — 2026-10-21
+
+The main target is M1 iPad Pro, reported iPadOS 27.0.1. The
+[new two-part plan](IPAD_DIAGNOSTICS_AND_NATIVE_APP_PLAN.md) supersedes the earlier
+desktop-first work order: Safari diagnostics first, iPad native Cast test app
+second. Mac/Python bridge integration is paused. Earlier results remain valid
+within their tested platform. End-to-end casting while staying in Safari is
+still unproven. This update is planning only; no new app or diagnostic code has
+been implemented under this plan yet.
+
+
 Research started: 2026-10-18. Last summarized: 2026-10-19.
 
 ## Current result
 
 Third-party source review is complete for the initial shortlist; an isolated
-PyChromecast experiment is proposed but not started. See the
+PyChromecast experiment was authorized and run: receiver playback/control states
+were observed and the user confirmed visible TV playback on 2026-10-19. An
+SSL write warning remains unresolved. No Safari transport integration has been added. See the
 [review and authorization boundary](THIRD_PARTY_CAST_REVIEW.md).
 
 - Desktop Safari DOM inspection and native request/reply: **user-confirmed pass**.
@@ -190,3 +210,12 @@ Questions for a Google Cast support inquiry (not sent):
 
 No new casting code was added during this assessment. iPhone remains deferred;
 this macOS limitation does not establish whether the iOS extension runtime works.
+
+## Bounded reliability follow-up — 2026-10-19
+
+The isolated PyChromecast probe completed three load/pause/seek/resume/stop cycles
+with fresh receiver snapshots and zero captured warnings. Three offline
+freshness tests pass. The earlier SSL warning was not reproduced; no root cause
+or library fix is established. This permits further design evaluation, not a
+claim of production or Safari lifecycle reliability. See the
+[experiment record](../spikes/safari-google-cast/transport-experiment/README.md).

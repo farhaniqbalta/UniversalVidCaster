@@ -1,3 +1,3 @@
 import { defineConfig } from 'vitest/config';
-export default defineConfig({ test: { environment: 'jsdom', include: ['packages/**/*.test.ts', 'apps/**/*.test.ts'] } });
+export default defineConfig({ test: { environment: 'jsdom', include: ['packages/**/*.test.ts', 'apps/**/*.test.ts', 'spikes/safari-google-cast/extension/**/*.test.ts'] } });
 

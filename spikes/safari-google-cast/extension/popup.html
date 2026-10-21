@@ -1,10 +1,18 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>Safari Cast feasibility</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Safari video diagnostics</title>
 <link rel="stylesheet" href="popup.css"></head><body>
-<h1>Safari feasibility probe</h1>
-<p>Tests page inspection and native messaging. Cast discovery, connection, and playback are not implemented.</p>
-<button id="inspect">Inspect this page</button>
-<button id="native">Check native bridge</button>
-<p id="status" role="status" aria-live="polite"></p>
-<ul id="candidates"></ul><ul id="limitations"></ul>
+<h1>Video diagnostics</h1>
+<p>Inspect video information exposed by this page. No casting or protected-stream extraction is performed.</p>
+<button id="inspect">Inspect / Refresh page</button>
+<p id="status" role="status" aria-live="polite">Start the page's video, then inspect. Only the permitted main document is inspected.</p>
+<h2>Direct media candidates</h2><ul id="candidates"></ul>
+<h2>Video observations</h2><ul id="videos"></ul>
+<h2>Limitations</h2><ul id="limitations"></ul>
+<h2>Share a diagnostic report</h2>
+<p>Query values, fragments, URL credentials, and titles are removed from the report. Hostnames, paths, and query names remain and can still be identifying. Review before sharing. Redacted URLs are not usable playback links.</p>
+<label for="report">Redacted JSON report</label>
+<textarea id="report" readonly spellcheck="false" rows="10" placeholder="Inspect a page to generate a report."></textarea>
+<button id="copy" disabled>Copy redacted report</button>
+<p id="copy-status" role="status" aria-live="polite"></p>
+<details><summary>Native transport diagnostic (optional)</summary><p>This check is separate from page inspection.</p><button id="native">Check native bridge</button></details>
 <script src="popup.js"></script></body></html>

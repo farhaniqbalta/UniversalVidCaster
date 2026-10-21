@@ -1,15 +1,19 @@
 # Third-party Cast sender review
 
-Reviewed: 2026-10-19. Status: source/metadata review only. No candidate installed,
-imported into the project, built, or tested against a TV. No library selected
-for production. This is not a complete dependency, security, or legal audit.
+Reviewed: 2026-10-19. An isolated desktop PyChromecast experiment was subsequently
+authorized and run. No candidate is integrated into Safari or selected for
+production. This is not a complete dependency, security, or legal audit.
+
+Current experiment results: discovery, connection, and receiver-reported playback
+controls worked, and visible TV playback was confirmed by the user on
+2026-10-19. An SSL write warning remains unresolved. See the [experiment record](../spikes/safari-google-cast/transport-experiment/README.md).
 
 ## Why investigate
 
 Desktop Safari page inspection and native messaging work. A supported macOS
 Cast transport has not been identified in the reviewed official SDKs. Third-party
-review was authorized after that finding; installation and integration remain
-pending. iPhone work is deferred until the final platform check.
+review was authorized after that finding. Isolated installation/testing was
+subsequently authorized; Safari integration remains pending. iPhone work is deferred until the final platform check.
 
 Proposed product flow:
 
@@ -55,7 +59,7 @@ traffic is plaintext and do not establish whether all Cast-specific authenticati
 mechanisms are present or absent. Device identity verification and local-network
 threat exposure require deeper assessment before production use.
 
-## Proposed next experiment — not started
+## Experiment plan (initial run performed; further validation remains)
 
 1. Obtain explicit go-ahead to install PyChromecast in an isolated environment
    outside the repository. First locate a suitable Python 3.11+ interpreter.
@@ -78,8 +82,8 @@ lifetime are separate unresolved design questions.
 
 ## Authorization boundary
 
-The user requested findings before importing anything and has now requested
-these documentation updates first. No installation or integration is authorized
-by this documentation change. The official-SDK requirement is relaxed for
-research only; adopting an unofficial implementation requires an explicit scope
-decision. No custom Cast protocol is being implemented by this project.
+The user subsequently authorized the isolated experiment and selected the target
+Cast TV. The library/runtime and downloads remain outside Git. Only our experiment
+script, dependency snapshot, and documentation are added to the repository.
+Safari integration, production adoption, custom protocol implementation, and an
+ongoing helper/service remain separate decisions. No custom TV software is used.

@@ -18,3 +18,8 @@ xcuserdata/
 *.xcuserstate
 *.xcarchive
 *.ipa
+
+# Python experiment output
+__pycache__/
+*.py[cod]
+.venv/

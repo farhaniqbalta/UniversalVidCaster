@@ -1,7 +1,5 @@
-import { HtmlVideoDetector } from '@uvc/detector';
+import { collectPageDiagnostics, redactReport } from '@uvc/detector';
 
-// Injected only on an explicit click using activeTab permission.
-// The popup can repeat inspection without accumulating message listeners.
-const result = new HtmlVideoDetector().detect(document);
-// Return a JSON snapshot to scripting.executeScript via a separate read function.
-(globalThis as typeof globalThis & { __uvcSafariProbe?: unknown }).__uvcSafariProbe = result;
+// Only a redacted snapshot crosses from the isolated page script to the popup.
+const report = redactReport(collectPageDiagnostics(document));
+(globalThis as typeof globalThis & { __uvcSafariProbe?: unknown }).__uvcSafariProbe = report;

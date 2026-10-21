@@ -1,5 +1,29 @@
 # Safari feasibility probe
 
+## Part 1 diagnostics implemented — 2026-10-21
+
+The popup is now **Video diagnostics**, version 0.0.2. It collects page video
+observations and generates a redacted report before data crosses to the popup.
+Use **Inspect / Refresh page**, review the JSON, then **Copy redacted report**.
+Native messaging is optional and independent. Casting is not implemented.
+
+Follow [the iPad diagnostic guide](../../docs/SAFARI_DIAGNOSTICS.md); physical
+installation and actual-site validation are pending. Run
+`npm run build:safari-probe` and rebuild/reinstall the existing iOS target to get
+the new resources. The macOS target shares the updated resources.
+
+
+## Priority update — 2026-10-21
+
+The main target is M1 iPad Pro, reported iPadOS 27.0.1. The
+[new two-part plan](../../docs/IPAD_DIAGNOSTICS_AND_NATIVE_APP_PLAN.md) supersedes the earlier
+desktop-first work order: Safari diagnostics first, iPad native Cast test app
+second. Mac/Python bridge integration is paused. Earlier results remain valid
+within their tested platform. End-to-end casting while staying in Safari is
+still unproven. This update is planning only; Part 1 software is now implemented; Part 2 and physical iPad/site validation
+remain pending.
+
+
 This contains macOS and iOS Safari Web Extension test targets with Apple's required packaging hosts.
 It is not a standalone Cast sender app. **Casting is not implemented.** The
 containing host only provides Apple's generated extension setup screen.
@@ -9,8 +33,10 @@ containing host only provides Apple's generated extension setup screen.
 Inspection and native messaging have passed in desktop Safari. Casting remains
 unimplemented. A [third-party source review](../../docs/THIRD_PARTY_CAST_REVIEW.md)
 recommends an isolated PyChromecast experiment before designing any Safari bridge
-integration. Nothing has been installed or imported. Installation awaits explicit
-go-ahead; iPhone work remains deferred. The finished flow must keep controls in
+integration. The user authorized isolated installation and selected the Cast TV.
+The [initial experiment](transport-experiment/README.md) reached receiver-reported
+playback and controls; the user confirmed visible TV playback. One SSL warning
+remains unresolved. Nothing is integrated into Safari. iPhone work remains deferred. The finished flow must keep controls in
 Safari and use the TV's existing Google Cast receiver without TV installation.
 
 ## Current test: desktop Safari on macOS

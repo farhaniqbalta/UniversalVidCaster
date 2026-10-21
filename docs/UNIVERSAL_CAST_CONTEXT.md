@@ -4,6 +4,17 @@
 **Version:** 0.8  
 **Last updated:** 2026-10-18
 
+## Current priority update — 2026-10-21
+
+The user clarified that the main goal is casting from an M1 iPad Pro (reported
+iPadOS 27.0.1). Current planning order is (1) a Safari diagnostic extension for
+the actual website, then (2) an iPad native Cast test app using the official SDK.
+See [the two-part plan](IPAD_DIAGNOSTICS_AND_NATIVE_APP_PLAN.md). Desktop Python
+bridge integration is paused. Native-app testing is now planned explicitly;
+previous deferrals of native-app work/iPad testing no longer set the work order.
+The final stay-in-Safari interaction and no-TV-install requirements remain.
+Native-app success alone cannot satisfy that interaction requirement.
+
 ## Latest session decisions — 2026-10-19
 
 These updates supersede the earlier milestone work order where it differs:
@@ -19,10 +30,11 @@ These updates supersede the earlier milestone work order where it differs:
 - Standalone sender-app work and app handoff are deferred. Required extension
   packaging hosts are infrastructure, not a replacement product.
 - Third-party sender library research is authorized because a supported desktop
-  Safari transport was not identified. This does not authorize installation,
-  integration, production adoption, or custom protocol implementation.
-- Proposed next test: isolated desktop PyChromecast experiment, pending explicit
-  go-ahead. See [third-party review](THIRD_PARTY_CAST_REVIEW.md) and
+  Safari transport was not identified. The user subsequently authorized
+  isolated PyChromecast installation/testing only, not Safari integration,
+  production adoption, or custom protocol implementation.
+- Isolated desktop PyChromecast test ran: receiver playback/control states
+  observed and visible TV playback confirmed by the user; an SSL write warning remains open. See [third-party review](THIRD_PARTY_CAST_REVIEW.md) and
   [M2 checklist](M2_IMPLEMENTATION_CHECKLIST.md).
 
 ## 1. Product vision

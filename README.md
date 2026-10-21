@@ -55,6 +55,26 @@ npm run build
 The production harness is written to `apps/web-test-harness/dist`.
 GitHub Actions runs the same checks on pushes and pull requests using Node.js 24.
 
+## Safari diagnostics — Part 1
+
+The extension now inspects page video metadata and provides a redacted JSON
+preview/copy action, independently of casting. See [installation and test steps](docs/SAFARI_DIAGNOSTICS.md).
+Software checks pass; physical iPad and target-site tests remain pending.
+Part 2, the native iPad Cast app, has not started.
+
+## Current priority — iPad diagnostics and native Cast test
+
+The main target is the user's M1 iPad Pro (reported iPadOS 27.0.1). Follow the
+[two-part plan](docs/IPAD_DIAGNOSTICS_AND_NATIVE_APP_PLAN.md):
+
+1. Build Safari diagnostics to inspect the actual website and export a redacted report.
+2. Build an iPad native Cast test app using Google's official iOS SDK.
+
+The parts are independently testable. Keeping Cast selection and controls in
+Safari is a later feasibility gate, not a consequence of native-app success.
+Mac/Python bridge integration is paused. The earlier work/status below remains
+supporting evidence, not the current implementation order.
+
 ## Current status and next milestone
 
 As of 2026-10-19:
@@ -74,9 +94,12 @@ Current M2 blocker: no supported macOS Safari Cast transport has been identified
 The reviewed official iOS SDK has no macOS binary. See the
 [transport assessment](docs/M2_SAFARI_FEASIBILITY.md).
 
-Next proposed action: an isolated desktop PyChromecast feasibility experiment,
+An isolated desktop PyChromecast feasibility experiment has run,
 following the [third-party source review](docs/THIRD_PARTY_CAST_REVIEW.md).
-Nothing has been installed or integrated; installation awaits explicit go-ahead.
+PyChromecast is installed only in a temporary environment outside the repository;
+Safari integration has not been added. Receiver-reported playback and controls
+worked, and the user confirmed visible TV playback on 2026-10-19. An observed
+SSL write warning remains unresolved.
 The experiment must prove discovery, media loading, playback controls, and live
 status before any Safari integration decision. Safari remains the interface;
 no TV installation is permitted, and iPhone checks remain deferred.
@@ -111,6 +134,10 @@ Unit tests use sender SDK doubles, not a simulated TV receiver. They cannot
 satisfy the physical M0 acceptance gate.
 
 ## Safari feasibility test target
+
+The experimental [bridge design](docs/SAFARI_CAST_BRIDGE_DESIGN.md) now includes a
+tested standalone command worker. The Swift launcher/runtime packaging and
+Safari-to-TV control integration remain unimplemented.
 
 A minimal Safari extension inspection/native-messaging probe is available under
 [`spikes/safari-google-cast`](spikes/safari-google-cast/README.md). Run

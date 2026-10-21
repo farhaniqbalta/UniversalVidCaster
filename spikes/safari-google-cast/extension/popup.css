@@ -1,4 +1,23 @@
-body { font: 14px system-ui; width: 320px; padding: 12px; color-scheme: light dark; }
-h1 { font-size: 18px; }
-button { padding: 8px; margin-bottom: 8px; }
-li { overflow-wrap: anywhere; margin-bottom: 8px; }
+:root { color-scheme: light dark; font: 15px/1.55 system-ui, sans-serif; }
+* { box-sizing: border-box; }
+/* Give Safari an explicit intrinsic width. A viewport-based body max-width can
+   make the popover size itself against its own narrow initial viewport. */
+html { width: 720px; }
+body { margin: 0; width: 100%; padding: 24px; }
+h1 { font-size: 24px; line-height: 1.2; margin: 0 0 12px; }
+h2 { font-size: 17px; margin: 26px 0 12px; }
+p { margin: 12px 0; overflow-wrap: anywhere; }
+button { font: inherit; padding: 10px 16px; margin: 8px 8px 8px 0; min-height: 44px; cursor: pointer; }
+button:disabled { cursor: default; opacity: .55; }
+ul { list-style: none; padding: 0; margin: 0; }
+li { overflow-wrap: anywhere; margin-bottom: 12px; padding: 14px; border: 1px solid #8886; border-radius: 8px; }
+#candidates, #videos { font: 13px/1.65 ui-monospace, monospace; }
+#videos li { white-space: pre-line; }
+#limitations { font-size: 14px; }
+label { display: block; font-weight: 600; }
+textarea { display: block; width: 100%; min-height: 320px; margin: 10px 0; padding: 12px; font: 13px/1.6 ui-monospace, monospace; resize: vertical; border: 1px solid #8888; border-radius: 6px; }
+details { margin-top: 24px; padding-top: 16px; border-top: 1px solid #8886; }
+summary { cursor: pointer; }
+:focus-visible { outline: 2px solid #3989e8; outline-offset: 3px; }
+/* Touch-hosted Safari panels may constrain their viewport independently. */
+@media (pointer: coarse) { html { width: min(720px, 100vw); } body { padding: 16px; } }
