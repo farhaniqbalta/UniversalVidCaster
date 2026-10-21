@@ -1,4 +1,4 @@
-import { redactReport } from '@uvc/detector';
+import { redactReport, redactDiagnosticUrl } from '@uvc/detector';
 import type { DiagnosticSnapshot } from './snapshot';
 
 declare const browser: {
@@ -19,6 +19,21 @@ function clearOriginal() {
   originalPanel.hidden = true; originalField.value = ''; originalStatus.textContent = '';
 }
 document.getElementById('hide-original')!.onclick = clearOriginal;
+async function copyValue(value: string, generation: number, label: string) {
+  clearOriginal();
+  // Called immediately inside a click to preserve clipboard user activation.
+  try {
+    await navigator.clipboard.writeText(value);
+    if (generation !== inspectionGeneration) return;
+    originalStatus.textContent = `${label} copied. Original URLs may contain private query values; use locally. The report remains redacted.`;
+  } catch {
+    if (generation !== inspectionGeneration) return;
+    originalPanel.hidden = false;
+    originalField.value = value;
+    originalField.focus(); originalField.select();
+    originalStatus.textContent = 'Clipboard unavailable. Value selected below for manual copying; hide it before sharing screenshots.';
+  }
+}
 copy.onclick = async () => {
   try {
     await navigator.clipboard.writeText(preview.value);
@@ -40,7 +55,7 @@ document.getElementById('inspect')!.onclick = async () => {
   clearOriginal();
   preview.value = ''; copy.disabled = true; copyStatus.textContent = '';
   try {
-    list('candidates', []); list('limitations', []); list('videos', []);
+    list('candidates', []); list('limitations', []); list('videos', []); list('subtitles', []);
     status.textContent = 'Inspecting permitted page…';
     const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
     if (tab?.id === undefined) throw new Error('No active tab is accessible.');
@@ -79,13 +94,31 @@ document.getElementById('inspect')!.onclick = async () => {
         }
       };
       item.append(description, action); candidates.append(item);
+      const mime = document.createElement('button');
+      mime.type = 'button'; mime.textContent = 'Copy MIME type';
+      mime.disabled = !candidate.mimeType;
+      mime.onclick = () => copyValue(candidate.mimeType!, generation, 'MIME type');
+      item.append(mime);
     });
+    const subtitles = snapshot.result.subtitles ?? [];
+    const safeSubtitles = subtitles.map(subtitle => ({ ...subtitle, url: redactDiagnosticUrl(subtitle.url) }));
+    const subtitleList = document.getElementById('subtitles')!;
+    safeSubtitles.forEach((subtitle, index) => {
+      const item = document.createElement('li');
+      const description = document.createElement('div');
+      description.textContent = `${subtitle.url} · language: ${subtitle.language ?? 'unknown'} · ${subtitle.method}`;
+      const action = document.createElement('button');
+      action.type = 'button'; action.textContent = 'Copy subtitle URL';
+      action.onclick = () => copyValue(subtitles[index].url, generation, 'Subtitle URL');
+      item.append(description, action); subtitleList.append(item);
+    });
+    if (!subtitles.length) list('subtitles', ['No subtitle URL observed. Enable a subtitle in the player and inspect again; absence does not prove no subtitles exist.']);
     list('limitations', result.limitations);
     list('videos', result.videos.map(video => {
       const sources = video.sources.map(source => `${source.method}: ${source.scheme} ${source.url} (MIME attribute: ${source.mimeAttribute ?? 'unknown'}; hint: ${source.mimeHint ?? 'unknown'})`).join('\n');
       return `Video ${video.index + 1} — ${video.width}×${video.height}\nPosition: ${video.positionSeconds ?? 'unknown'}s / ${video.durationSeconds ?? 'unknown'}s\nPlayback: ${video.paused ? 'paused' : 'not paused'}; ended: ${video.ended}\nReady state: ${video.readyState}; network state: ${video.networkState}\nMedia error: ${video.mediaErrorCode ?? 'none'}; media keys: ${video.attachedMediaKeys ? 'attached' : 'not observed'}\nSources:\n${sources || 'none exposed'}`;
     }));
-    preview.value = JSON.stringify(result, null, 2);
+    preview.value = JSON.stringify({ ...result, subtitleObservations: safeSubtitles }, null, 2);
     copy.disabled = false;
     status.textContent = `${result.videos.length} video(s), ${result.candidates.length} direct candidate(s), ${result.frames.length} uninspected frame(s). Playback compatibility remains unknown.`;
   } catch { status.textContent = 'Inspection failed. Allow access to this website, use a normal webpage, and retry. Browser-internal and restricted pages may not allow inspection.'; }

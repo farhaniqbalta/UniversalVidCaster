@@ -5,6 +5,13 @@ const address = '192.168.1.10';
 const url = `http://${address}:8787/hls/${'a'.repeat(48)}/${'b'.repeat(48)}.m3u8`;
 const media = { url: 'https://example.test/master?t=private&pm=browser', mimeType: 'video/mp4', startPositionMs: 12000 };
 describe('combined Mac bridge load', () => {
+  it('preserves subtitle authorization independently of the bridged video', async () => {
+    const subtitle = { url: 'https://subtitle.test/id.vtt?t=different-token&pm=browser', language: 'id' };
+    const fetcher = vi.fn().mockResolvedValue(new Response(JSON.stringify({ url })));
+    const prepared = await prepareBridgeMedia({ ...media, subtitle }, address, fetcher);
+    expect(prepared.subtitle).toEqual(subtitle);
+    expect(JSON.parse(fetcher.mock.calls[0][1].body)).not.toHaveProperty('subtitle');
+  });
   it('prepares the original input and supplies automatic HLS options without losing start position', async () => {
     const fetcher = vi.fn().mockResolvedValue(new Response(JSON.stringify({ url })));
     expect(await prepareBridgeMedia(media, address, fetcher)).toEqual({ ...media, url, mimeType: 'application/vnd.apple.mpegurl', hlsSegmentFormat: 'FMP4' });

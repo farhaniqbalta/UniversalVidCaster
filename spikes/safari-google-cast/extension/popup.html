@@ -6,6 +6,8 @@
 <button id="inspect">Inspect / Refresh page</button>
 <p id="status" role="status" aria-live="polite">Start the page's video, then inspect. Only the permitted main document is inspected.</p>
 <h2>Direct media candidates</h2><ul id="candidates"></ul>
+<h2>Subtitle candidates</h2><ul id="subtitles"></ul>
+<p>Enable subtitles in the player, then inspect again. Looks for subtitle/caption track elements and .vtt URLs in this document's available resource timing entries. Requests may be missing, cleared, or belong to an earlier video; check the exact video and language. Embedded frames and private player state are not inspected.</p>
 <p>Copy original URL is for local playback testing. It includes any private query values and is separate from the redacted report.</p>
 <p id="original-status" role="status" aria-live="polite"></p>
 <div id="original-panel" hidden>

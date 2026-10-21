@@ -13,6 +13,7 @@ async function mount(failInspection = false) {
     vi.fn().mockResolvedValueOnce([]).mockResolvedValueOnce([{ result: {
       report: redactReport(collectPageDiagnostics(doc)),
       originalCandidateUrls: collectPageDiagnostics(doc).candidates.map(candidate => candidate.url),
+      subtitles: [{ url: 'https://example.test/en.vtt?t=subtitle-secret&pm=browser', language: 'en', method: 'track-element' }],
     } }]);
   const native = vi.fn().mockRejectedValue(new Error('unavailable'));
   vi.stubGlobal('browser', { tabs: { query: vi.fn().mockResolvedValue([{ id: 1 }]) }, scripting: { executeScript }, runtime: { sendNativeMessage: native } });
@@ -82,4 +83,19 @@ it('reveals original only after explicit copy fails and supports clearing it', a
   (document.getElementById('hide-original') as HTMLButtonElement).click();
   expect(field.value).toBe('');
   expect(document.getElementById('original-panel')!.hidden).toBe(true);
+});
+
+it('copies MIME and original subtitle separately while keeping subtitle tokens out of reports and markup', async () => {
+  const writeText = vi.fn().mockResolvedValue(undefined);
+  Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+  await mount();
+  (document.getElementById('inspect') as HTMLButtonElement).click();
+  await vi.waitFor(() => expect(document.querySelector('#subtitles button')).not.toBeNull());
+  const mime = Array.from(document.querySelectorAll('#candidates button')).find(button => button.textContent === 'Copy MIME type') as HTMLButtonElement;
+  mime.click();
+  expect(writeText).toHaveBeenLastCalledWith('video/mp4');
+  (document.querySelector('#subtitles button') as HTMLButtonElement).click();
+  expect(writeText).toHaveBeenLastCalledWith('https://example.test/en.vtt?t=subtitle-secret&pm=browser');
+  expect(document.body.innerHTML).not.toContain('subtitle-secret');
+  expect((document.getElementById('report') as HTMLTextAreaElement).value).not.toContain('subtitle-secret');
 });

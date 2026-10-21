@@ -5,6 +5,17 @@ are deferred. The Mac manifest bridge playback test passed per user report.
 
 ## Physical result — 2026-10-21
 
+Optional external WebVTT subtitles are now supported in the harness for direct
+and Mac bridge loads. Expand **Subtitles (optional WebVTT)** and enter the exact
+video's original signed subtitle URL plus language (`en`/`id`). The sender attaches
+and activates that text track on load, preserving its own authorization separately
+from the video session. No live subtitle URL was fetched during development.
+78 repository tests, type checks, and build pass, including validation, active
+track mapping, no-subtitle loads, and bridge preservation. Physical subtitle display
+and synchronization remain pending; the earlier video/audio pass does not cover
+this feature. Changing the subtitle requires reloading media, so defer it during
+an aging test.
+
 The harness now also supports a single-page **Mac HLS bridge** mode: paste the
 original master URL, confirm the Mac network address, connect, and choose
 **Prepare & play**. MIME/fMP4 and bridge URL handoff are automatic. Run both the

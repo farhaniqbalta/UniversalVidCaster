@@ -92,3 +92,23 @@ native-independent inspection, clipboard fallback, and explicit original-URL cop
 without leaking originals into the report. Type checks and Safari
 resources/web harness builds and unsigned iPadOS/macOS packaging builds pass.
 Actual device/site results are tracked separately; automated success is not a compatibility claim.
+
+## Video MIME and subtitle copying
+
+Video candidates now include **Copy MIME type** beside **Copy original URL**.
+Unknown MIME disables the MIME copy button. This copies the detected MIME hint;
+it does not verify the server response or receiver codec support.
+
+**Subtitle candidates** lists subtitle/caption track-element URLs and `.vtt` URLs
+visible in this main document's existing Resource Timing entries. Enable subtitles
+in the site player, then choose **Inspect / Refresh page**. Use **Copy subtitle URL**
+to copy the exact original signed URL for local testing. A resource-timing candidate
+has unknown language; confirm it in the player. Entries can be absent or from a
+previous video. No network interception, subtitle request, iframe inspection, or
+private player access is performed. Absence does not establish no subtitles exist.
+
+Original subtitle URLs remain transient and out of displayed markup and the shared
+report, except the explicit manual-copy fallback. The report adds redacted
+`subtitleObservations`; query values remain redacted. Rebuild extension resources
+with `npm run build:safari-probe`, then build/run the macOS Safari target in Xcode
+to update the installed extension. Physical site subtitle detection remains pending.

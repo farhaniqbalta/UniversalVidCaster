@@ -18,6 +18,25 @@ clear bridge sessions. Do not restart the bridge during an aging test.
 
 ## Standalone bridge page (optional)
 
+### Optional subtitles in the unified harness
+
+Expand **Subtitles (optional WebVTT)** on the harness page. Paste the complete
+original `.vtt` request URL for the exact video being cast, and set its language
+(`en` for English, `id` for Indonesian). Select **Prepare & play** again to load
+the video with that track active. Leave the subtitle URL blank for no external
+subtitle on the next load. Reloading interrupts current playback; finish an aging
+test before changing tracks. The start-position field can preserve your place.
+
+The TV fetches the subtitle URL directly using its own supplied authorization;
+the bridge does not fetch it or replace its token with the video's token. It must
+remain accessible to the TV and provide appropriate CORS headers. Requests for
+different video IDs may not match the current episode. No track auto-discovery,
+format conversion, timing correction, or in-session subtitle toggle is implemented.
+Subtitle rendering and synchronization on the physical TV remain pending.
+
+This uses the official [Cast Web Sender text-track API](https://developers.google.com/cast/docs/web_sender/advanced)
+with a text/vtt SUBTITLES track and the load request's activeTrackIds.
+
 Run `npm run bridge:hls` from the repository root, then open
 http://localhost:8787 in Chrome. No new dependencies are needed (Node 22+).
 

@@ -85,7 +85,17 @@ export class GoogleCastWebAdapter implements CastSenderAdapter {
     const metadata = new chrome.cast.media.GenericMediaMetadata();
     metadata.title = media.title ?? 'Direct video';
     info.metadata = metadata;
+    if (media.subtitle) {
+      const track = new chrome.cast.media.Track(1, chrome.cast.media.TrackType.TEXT);
+      track.trackContentId = media.subtitle.url;
+      track.trackContentType = 'text/vtt';
+      track.subtype = chrome.cast.media.TextTrackType.SUBTITLES;
+      track.language = media.subtitle.language;
+      track.name = `${media.subtitle.language} subtitles`;
+      info.tracks = [track];
+    }
     const request = new chrome.cast.media.LoadRequest(info);
+    if (media.subtitle) request.activeTrackIds = [1];
     request.autoplay = true;
     request.currentTime = (media.startPositionMs ?? 0) / 1000;
     await session.loadMedia(request);

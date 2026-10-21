@@ -43,6 +43,11 @@
           <div class="fields"><label>MIME type<input id="mime" value="video/mp4" placeholder="video/mp4" /></label>
             <label>Title<input id="title" value="Flower — MDN sample" /></label>
             <label>Start at (seconds)<input id="start" type="number" min="0" step="any" value="0" required /></label></div>
+          <details><summary>Subtitles (optional WebVTT)</summary>
+            <label>Subtitle URL<input id="subtitle-url" type="url" autocomplete="off" placeholder="https://…/subtitles.vtt?t=…&amp;pm=browser" /></label>
+            <label>Subtitle language<input id="subtitle-language" value="en" placeholder="en or id" /></label>
+            <p class="hint">Use the complete subtitle URL for this exact video, including its own token. Leave blank for no external subtitle. Adding or changing subtitles requires loading the video again.</p>
+          </details>
           <button id="load" disabled>Load &amp; play</button>
           <label class="inline-check"><input id="hls-fmp4" type="checkbox" /> HLS uses fragmented MP4 audio/video (explicit Cast format hint)</label>
           <p class="hint">This changes format handling only; it does not change server authorization.</p>

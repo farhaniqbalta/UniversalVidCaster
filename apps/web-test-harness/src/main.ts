@@ -1,4 +1,4 @@
-import { CastController, errorMessage } from '@uvc/core';
+import { CastController, errorMessage, validateMedia } from '@uvc/core';
 import { GoogleCastWebAdapter } from '@uvc/cast-web';
 import { HtmlVideoDetector } from '@uvc/detector';
 import './styles.css';
@@ -54,7 +54,8 @@ element<HTMLFormElement>('media-form').onsubmit = event => {
   event.preventDefault();
   if (preparingBridge) return;
   const media = { url: input('url'), mimeType: input('mime'), title: input('title'), startPositionMs: Number(input('start')) * 1000,
-    hlsSegmentFormat: element<HTMLInputElement>('hls-fmp4').checked ? 'FMP4' as const : undefined };
+    hlsSegmentFormat: element<HTMLInputElement>('hls-fmp4').checked ? 'FMP4' as const : undefined,
+    subtitle: input('subtitle-url').trim() ? { url: input('subtitle-url').trim(), language: input('subtitle-language') } : undefined };
   if (input('media-mode') !== 'mac-hls-bridge') {
     perform('Load', () => controller.load(media));
     return;
@@ -65,6 +66,7 @@ element<HTMLFormElement>('media-form').onsubmit = event => {
   element('bridge-status').textContent = 'Preparing playlist…';
   perform('Bridge load', async () => {
     try {
+      validateMedia({ ...media, mimeType: 'application/vnd.apple.mpegurl', hlsSegmentFormat: 'FMP4' });
       const prepared = await prepareBridgeMedia(media, address);
       element('bridge-status').textContent = 'Playlist prepared. Sending to TV…';
       await controller.load(prepared);

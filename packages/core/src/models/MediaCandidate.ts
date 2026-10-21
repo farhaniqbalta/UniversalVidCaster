@@ -5,9 +5,24 @@ export interface MediaCandidate {
   sourcePage?: string;
   startPositionMs?: number;
   hlsSegmentFormat?: 'FMP4';
+  subtitle?: { url: string; language: string };
 }
 
 export function validateMedia(media: MediaCandidate): MediaCandidate {
+  let subtitle = media.subtitle;
+  if (subtitle) {
+    let subtitleUrl: URL;
+    try { subtitleUrl = new URL(subtitle.url); }
+    catch { throw new Error('Provide a valid HTTP(S) WebVTT subtitle URL.'); }
+    if (!['https:', 'http:'].includes(subtitleUrl.protocol) || subtitleUrl.username || subtitleUrl.password || /\[REDACTED\]/i.test(decodeURIComponent(subtitleUrl.href))) {
+      throw new Error('Use an original HTTP(S) subtitle URL without embedded credentials or redaction placeholders.');
+    }
+    let language: string;
+    try { language = Intl.getCanonicalLocales(subtitle.language.trim())[0]; }
+    catch { throw new Error('Provide a valid subtitle language, such as en or id.'); }
+    if (!language) throw new Error('Provide a subtitle language, such as en or id.');
+    subtitle = { url: subtitleUrl.href, language };
+  }
   if (media.hlsSegmentFormat !== undefined && media.hlsSegmentFormat !== 'FMP4') {
     throw new Error('Unsupported HLS segment format hint.');
   }
@@ -28,5 +43,5 @@ export function validateMedia(media: MediaCandidate): MediaCandidate {
   if (media.hlsSegmentFormat && !['application/x-mpegurl', 'application/vnd.apple.mpegurl'].includes(mimeType.toLowerCase())) {
     throw new Error('The HLS format hint requires an HLS MIME type.');
   }
-  return { ...media, url: url.href, mimeType };
+  return { ...media, url: url.href, mimeType, ...(subtitle ? { subtitle } : {}) };
 }

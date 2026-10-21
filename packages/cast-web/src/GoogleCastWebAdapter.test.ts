@@ -33,6 +33,7 @@ function setup() {
   }
   class MediaInfo { constructor(public contentId: string, public contentType: string) {} }
   class LoadRequest { constructor(public media: unknown) {} }
+  class Track { constructor(public trackId: number, public type: string) {} }
   class Request {}
   vi.stubGlobal('cast', { framework: {
     CastContext: { getInstance: () => context }, RemotePlayer: Player, RemotePlayerController: Remote,
@@ -42,6 +43,7 @@ function setup() {
   } });
   vi.stubGlobal('chrome', { cast: { AutoJoinPolicy: { ORIGIN_SCOPED: 'origin' }, media: {
     DEFAULT_MEDIA_RECEIVER_APP_ID: 'DEFAULT', MediaInfo, LoadRequest,
+    Track, TrackType: { TEXT: 'TEXT' }, TextTrackType: { SUBTITLES: 'SUBTITLES' },
     HlsSegmentFormat: { FMP4: 'fmp4' }, HlsVideoSegmentFormat: { FMP4: 'fmp4' },
     GenericMediaMetadata: Request, PlayRequest: Request, PauseRequest: Request, StopRequest: Request, SeekRequest: Request,
   } } });
@@ -53,6 +55,20 @@ function setup() {
 }
 afterEach(() => vi.unstubAllGlobals());
 describe('GoogleCastWebAdapter', () => {
+  it('loads and activates an external WebVTT track with its own signed URL', async () => {
+    const test = setup(); await test.adapter.initialize(); await test.adapter.connect();
+    const url = 'https://subtitle.test/en.vtt?t=subtitle-own-token&pm=browser';
+    await test.adapter.load({ url: 'https://video.test/master.m3u8', mimeType: 'application/vnd.apple.mpegurl', subtitle: { url, language: 'en' } });
+    expect(test.session.loadMedia).toHaveBeenCalledWith(expect.objectContaining({
+      activeTrackIds: [1], media: expect.objectContaining({ tracks: [expect.objectContaining({
+        trackId: 1, type: 'TEXT', trackContentId: url, trackContentType: 'text/vtt', subtype: 'SUBTITLES', language: 'en',
+      })] }),
+    }));
+    await test.adapter.load({ url: 'https://video.test/movie.mp4', mimeType: 'video/mp4' });
+    const last = test.session.loadMedia.mock.calls.at(-1) as unknown as [{ activeTrackIds?: number[]; media: { tracks?: unknown[] } }];
+    expect(last[0].activeTrackIds).toBeUndefined();
+    expect(last[0].media.tracks).toBeUndefined();
+  });
   it('sends explicit audio/video format hints for an HLS fragmented MP4 request', async () => {
     const test = setup(); await test.adapter.initialize(); await test.adapter.connect();
     await test.adapter.load({ url: 'https://example.test/master.json', mimeType: 'application/vnd.apple.mpegurl', hlsSegmentFormat: 'FMP4' });
