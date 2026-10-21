@@ -173,6 +173,12 @@ The macOS probe tests inspection/native messaging only; Cast transport is unprov
 
 ## Local HLS bridge test
 
+The Chrome harness now offers **Playback mode → Mac HLS bridge**. Paste the
+original master URL, confirm the Mac network address, connect, and select
+**Prepare & play**. It prepares and loads the playlist on one page with automatic
+HLS/fMP4 settings. Keep both `npm run bridge:hls` and `npm run dev` running.
+Restart an older Vite server once to load the new development proxy configuration.
+
 For the current site-specific playback experiment, run `npm run bridge:hls` and
 open http://localhost:8787. Follow the [Mac manifest bridge instructions](spikes/hls-manifest-bridge/README.md)
 to prepare a fresh signed master playlist for the Chrome Cast harness.

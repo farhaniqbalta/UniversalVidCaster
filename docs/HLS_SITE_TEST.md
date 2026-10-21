@@ -5,6 +5,13 @@ are deferred. The Mac manifest bridge playback test passed per user report.
 
 ## Physical result — 2026-10-21
 
+The harness now also supports a single-page **Mac HLS bridge** mode: paste the
+original master URL, confirm the Mac network address, connect, and choose
+**Prepare & play**. MIME/fMP4 and bridge URL handoff are automatic. Run both the
+bridge and Vite dev server; no visit to port 8787 is needed. This UI integration
+has automated coverage; the reported physical pass below used the earlier manual
+two-page flow. The running bridge was not restarted for this UI change.
+
 The user generated a bridge URL, loaded it through the Chrome harness, and
 reported video playing on the TV. Asked whether it was the correct video with
 sound and whether Pause, Play, and Seek worked, the user confirmed “for now yes!”

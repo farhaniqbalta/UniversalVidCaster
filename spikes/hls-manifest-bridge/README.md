@@ -1,5 +1,23 @@
 # Mac HLS manifest bridge experiment
 
+## Unified harness flow (recommended)
+
+Keep `npm run bridge:hls` running in one terminal and `npm run dev` in another.
+In the local Chrome harness, choose **Mac HLS bridge** under Playback mode.
+Paste the fresh original master URL in the existing Media URL field. The Mac
+network address loads automatically; a single address is selected, while multiple
+addresses require choosing the Wi-Fi/Ethernet address connected to the TV.
+Connect to the TV and select **Prepare & play**. Preparation and Cast loading
+happen on this page; HLS MIME and fMP4 are automatic. No generated URL copy or
+second browser page is needed. Title and start position remain available.
+
+This integrated flow uses Vite's local development proxy to the existing bridge;
+the static production build alone does not supply that API. Bridge controls remain
+restricted to local callers. Switching mode or refreshing the harness does not
+clear bridge sessions. Do not restart the bridge during an aging test.
+
+## Standalone bridge page (optional)
+
 Run `npm run bridge:hls` from the repository root, then open
 http://localhost:8787 in Chrome. No new dependencies are needed (Node 22+).
 
