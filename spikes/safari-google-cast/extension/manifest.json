@@ -1,8 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Universal VidCaster Safari Probe",
-  "version": "0.0.1",
-  "description": "Safari DOM and native messaging feasibility test. Casting is not implemented.",
-  "permissions": ["activeTab", "scripting", "nativeMessaging"],
-  "action": { "default_popup": "popup.html" }
+  "name": "Universal VidCaster Diagnostics",
+  "version": "0.0.2",
+  "description": "Inspect permitted page video information and export a redacted diagnostic report. Casting is not implemented.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "nativeMessaging"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
 }

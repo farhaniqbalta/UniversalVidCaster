@@ -1,5 +1,35 @@
 # M2 implementation checklist — Safari feasibility first
 
+Part 1 update (2026-10-21): Safari diagnostics software is implemented with 53
+passing tests, type checks, web/Safari builds, and unsigned iPadOS/macOS packaging
+builds. Physical iPad/site checks are pending; Part 2 native Cast app has not
+started. See [diagnostic guide](SAFARI_DIAGNOSTICS.md) and
+[results sheet](IPAD_DIAGNOSTIC_RESULTS.md). This supersedes earlier plan-only
+status below.
+
+## Priority update — 2026-10-21
+
+The main target is M1 iPad Pro, reported iPadOS 27.0.1. The
+[new two-part plan](IPAD_DIAGNOSTICS_AND_NATIVE_APP_PLAN.md) supersedes the earlier
+desktop-first work order: Safari diagnostics first, iPad native Cast test app
+second. Mac/Python bridge integration is paused. Earlier results remain valid
+within their tested platform. End-to-end casting while staying in Safari is
+still unproven. This update is planning only; no new app or diagnostic code has
+been implemented under this plan yet.
+
+
+Update 2026-10-21: experimental command worker and
+[session-ownership design](SAFARI_CAST_BRIDGE_DESIGN.md) are implemented/documented.
+12 offline Python tests and a diagnostic subprocess smoke test pass. Swift process
+launch, signed runtime packaging, and end-to-end Safari casting remain pending.
+
+- [x] Define serial command IPC, worker-owned sessions, fresh receiver snapshots, and process-loss behavior.
+- [x] Implement/test the standalone command worker without exposing an HTTP service.
+- [ ] Validate bundled Python and dependency execution inside the sandboxed macOS native target.
+- [ ] Implement bounded Swift request/reply process management and worker restart handling.
+- [ ] Wire the experimental native adapter and Safari controls through shared core contracts.
+- [ ] Prove Safari-to-TV playback and popup/native-process lifecycle behavior on the real device.
+
 Status (2026-10-19): desktop Safari DOM inspection and native request/reply passed per user report. macOS and iOS unsigned builds pass; the selected iOS Cast APIs pass extension-restricted type checking. Safari Cast transport remains unimplemented/unproven. iPhone runtime validation is deferred until the final platform check.
 
 User decision (2026-10-18): a containing-app handoff is acceptable only for
@@ -31,19 +61,23 @@ macOS transport.
 
 Desktop setup: [probe README](../spikes/safari-google-cast/README.md).
 
-## Next action — isolated desktop transport experiment (pending)
+## Isolated desktop transport experiment — initial run performed
 
 - [x] Review third-party library metadata, runtime requirements, dependencies, and selected connection source.
 - [x] Report findings before importing or installing anything.
 - [x] Document the proposed Safari/extension/native flow and the experiment boundary.
-- [ ] Obtain go-ahead to install a pinned PyChromecast version in an isolated environment outside the repository.
-- [ ] Locate Python 3.11+ and record the experiment's resolved dependencies.
-- [ ] Discover/select a real Cast device and test the MDN flower MP4 without TV-side installation.
-- [ ] Confirm receiver playback, controls, and fresh status; document device/test results.
+- [x] Obtain go-ahead and install PyChromecast 14.0.10 in a temporary environment outside the repository.
+- [x] Set up temporary Python 3.12.15 and record resolved dependencies.
+- [x] Discover a real Cast device, obtain user target selection, and send the flower MP4 without TV-side installation.
+- [x] Record receiver playback/control states and user-confirmed visible TV playback (2026-10-19).
+- [x] Investigate and run three fresh-status control cycles: all passed with zero warnings.
+- [ ] Establish the original SSL warning's cause or an explicit experimental acceptance boundary; no fix has been proven.
 - [ ] Decide whether the experimental transport merits a Safari/native bridge integration design.
 
-See [third-party review](THIRD_PARTY_CAST_REVIEW.md). No library has been installed,
-imported, or integrated. The research recommendation is not production approval.
+See [third-party review](THIRD_PARTY_CAST_REVIEW.md) and the
+[experiment results](../spikes/safari-google-cast/transport-experiment/README.md).
+The library is installed only in a temporary test environment. Safari integration
+is not implemented, and the SSL write warning remains unresolved.
 
 ## 1. Establish architecture and prerequisites
 
@@ -139,3 +173,8 @@ Next: investigate a supported macOS Safari Cast sender transport without changin
 the no-TV-install or in-Safari interaction requirements.
 
 Desktop transport assessment is recorded in [feasibility findings](M2_SAFARI_FEASIBILITY.md). M2 remains incomplete; no discovery/playback implementation can yet be claimed under the current supported-integration requirement.
+
+Reliability follow-up (2026-10-19): three cycles passed with fresh receiver status
+and zero warnings; three offline freshness tests pass. The initial SSL warning
+was not reproduced and remains unexplained. See the experiment README and
+sanitized reliability results. Safari session ownership remains a separate gate.

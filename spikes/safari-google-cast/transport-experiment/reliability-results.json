@@ -1,0 +1,136 @@
+{
+  "date": "2026-10-19",
+  "python": "3.12.15",
+  "pychromecast": "14.0.10",
+  "scope": "One selected TV, three bounded cycles, fresh receiver events; not a production reliability guarantee",
+  "events": [
+    {
+      "event": "cycle_started",
+      "cycle": 1
+    },
+    {
+      "event": "receiver_status",
+      "state": "PLAYING",
+      "position": 0,
+      "duration": 5.055,
+      "flower_media": true
+    },
+    {
+      "event": "receiver_status",
+      "state": "PAUSED",
+      "position": 0,
+      "duration": 5.055,
+      "flower_media": true
+    },
+    {
+      "event": "seek_status",
+      "requested_position": 1.0,
+      "reported_position": 1.35938
+    },
+    {
+      "event": "receiver_status",
+      "state": "PLAYING",
+      "position": 1.499081,
+      "duration": 5.055,
+      "flower_media": true
+    },
+    {
+      "event": "receiver_status",
+      "state": "IDLE",
+      "position": 0,
+      "duration": 5.055,
+      "flower_media": true
+    },
+    {
+      "event": "controls_completed",
+      "cycle": 1
+    },
+    {
+      "event": "cycle_started",
+      "cycle": 2
+    },
+    {
+      "event": "receiver_status",
+      "state": "PLAYING",
+      "position": 0,
+      "duration": 5.055,
+      "flower_media": true
+    },
+    {
+      "event": "receiver_status",
+      "state": "PAUSED",
+      "position": 0,
+      "duration": 5.055,
+      "flower_media": true
+    },
+    {
+      "event": "seek_status",
+      "requested_position": 1.0,
+      "reported_position": 1.372115
+    },
+    {
+      "event": "receiver_status",
+      "state": "PLAYING",
+      "position": 1.509448,
+      "duration": 5.055,
+      "flower_media": true
+    },
+    {
+      "event": "receiver_status",
+      "state": "IDLE",
+      "position": 0,
+      "duration": 5.055,
+      "flower_media": true
+    },
+    {
+      "event": "controls_completed",
+      "cycle": 2
+    },
+    {
+      "event": "cycle_started",
+      "cycle": 3
+    },
+    {
+      "event": "receiver_status",
+      "state": "PLAYING",
+      "position": 0,
+      "duration": 5.055,
+      "flower_media": true
+    },
+    {
+      "event": "receiver_status",
+      "state": "PAUSED",
+      "position": 0,
+      "duration": 5.055,
+      "flower_media": true
+    },
+    {
+      "event": "seek_status",
+      "requested_position": 1.0,
+      "reported_position": 1.29329
+    },
+    {
+      "event": "receiver_status",
+      "state": "PLAYING",
+      "position": 1.445316,
+      "duration": 5.055,
+      "flower_media": true
+    },
+    {
+      "event": "receiver_status",
+      "state": "IDLE",
+      "position": 0,
+      "duration": 5.055,
+      "flower_media": true
+    },
+    {
+      "event": "controls_completed",
+      "cycle": 3
+    },
+    {
+      "event": "reliability_summary",
+      "completed_cycles": 3,
+      "warning_count": 0
+    }
+  ]
+}
