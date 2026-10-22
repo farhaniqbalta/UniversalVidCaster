@@ -1,5 +1,10 @@
 # Universal VidCaster — native iPad UX/UI designer handover
 
+> Historical plan / experiment record. Earlier priorities, pending statuses, and
+> UI instructions below may be superseded. Use the [documentation index](README.md),
+> [current handoff guide](IPAD_SAFARI_HANDOFF.md), and
+> [consolidated results](IPAD_NATIVE_CAST_RESULTS.md) for current behavior.
+
 Prepared: 2026-10-23. Audience: a designer agent with **no repository access**.
 
 Latest implementation/validation update (2026-10-23): the redesigned UI and its

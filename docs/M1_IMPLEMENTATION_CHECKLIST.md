@@ -1,5 +1,10 @@
 # M1 implementation checklist
 
+> Historical plan / experiment record. Earlier priorities, pending statuses, and
+> UI instructions below may be superseded. Use the [documentation index](README.md),
+> [current handoff guide](IPAD_SAFARI_HANDOFF.md), and
+> [consolidated results](IPAD_NATIVE_CAST_RESULTS.md) for current behavior.
+
 Status: software implementation complete (2026-10-18). All 40 tests, TypeScript checks, and the production build pass. All six normal-flow manual checks passed per user report on 2026-10-18.
 
 Based on [project context](UNIVERSAL_CAST_CONTEXT.md), milestone M1. The

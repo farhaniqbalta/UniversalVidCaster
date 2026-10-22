@@ -1,7 +1,8 @@
 # Cast playback speed and media volume
 
-Implemented on `feat/cast-speed-volume-control`, based on `main` independently
-of the documentation-cleanup branch.
+Implemented on `feat/cast-speed-volume-control` and merged into `main`. The
+`docs-cleanup` branch now includes this implementation through a merge from main;
+the broader documentation cleanup remains separate.
 
 Physical result (2026-10-23): the user confirmed the new controls work after
 installation on the iPad. Record playback speed, media volume, and mute/unmute

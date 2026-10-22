@@ -1,17 +1,18 @@
 # iPad diagnostic validation
 
-Status: physical iPad validation pending. Desktop Safari target-site reports
-were collected and assessed separately in
+Updated 2026-10-23. User confirmed the iPad Safari copy/Paste flow and TV
+video/audio/subtitles, plus the popup width correction. These imply successful
+extension enablement and useful capture in that run; they do not complete the
+independent diagnostic/privacy matrix below. Desktop source reports remain in
 [SITE_MEDIA_DIAGNOSTIC_FINDINGS.md](SITE_MEDIA_DIAGNOSTIC_FINDINGS.md).
-Do not treat those Mac observations as iPad results.
 
 | Field | Result |
 | --- | --- |
 | iPad | M1 iPad Pro (user-reported) |
 | iPadOS | 27.0.1 (user-reported) |
-| Diagnostic extension | 0.0.3 |
-| Date tested | Pending |
-| Signing/install and enablement | Pending |
+| Diagnostic extension | Current shared manifest 0.0.5 |
+| Date tested | User-confirmed end-to-end run, 2026-10-23 |
+| Signing/install and enablement | Implied by successful iPad Safari transfer |
 | Website access prompt | Pending |
 | Known direct-media page | Pending |
 | Empty page | Pending |

@@ -1,5 +1,10 @@
 # M2 implementation checklist — Safari feasibility first
 
+> Historical plan / experiment record. Earlier priorities, pending statuses, and
+> UI instructions below may be superseded. Use the [documentation index](README.md),
+> [current handoff guide](IPAD_SAFARI_HANDOFF.md), and
+> [consolidated results](IPAD_NATIVE_CAST_RESULTS.md) for current behavior.
+
 ## Latest priority update — 2026-10-23
 
 - [x] User-confirmed architecture-refactor smoke test: all requested functions worked.

@@ -1,116 +1,60 @@
 # Native iPad Cast validation
 
-Latest physical result (2026-10-23): user confirmed Safari transfer Paste, then
-video, sound, and subtitles after the instruction to prepare/cast from iPad with
-Mac bridge stopped. The explicit iPad Safari -> clipboard import -> native
-foreground preparation -> TV flow passed per user report. Detailed endurance,
-expiry/recovery, final seek checks, and timing measurements were not provided.
-This supersedes earlier handoff-pending entries below. See
-[handoff result](IPAD_SAFARI_HANDOFF.md).
+Updated 2026-10-23. Consolidated results replace the earlier incremental status
+entries. Physical passes below are user reports, not independently collected
+receiver telemetry. See [setup](../spikes/ipad-cast/README.md),
+[handoff](IPAD_SAFARI_HANDOFF.md), and [architecture](NATIVE_APP_ARCHITECTURE.md).
 
-Architecture follow-up (2026-10-23): user confirmed “all the fucntions” worked
-after the refactor smoke-test checklist. The explicit bundled Safari transfer and
-embedded iPad extension subsequently passed the physical transfer/playback flow
-as recorded above. See [handoff test guide](IPAD_SAFARI_HANDOFF.md).
+## Tested setup
 
-UI follow-up (2026-10-23): after the portrait/landscape, website/subtitle, seeking,
-replacement, and End casting checklist, the user reported “it workss~”. Record
-those UI checks as user-confirmed for the pre-refactor redesigned app; no detailed
-logs or endurance measurements were supplied. The subsequent architecture-only
-separation needs a device smoke test; see [architecture](NATIVE_APP_ARCHITECTURE.md).
+- M1 iPad Pro, 11-inch; user-reported iPadOS 27.0.1.
+- Existing Google Cast TV: SWTV-22AE-FHD; no additional TV app.
+- Native SwiftUI app targeting iPadOS 17+, official Google Cast SDK 4.8.6.
+- Foreground, screen-awake native hosting is accepted by the user.
 
-UI integration update (2026-10-23): the proposed design is adopted into an
-adaptive Setup/Now Playing workspace using the existing SDK/hosting services.
-Nineteen native tests and unsigned device/simulator builds pass. Physical review
-of the redesigned screens, seeking, replacement, and End casting remains pending;
-earlier user-reported passes refer to the previous UI. See
-[integration notes](CastDesign/INTEGRATION_NOTES.md).
+## Physical evidence
 
-Latest subtitle result (2026-10-23): user confirmed subtitle loading works, but
-reported the Safari extension supplied the previous video's subtitle on a second
-video. Record loading as user-confirmed; correct matching/timing on the second
-video failed. Extension association filtering was added; physical retest pending.
-
-Subtitle update (2026-10-23): optional external WebVTT URL/language input and
-active native Cast text-track loading are implemented in both direct and iPad-local
-modes. Subtitle authorization is kept independent. Sixteen native tests and an
-unsigned iOS build pass; actual TV subtitle display/timing remains pending.
-Safari subtitle discovery remains deferred; changing tracks requires reloading.
-
-Foreground Mac-free implementation update (2026-10-23): the user accepts a
-foreground, screen-awake native app. iPad-local VOD playlist preparation/server
-and a prepare-and-play UI are implemented. This is not a physical playback pass;
-install the update and start a fresh original-URL session with Mac bridge stopped.
-Keep URL acquisition/handoff and background execution separate from this gate.
-
-Latest user report (2026-10-23): “it works, the hls preparation” after the
-iPad-local flow was supplied. Record iPad-local HLS preparation as user-confirmed;
-detailed independent TV video/audio/controls/endurance results and whether the
-Mac bridge was stopped were not explicitly repeated in that report. Native
-subtitle casting is now requested again and pending implementation; Safari
-subtitle auto-discovery remains deferred. A self-contained
-[designer handover](NATIVE_IPAD_DESIGNER_HANDOVER.md) covers the next UI/UX work.
-
-Date prepared: 2026-10-21. Updated 2026-10-23: public flower MP4 playback and
-Pause/Play/Seek/Stop passed per user report on the native iPad app.
-
-Website HLS result (2026-10-23): after installing the fMP4 update and using the
-Mac bridge flow, the user confirmed website video, sound, and seeking on the TV.
-This is a physical user-reported pass for the native iPad sender with Mac-hosted
-playlists. No final receiver logs, endurance duration, or expiry/recovery evidence
-were supplied. It does not establish Mac-free or Safari-only playback.
-
-Update 2026-10-23: user reports the prerequisite documentation and Mac aging-test
-steps complete. Detailed endurance/expiry telemetry was not supplied. Native
-iPad flower MP4 baseline subsequently passed: the user confirmed TV playback,
-then confirmed Pause, Play, Seek, and Stop. Installation and Cast connection
-therefore succeeded in this run. No receiver telemetry was supplied, so do not
-claim a separately observed PLAYING status or permission denial/recovery test.
-
-| Check | Result |
+| Capability | Result |
 | --- | --- |
-| Intended iPad | M1 iPad Pro (user-reported) |
-| Intended iPadOS | 27.0.1 (user-reported) |
-| Xcode | 27.1 |
-| Official Cast SDK | 4.8.6, exact Swift package pin |
-| Dependency | GTMSessionFetcher 3.5.0, resolved |
-| Unsigned generic-iOS build | Passed |
-| Native automated tests | 16 passed: input/subtitle validation, VOD manifest graph/authorization, and loopback HTTP serving |
-| Native WebVTT subtitles on TV | Implemented; rendering/synchronization physical test pending |
-| Signing and installation | Passed in this run, implied by successful physical app test |
-| Local-network permission and denial/recovery | Pending |
-| SDK device selection/connection | Passed in this run, implied by confirmed casting |
-| Flower MP4 load request | Passed per user-reported TV playback |
-| Receiver-reported PLAYING and fresh status | Pending |
-| Visible TV playback | Passed per user report, 2026-10-23 |
-| Pause/play/seek/stop | Passed per user report, 2026-10-23 |
-| Disconnect behavior | Pending |
-| Switch to Safari and return | Playback continuity and control recovery passed per user report, 2026-10-23, Mac bridge running |
-| Brief iPad lock/unlock | Playback continuity and control recovery passed per user report, 2026-10-23, Mac bridge running |
-| Recovery after actual session/network loss | Pending; normal app return is not evidence of network reconnection |
-| Unreachable media recovery | Pending |
-| Website HLS via Mac bridge | Video, audio, and seek passed per user report, 2026-10-23; Mac still required |
-| iPad-local HLS preparation | User confirmed working, 2026-10-23 |
-| Website HLS hosted on iPad, Mac bridge stopped | Detailed independent playback/control/host-off evidence still to record |
-| Original website URL without bridge | Not validated on iPad; earlier desktop direct-URL path failed with unsigned child requests returning 401 |
-| TV-side installation | Must be zero |
+| App installation and Cast selection | Succeeded in the reported playback runs |
+| Public flower MP4 | TV playback and Pause/Play/Seek/Stop confirmed |
+| Website HLS with Mac playlist host | Video, audio, and seek confirmed |
+| Switch to Safari/return and brief lock/unlock | Continuity/control recovery confirmed with Mac host running; does not establish iPad background hosting |
+| iPad-local HLS preparation | Confirmed working |
+| Redesigned UI and architecture refactor | User confirmed the supplied functional smoke checks worked, including seeking, replacement, and End casting; no per-action telemetry |
+| iPad Safari transfer -> native Paste -> iPad preparation -> TV | Video, audio, and subtitles confirmed after instruction to stop the Mac bridge |
+| Subtitle association | Initial stale-video subtitle issue reported; filtering/layout fixes followed by user confirmation that subtitles work after website captions off/on |
+| Playback speed, media volume, mute/unmute | User-confirmed functional pass; individual presets/path combinations were not separately reported |
+| iPad Safari popup width | Wider popup confirmed working after CSS correction |
+| Mac-hosted aging step | Reported complete; precise duration and expiry telemetry not supplied |
 
-Native-app playback will not establish Safari-to-Cast integration. Keep physical
-findings separate from compilation and input-validation tests. Do not infer DRM,
-codec compatibility, or authorization needs from a generic failure code.
+The initial direct HLS URL failed because child requests lacked session query
+parameters. Preparation now reproduces the observed player's missing `t`/`pm`
+parameters using the user-supplied session. It does not renew authorization or
+prove compatibility with unrelated providers. Subtitle URLs retain their own
+session parameters. Matching media identity does not measure subtitle timing.
 
-Site-specific access findings: [SITE_MEDIA_DIAGNOSTIC_FINDINGS.md](SITE_MEDIA_DIAGNOSTIC_FINDINGS.md).
-Native HLS update (2026-10-23): explicit audio/video fMP4 settings and the
-**Use Mac bridge HLS settings** button are implemented; unsigned iOS build and
-seven native input tests pass. The flower preset clears the option, and an fMP4
-hint on non-HLS input is rejected. The user installed this update and confirmed
-website video/audio/seek using a fresh Mac bridge playlist, as recorded above.
-The user also confirmed the follow-up Safari app-switch/return and brief
-lock/unlock checks continued working, including playback and control recovery,
-with the Mac bridge running. No duration, lifecycle trace, or actual network-loss
-test was supplied. This does not establish that an iPad-hosted playlist server
-would run while suspended; the Mac served playlists throughout.
+## Automated evidence
 
-Next: design a Mac-free playlist flow with iPad lifecycle limits explicitly
-evaluated. Recovery after actual session/network loss remains pending.
-Subtitles remain deferred.
+Latest recorded native check: 31 tests pass, covering input/subtitle validation,
+manifest graph preparation and authorization, local HTTP serving, session
+contracts, Safari handoff validation, and speed/volume command validation and
+capability gating. The speed/volume update and unsigned iPad build passed; its
+physical controls subsequently passed per user report. See
+[control-specific results](CAST_SPEED_VOLUME.md). Unsigned iOS packaging with the embedded
+extension passed. Latest recorded web check: 85 tests, TypeScript checks, and
+extension resource build passed. These are recorded development results, not a
+new test run performed by this documentation cleanup.
+
+## Remaining validation
+
+- Precisely timed iPad-hosted endurance, 30-minute host expiry, and upstream token expiry.
+- Recovery after actual Wi-Fi/session loss and unreachable media.
+- Local Network permission denial/recovery and partial teardown failures.
+- Detailed independent receiver telemetry and subtitle synchronization measurements.
+- Narrow/resizable Safari windows, iPhone layouts, VoiceOver, larger text, keyboard,
+  and full redesigned-extension regression coverage.
+
+Host lifetime and token lifetime are separate. Keep the app foregrounded while
+hosting; Mac-hosted app-switch tests do not prove suspended iPad hosting works.
+Normal navigation/return is not a network-loss recovery test.

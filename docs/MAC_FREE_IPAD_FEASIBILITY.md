@@ -1,5 +1,10 @@
 # Mac-free iPad playback: design and feasibility gates
 
+> Historical plan / experiment record. Earlier priorities, pending statuses, and
+> UI instructions below may be superseded. Use the [documentation index](README.md),
+> [current handoff guide](IPAD_SAFARI_HANDOFF.md), and
+> [consolidated results](IPAD_NATIVE_CAST_RESULTS.md) for current behavior.
+
 Prepared 2026-10-23. Updated requirement: the user accepts keeping the native
 iPad app foregrounded and awake while casting. Foreground iPad-local preparation
 and HTTP hosting are now implemented; physical Mac-free playback remains pending.

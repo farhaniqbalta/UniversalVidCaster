@@ -2,8 +2,7 @@
 
 UI update (2026-10-23): popup 0.0.5 uses **Find video / Refresh** and **Copy transfer
 for iPad**, with Diagnostics collapsed and subtitle capture help in its own section.
-The transfer schema and native Paste action are unchanged. Older button names below
-describe the validated baseline. See [UI research and redesign](SAFARI_EXTENSION_UX.md).
+The transfer schema and native Paste action are unchanged. See [UI research and redesign](SAFARI_EXTENSION_UX.md).
 
 Popup width fix (2026-10-23): user confirmed the wider popup works in iPad Safari.
 The stylesheet requests an 800px preferred width without clamping it to the
@@ -35,14 +34,14 @@ app launching, persistent shared storage, or a Safari-hosted Cast sender.
 ## Use
 
 1. In **iPad Safari**, open/start the target video. Open the extension and select
-   **Inspect / Refresh page**.
+   **Find video** (or **Refresh** after inspection).
 2. If captions are wanted but missing, use **Watch new subtitle requests**, close
    the popup, toggle subtitles off/on in the player, then reopen and inspect.
-3. Under **Transfer to iPad app**, choose the video, playback method, and optional
+3. In the transfer card, choose the video, playback method, and optional
    subtitle. Confirm its language (`en` or `id`, or another supported tag).
    Use **Prepare on iPad** for the observed signed HLS master URLs; use Direct
    for public MP4. The method is chosen explicitly, not inferred from `.json`.
-4. Select **Copy video + subtitle for app**. Original signed URLs are copied
+4. Select **Copy transfer for iPad**. Original signed URLs are copied
    together. A clipboard failure exposes a selected manual-copy fallback; hide
    and clear it before sharing screenshots. This payload is private, unlike the
    separately redacted diagnostic report.

@@ -1,5 +1,10 @@
 # M0 implementation checklist
 
+> Historical plan / experiment record. Earlier priorities, pending statuses, and
+> UI instructions below may be superseded. Use the [documentation index](README.md),
+> [current handoff guide](IPAD_SAFARI_HANDOFF.md), and
+> [consolidated results](IPAD_NATIVE_CAST_RESULTS.md) for current behavior.
+
 M1 software implementation is complete; see the [M1 implementation checklist](M1_IMPLEMENTATION_CHECKLIST.md) for software results and the user-reported normal-flow manual regression pass.
 
 Based on [UNIVERSAL_CAST_CONTEXT.md](UNIVERSAL_CAST_CONTEXT.md) v0.8. Software implementation and automated checks are complete. User reports all harness functions working (2026-10-18). Detailed hardware metadata, receiver telemetry, and negative-path validation remain to be recorded.
