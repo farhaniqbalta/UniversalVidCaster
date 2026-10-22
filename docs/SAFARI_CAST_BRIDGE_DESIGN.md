@@ -1,5 +1,10 @@
 # Experimental desktop Safari Cast bridge
 
+> Historical plan / experiment record. Earlier priorities, pending statuses, and
+> UI instructions below may be superseded. Use the [documentation index](README.md),
+> [current handoff guide](IPAD_SAFARI_HANDOFF.md), and
+> [consolidated results](IPAD_NATIVE_CAST_RESULTS.md) for current behavior.
+
 Date: 2026-10-21. Status: session/command worker implemented and tested offline;
 Swift launcher, runtime packaging, and Safari-to-TV integration not implemented.
 This is an experimental macOS design, not an iOS solution or production approval.

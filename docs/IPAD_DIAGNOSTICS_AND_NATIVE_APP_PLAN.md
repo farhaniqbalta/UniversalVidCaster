@@ -1,5 +1,10 @@
 # Plan: Safari diagnostics, then an iPad native Cast app
 
+> Historical plan / experiment record. Earlier priorities, pending statuses, and
+> UI instructions below may be superseded. Use the [documentation index](README.md),
+> [current handoff guide](IPAD_SAFARI_HANDOFF.md), and
+> [consolidated results](IPAD_NATIVE_CAST_RESULTS.md) for current behavior.
+
 Date: 2026-10-21. Updated 2026-10-23: Part 1 software implemented; physical iPad Safari inspection remains pending. Part 2 flower playback/controls and website video/audio/seek via Mac bridge passed per user report. See [diagnostic run guide](SAFARI_DIAGNOSTICS.md).
 Target hardware: user's M1 iPad Pro, reported iPadOS 27.0.1.
 

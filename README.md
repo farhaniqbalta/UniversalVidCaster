@@ -1,70 +1,60 @@
 # Universal VidCaster
 
-Google Cast test harness for desktop Chrome with optional DOM media inspection. The shared TypeScript core is
-intended for reuse by a later iPhone Safari extension. Safari sender feasibility
-has not been established.
+Cast website video from iPad Safari to an existing Google Cast-enabled TV using
+an explicit Safari-to-native-app transfer. The native SwiftUI app prepares supported
+HLS playlists on the iPad and provides playback controls through Google's iOS Cast SDK.
+Public receiver-accessible media can be loaded directly.
 
-## Native iPad Cast test app — Part 2
+## Start here
 
-The [native iPad test app](spikes/ipad-cast/README.md) now builds with Google's
-pinned official Cast SDK. Open
-`spikes/ipad-cast/iPadCastTest.xcodeproj`, select your signing team and iPad, and
-run the flower preset first. Six offline native validation tests pass; physical
-iPad discovery/playback and the target website's media remain unverified.
-This is a separate native test client, not a completed Safari bridge.
+1. Follow the [iPad setup and usage guide](spikes/ipad-cast/README.md).
+2. Use the [Safari transfer guide](docs/IPAD_SAFARI_HANDOFF.md) to select a video
+   and optional subtitle, copy a transfer, and paste it into the native app.
+3. Review [validation results](docs/IPAD_NATIVE_CAST_RESULTS.md) and the
+   [documentation index](docs/README.md) for current capabilities and limitations.
 
-Target-site diagnostic outcome: the current direct-URL path does not play the
-site's HLS stream; a query-free initialization request returned 401. See
-[the findings](docs/SITE_MEDIA_DIAGNOSTIC_FINDINGS.md). No site workaround is
-implemented. Continue native iPad validation with the public flower MP4 first.
+The user confirmed iPad Safari transfer, Mac-free foreground HLS preparation,
+and TV video/audio/subtitles. Native playback controls and the redesigned app
+also passed user-reported checks. These are observations on the tested setup,
+not a universal website/device compatibility guarantee.
 
-## Current site investigation
+Keep the native app open and the screen awake while it hosts playlists. The TV
+fetches actual media directly from source servers. No Mac playlist host, cloud
+service, or additional TV app is needed for this path. Safari capture may require
+starting a subtitle watch and toggling captions off/on in the website player.
+Automatic app launch, token renewal, live/encrypted HLS preparation, transcoding,
+and mirroring are not implemented.
 
-The user has prioritized the target site's playback before physical iPad testing.
-The Chrome harness includes **Check playlist and child access** and an explicit
-**HLS fragmented MP4** load option. Follow [the local site test](docs/HLS_SITE_TEST.md).
-The original child-resource authorization finding remains open; this update does
-not establish working site playback or change server access requirements.
+## Development setup
 
-## Run
-
-Install Node.js 22.12+ or 24 LTS, then run from the repository root:
+Install Node.js with npm (Node 22.12+ or 24 LTS; `.nvmrc` selects 24), then:
 
 ```sh
-node --version
-npm --version
 npm ci
+npm run build:safari-probe
+```
+
+If npm is missing, install Node.js or correct its PATH and reopen the terminal.
+With nvm already installed, use `nvm install` and `nvm use`.
+Open `spikes/ipad-cast/iPadCastTest.xcodeproj` in full Xcode, configure signing
+for both app and extension, and run on the iPad. See the setup guide for details.
+Source changes to the extension require rebuilding resources and reinstalling
+through Xcode; they do not update an installed extension automatically.
+
+## Desktop Chrome test harness
+
+```sh
 npm run dev
 ```
 
-If your terminal reports `command not found: npm`, install Node.js with its bundled
-npm, or add your existing installation to PATH, then reopen the terminal. The
-repository's `.nvmrc` selects Node.js 24 for developers using nvm:
+Open Vite's localhost URL in desktop Chrome, select a Cast device, and load the
+flower MP4 preset or another receiver-accessible media URL with its MIME type.
+The official Web Sender SDK needs internet access and a secure context; use HTTPS
+outside localhost. Sender and TV must share a network that permits discovery.
+An Android TV label alone does not establish Google Cast support.
 
-```sh
-nvm install
-nvm use
-```
-
-The nvm commands require nvm to be installed already.
-
-Open the localhost URL printed by Vite in desktop Chrome. The page loads Google's
-official Web Sender SDK over the internet. Keep the sender and Cast device on a
-network that permits discovery, and allow any Chrome local-network permission
-prompt. Use an existing Google Cast-enabled receiver; Android TV branding alone
-does not establish Cast support.
-
-1. Select **Select device / Connect** and choose a device in Chrome's SDK chooser.
-2. Keep the default flower MP4, or supply a receiver-accessible HTTP(S) media URL
-   and MIME type. Select **Load & play**.
-3. Check receiver playback status and confirm video is visible on the TV.
-4. Exercise pause, play, seek, and stop. Disconnect leaves playback running;
-   select Stop first if you want to stop the video.
-
-Use HTTPS when hosting outside localhost. Do not open `index.html` as a file or
-substitute an insecure LAN IP URL. The SDK loader checks secure-context support;
-normal localhost Chrome playback was confirmed by the user; detailed test records
-and physical error-case validation remain open.
+The optional [Mac HLS bridge](spikes/hls-manifest-bridge/README.md) remains a
+supporting diagnostic tool. It is not required by the iPad-local flow.
 
 ## Checks
 
@@ -72,122 +62,23 @@ and physical error-case validation remain open.
 npm test
 npm run typecheck
 npm run build
+npm run build:safari-probe
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swift test --package-path spikes/ipad-cast
 ```
 
-The production harness is written to `apps/web-test-harness/dist`.
-GitHub Actions runs the same checks on pushes and pull requests using Node.js 24.
+Automated tests do not replace physical TV checks. See the validation guide for
+remaining endurance, token-expiry, network-loss, and accessibility checks.
 
-## Safari diagnostics — Part 1
+## Repository layout
 
-The extension now inspects page video metadata and provides a redacted JSON
-preview/copy action, independently of casting. See [installation and test steps](docs/SAFARI_DIAGNOSTICS.md).
-Software checks pass; physical iPad and target-site tests remain pending.
-Part 2 software is now implemented; physical iPad validation is pending.
+- `spikes/ipad-cast`: native iPad app, embedded Safari extension target, and native tests.
+- `spikes/safari-google-cast`: shared Safari inspection/copy UI and packaging probes.
+- `packages/core`, `packages/cast-web`, `packages/detector`: TypeScript validation,
+  controller, Web Sender adapter, and DOM detection.
+- `apps/web-test-harness`: desktop Chrome test client.
+- `spikes/hls-manifest-bridge`: optional Mac playlist preparation tool.
+- `docs`: current guides, architecture, validation evidence, and labeled historical plans.
 
-## Current priority — iPad diagnostics and native Cast test
-
-The main target is the user's M1 iPad Pro (reported iPadOS 27.0.1). Follow the
-[two-part plan](docs/IPAD_DIAGNOSTICS_AND_NATIVE_APP_PLAN.md):
-
-1. Build Safari diagnostics to inspect the actual website and export a redacted report.
-2. Build an iPad native Cast test app using Google's official iOS SDK.
-
-The parts are independently testable. Keeping Cast selection and controls in
-Safari is a later feasibility gate, not a consequence of native-app success.
-Mac/Python bridge integration is paused. The earlier work/status below remains
-supporting evidence, not the current implementation order.
-
-## Current status and next milestone
-
-Latest priority update (2026-10-21): subtitle support and subtitle-specific
-Safari extension enhancements are **deferred**. Continue the Mac HLS bridge
-aging test, then physical native iPad Cast validation. Subtitles are not required
-for those gates, and TV subtitle display/synchronization has not been confirmed.
-See [HLS testing](docs/HLS_SITE_TEST.md) and the
-[iPad plan](docs/IPAD_DIAGNOSTICS_AND_NATIVE_APP_PLAN.md).
-
-As of 2026-10-19:
-
-| Milestone | Status |
-| --- | --- |
-| M0 — Chrome Cast media path | Normal playback and controls passed per user report with the MDN flower MP4. Detailed hardware/telemetry and physical error cases remain undocumented. |
-| M1 — Core hardening and DOM detection | Complete for planned scope: 40 tests, type checks, and web build pass; all six normal-flow manual checks passed per user report. |
-| M2 — Safari feasibility | In progress. Desktop Safari inspection and native request/reply passed per user report. Safari Cast transport is not implemented or proven. |
-
-Safari on macOS is the immediate target. iPhone validation is deferred until the
-final platform check. Standalone native sender app development is deferred;
-Apple-required extension packaging hosts are included only as infrastructure.
-The finished product must keep device selection and controls in Safari.
-
-Current M2 blocker: no supported macOS Safari Cast transport has been identified.
-The reviewed official iOS SDK has no macOS binary. See the
-[transport assessment](docs/M2_SAFARI_FEASIBILITY.md).
-
-An isolated desktop PyChromecast feasibility experiment has run,
-following the [third-party source review](docs/THIRD_PARTY_CAST_REVIEW.md).
-PyChromecast is installed only in a temporary environment outside the repository;
-Safari integration has not been added. Receiver-reported playback and controls
-worked, and the user confirmed visible TV playback on 2026-10-19. An observed
-SSL write warning remains unresolved.
-The experiment must prove discovery, media loading, playback controls, and live
-status before any Safari integration decision. Safari remains the interface;
-no TV installation is permitted, and iPhone checks remain deferred.
-
-Use **Inspect page videos** in the Chrome harness to discover its local flower
-video; **Use this source** fills the manual form without starting playback.
-See the [detector guide](docs/MEDIA_DETECTION.md),
-[M1 checklist](docs/M1_IMPLEMENTATION_CHECKLIST.md),
-[M2 checklist](docs/M2_IMPLEMENTATION_CHECKLIST.md), and
-[Safari feasibility findings](docs/M2_SAFARI_FEASIBILITY.md).
-
-## Layout
-
-- `packages/core`: media validation, controller, adapter contract, and state.
-- `packages/cast-web`: official Web Sender SDK integration and SDK status mapping.
-- `packages/detector`: optional DOM media discovery without platform dependencies.
-- `apps/web-test-harness`: manual test client of the shared modules.
-- `docs/M0_PHYSICAL_VALIDATION.md`: hardware procedure and results.
-- [Implementation checklist](docs/IMPLEMENTATION_CHECKLIST.md): progress and acceptance tracking.
-- [Project context](docs/UNIVERSAL_CAST_CONTEXT.md): product requirements and architecture.
-
-The SDK chooser owns discovery and selection; the adapter deliberately has no
-arbitrary device enumeration or TV IP input. The Default Media Receiver requires
-no project-specific TV installation or custom receiver registration.
-
-Direct media must be retrievable by the TV. A recognized extension or successful
-load request does not establish codec compatibility or actual playback. No cookie
-extraction, DRM bypass, webpage rendering, or mirroring is implemented. Signed
-URLs and private addresses may also be inaccessible or expire.
-
-Unit tests use sender SDK doubles, not a simulated TV receiver. They cannot
-satisfy the physical M0 acceptance gate.
-
-## Safari feasibility test target
-
-The experimental [bridge design](docs/SAFARI_CAST_BRIDGE_DESIGN.md) now includes a
-tested standalone command worker. The Swift launcher/runtime packaging and
-Safari-to-TV control integration remain unimplemented.
-
-A minimal Safari extension inspection/native-messaging probe is available under
-[`spikes/safari-google-cast`](spikes/safari-google-cast/README.md). Run
-`npm run build:safari-probe` before opening its Xcode project. Casting is not
-implemented there. Desktop Safari inspection/native messaging passed per user
-report; Cast runtime feasibility remains open.
-
-Current M2 priority: test the [desktop Safari probe](spikes/safari-google-cast/README.md)
-on macOS first. iPhone validation is deferred until the final platform check.
-The macOS probe tests inspection/native messaging only; Cast transport is unproven.
-
-## Local HLS bridge test
-
-The Chrome harness now offers **Playback mode → Mac HLS bridge**. Paste the
-original master URL, confirm the Mac network address, connect, and select
-**Prepare & play**. It prepares and loads the playlist on one page with automatic
-HLS/fMP4 settings. Keep both `npm run bridge:hls` and `npm run dev` running.
-Restart an older Vite server once to load the new development proxy configuration.
-
-For the current site-specific playback experiment, run `npm run bridge:hls` and
-open http://localhost:8787. Follow the [Mac manifest bridge instructions](spikes/hls-manifest-bridge/README.md)
-to prepare a fresh signed master playlist for the Chrome Cast harness.
-The user confirmed correct video, audio, and Pause/Play/Seek in a Mac bridge TV
-test. Endurance, token expiry/recovery, and iPad playback remain unverified.
+Original signed media links are private inputs; exported reports redact query values.
+Do not commit session URLs or use redacted report links for playback. No cookie
+extraction or DRM handling is implemented.

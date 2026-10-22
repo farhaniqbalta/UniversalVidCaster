@@ -2,7 +2,8 @@
 
 Part 1 implementation, 2026-10-21. Diagnostics do not require native messaging
 or a working Cast transport. Part 2 is now a separate
-[native iPad test app](../spikes/ipad-cast/README.md), with physical validation pending.
+[native iPad app](../spikes/ipad-cast/README.md). The iPad Safari transfer and
+TV video/audio/subtitle flow are user-confirmed. See [current results](IPAD_NATIVE_CAST_RESULTS.md).
 
 ## What is collected
 
@@ -50,25 +51,15 @@ redacted JSON report. Reports remain redacted even after copying an original URL
 
 ## Build and install on the iPad
 
-1. Run `npm ci` if dependencies are missing, then `npm run build:safari-probe`.
-2. Open `spikes/safari-google-cast/xcode/UniversalVidCaster Probe/UniversalVidCaster Probe.xcodeproj`.
-3. Select your signing team and unique identifiers for both targets, preserving
-   the host identifier prefix on the extension. Connect/unlock/trust the iPad;
-   enable Developer Mode if Xcode/iPadOS requires it.
-4. Select the containing app scheme **UniversalVidCaster Probe** and your iPad as
-   the destination; build and run. The app is the extension's packaging host.
-5. Enable **Universal VidCaster Diagnostics** in Safari's extension settings.
-   The native packaging scheme may still use the old Probe name.
-6. Open the page with the video in Safari, open the extension, and grant website
-   access when prompted. Restricted/internal pages can refuse injection.
-
-Signing, installation, and page permission behavior require physical iPad
-confirmation. An unsigned generic-iOS build cannot be installed directly.
-Desktop Safari can use the existing macOS project to check the same popup.
+Use the embedded **VidCasterSafari** target in the native iPad app. Follow the
+[current installation guide](IPAD_SAFARI_HANDOFF.md#installupdate), including
+resource generation and signing both targets. The standalone Probe project is
+retained for isolated packaging experiments, not the primary installation path.
+Desktop Safari can use the macOS probe project with the same shared resources.
 
 ## Test on your actual website
 
-1. Before starting the video, select **Inspect / Refresh page**.
+1. Before starting the video, select **Find video / Refresh**.
 2. Review candidate/source schemes, MIME hints, video state, and limitations.
 3. Preview the JSON, select **Copy redacted report**, and verify private query
    values are absent. If needed use the selected report field's Copy action.
@@ -83,7 +74,10 @@ Desktop Safari can use the existing macOS project to check the same popup.
 Share the redacted report for analysis; there is no need to supply cookies,
 authorization headers, passwords, or a private signed media URL.
 
-## Verification
+## Verification history
+
+The counts below describe individual development checkpoints. Use
+[consolidated results](IPAD_NATIVE_CAST_RESULTS.md) for the latest recorded checks.
 
 The TypeScript suite has 56 passing tests, including diagnostics collection,
 URL redaction/non-mutation, dynamic currentSrc snapshots, source provenance,
@@ -93,14 +87,12 @@ without leaking originals into the report. Type checks and Safari
 resources/web harness builds and unsigned iPadOS/macOS packaging builds pass.
 Actual device/site results are tracked separately; automated success is not a compatibility claim.
 
-## Subtitle enhancements — deferred
+## Subtitle support and current evidence
 
-Priority update (2026-10-21): the user has deferred subtitle work, including
-subtitle URL discovery/copying enhancements and TV subtitle validation. These
-are not required for the current Mac bridge aging test or initial native iPad
-video/audio validation. Existing video inspection and original video URL copying
-remain the baseline. Subtitle requests observed manually are not proof that an
-extension can discover them or that the TV can display them in sync.
+Subtitle URL/MIME copying and explicit bundled transfer are implemented. The user
+confirmed video/audio/subtitles through the iPad flow. The original 2026-10-21
+subtitle deferral was reversed. Capturing the current subtitle can require the
+watch and website off/on sequence below. Precise timing remains unmeasured.
 
 ## Current-video subtitle association
 
@@ -118,7 +110,8 @@ distinct; old-video and newer-playback checks apply to both. The watch also
 captures flat-path playback requests. No signed URLs are retained here.
 Eighty tests, type checks, and extension resource build pass, with regression
 coverage for flat-path matching, stale captions, and mixed-layout collisions.
-Physical retest after reinstalling the extension remains pending.
+The user subsequently confirmed subtitles work after toggling website captions
+off/on. See the consolidated results for the scope of that report.
 
 If inspection finds no subtitle, the popup now distinguishes **no VTT requests
 observed** from **observed requests that could not be matched**. The redacted
@@ -138,7 +131,8 @@ the browser's own history after the watch stops. If a player makes no new reques
 uses an uninspected frame, or URLs cannot be associated, detection may remain empty.
 
 Updated verification: 77 repository tests, type checks, and extension resource
-build pass. Physical request capture and subtitle matching retest remain pending.
+build pass at that development checkpoint. Later user-confirmed subtitle capture
+and transfer results supersede its original physical-test-pending status.
 
 Update 2026-10-23: native subtitle loading was confirmed by the user, but a
 second video received a subtitle from the first video. Subtitle correctness and

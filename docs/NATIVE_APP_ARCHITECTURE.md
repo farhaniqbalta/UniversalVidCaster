@@ -8,7 +8,7 @@ The user subsequently confirmed all architecture-refactor smoke-test functions
 worked. A new explicit Safari transfer is added through `SafariHandoff.swift`
 validation and `WorkspaceSession.importSafariTransfer(_:)`, separate from visual
 components and media preparation. The embedded extension has no Cast SDK/session
-owner. Its physical iPad handoff test remains pending; see
+owner. The user confirmed the physical iPad handoff/playback flow; see
 [handoff guide](IPAD_SAFARI_HANDOFF.md).
 
 ```mermaid
@@ -105,9 +105,9 @@ These tests have no SwiftUI or Google Cast dependency.
 
 Verification: 26 native tests pass, including seven session-contract tests; the
 final unsigned iOS build and whitespace check pass. No real TV was commanded
-during the architecture tests. Device smoke validation after this refactor is pending.
+during the architecture tests. The user subsequently confirmed the refactor smoke checks worked.
 
 Run `xcrun swift test --package-path spikes/ipad-cast` with full Xcode selected,
 then build the iPad target. Physical UI/playback checks remain necessary after a
-design swap. The pre-refactor UI was user-confirmed; the architecture refactor
-is automatically checked and still needs a device smoke test.
+design swap. Both the redesigned UI and architecture refactor received user-confirmed
+smoke passes; later changes still require their own regression checks.
