@@ -11,6 +11,9 @@
 		000000000000000000000015 /* CastService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000B /* CastService.swift */; };
 		000000000000000000000016 /* MediaInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000C /* MediaInput.swift */; };
 		00000000000000000000003E /* GoogleCastDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 00000000000000000000003D /* GoogleCastDynamic */; };
+		000000000000000000000070 = {isa = PBXBuildFile; fileRef = 000000000000000000000060; };
+		000000000000000000000071 = {isa = PBXBuildFile; fileRef = 000000000000000000000061; };
+		000000000000000000000072 = {isa = PBXBuildFile; fileRef = 000000000000000000000062; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +21,9 @@
 		00000000000000000000000B /* CastService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastService.swift; sourceTree = "<group>"; };
 		00000000000000000000000C /* MediaInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaInput.swift; sourceTree = "<group>"; };
 		00000000000000000000001E /* iPadCastTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = iPadCastTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		000000000000000000000060 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManifestPreparation.swift; sourceTree = "<group>"; };
+		000000000000000000000061 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalManifestServer.swift; sourceTree = "<group>"; };
+		000000000000000000000062 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForegroundManifestHost.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +52,9 @@
 				00000000000000000000000A /* NativeCastApp.swift */,
 				00000000000000000000000B /* CastService.swift */,
 				00000000000000000000000C /* MediaInput.swift */,
+				000000000000000000000062 /* ForegroundManifestHost.swift */,
+				000000000000000000000061 /* LocalManifestServer.swift */,
+				000000000000000000000060 /* ManifestPreparation.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -128,6 +137,9 @@
 				000000000000000000000014 /* NativeCastApp.swift in Sources */,
 				000000000000000000000015 /* CastService.swift in Sources */,
 				000000000000000000000016 /* MediaInput.swift in Sources */,
+				000000000000000000000072 /* ForegroundManifestHost.swift in Sources */,
+				000000000000000000000071 /* LocalManifestServer.swift in Sources */,
+				000000000000000000000070 /* ManifestPreparation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

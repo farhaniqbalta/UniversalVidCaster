@@ -6,7 +6,7 @@ let package = Package(
     name: "iPadCastInputTests",
     platforms: [.macOS(.v13)],
     targets: [
-        .target(name: "MediaInput", path: "Sources", exclude: ["NativeCastApp.swift", "CastService.swift"], sources: ["MediaInput.swift"]),
+        .target(name: "MediaInput", path: "Sources", exclude: ["NativeCastApp.swift", "CastService.swift", "ForegroundManifestHost.swift"], sources: ["MediaInput.swift", "ManifestPreparation.swift", "LocalManifestServer.swift"]),
         .testTarget(name: "MediaInputTests", dependencies: ["MediaInput"], path: "Tests"),
     ]
 )

@@ -6,6 +6,12 @@
 <button id="inspect">Inspect / Refresh page</button>
 <p id="status" role="status" aria-live="polite">Start the page's video, then inspect. Only the permitted main document is inspected.</p>
 <h2>Direct media candidates</h2><ul id="candidates"></ul>
+<h2>Subtitle candidates for this video</h2><ul id="subtitles"></ul>
+<button id="watch-subtitles" type="button">Watch new subtitle requests</button>
+<button id="stop-subtitle-watch" type="button">Stop subtitle watch</button>
+<p id="subtitle-watch-status" role="status" aria-live="polite"></p>
+<p id="subtitle-diagnostics"></p>
+<p>Enable the desired subtitle in the current player, then inspect again. Resource-history URLs are shown only when their media ID matches a single current video candidate. Unmatched or ambiguous history is omitted. Current track elements are also inspected; matching IDs do not verify subtitle language or timing.</p>
 <p>Copy original URL is for local playback testing. It includes any private query values and is separate from the redacted report.</p>
 <p id="original-status" role="status" aria-live="polite"></p>
 <div id="original-panel" hidden>

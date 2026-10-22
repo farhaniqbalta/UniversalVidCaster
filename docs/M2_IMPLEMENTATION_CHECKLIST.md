@@ -2,11 +2,25 @@
 
 ## Latest priority update — 2026-10-23
 
+Native subtitle loading was reinstated by the user and is now implemented:
+optional WebVTT URL/language plus activation on load. Sixteen native tests and
+unsigned iOS build pass. TV rendering/synchronization remain pending; Safari
+subtitle discovery is still deferred. This supersedes blanket subtitle deferral below.
+
+The user now accepts foreground native iPad operation while casting. Local
+manifest preparation/hosting and a prepare-and-play UI are implemented; next is
+a fresh original-URL test with the Mac bridge stopped. Background serving and
+Safari-only controls are not acceptance requirements for this iteration.
+
 - [x] Complete the Mac HLS bridge aging-test step (user-reported complete; detailed duration/expiry results not supplied).
 - [x] Validate native iPad flower MP4 playback and Pause/Play/Seek/Stop (user report).
 - [x] Validate website video/audio/seek from native iPad using Mac bridge playlists (user report).
-- [ ] Check iPad background/foreground, lock/unlock, and reconnection; record playback and control recovery separately.
-- [ ] Evaluate Mac-free playlist hosting and Safari handoff against iPad lifecycle limits.
+- [x] Check switching to Safari/return and brief iPad lock/unlock: playback continuity and control recovery passed per user report with Mac bridge running.
+- [ ] Test recovery after actual network/session loss; normal app return does not establish this.
+- [x] Document Mac-free architecture options and a bounded foreground iPad-local experiment ([design](MAC_FREE_IPAD_FEASIBILITY.md)).
+- [x] Implement the foreground iPad-local VOD manifest host and native automated tests.
+- [ ] Physically validate correct video/audio/seek with the Mac bridge stopped and the iPad app foregrounded.
+- [ ] Evaluate Safari handoff and persistent session ownership separately from native playback.
 - [ ] **Deferred:** external WebVTT subtitle loading, selection, display, and synchronization validation.
 - [ ] **Deferred:** subtitle URL detection/copying enhancements in the Safari extension.
 

@@ -38,3 +38,21 @@ struct InputError: LocalizedError {
     init(_ message: String) { self.message = message }
     var errorDescription: String? { message }
 }
+
+struct SubtitleInput {
+    let url: URL
+    let language: String
+
+    static func parse(url text: String, language: String) throws -> SubtitleInput? {
+        let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if text.isEmpty { return nil }
+        let input: MediaInput
+        do { input = try MediaInput(url: text, mime: "text/vtt", startSeconds: 0) }
+        catch { throw InputError("Enter an original HTTP(S) WebVTT subtitle URL without credentials or redaction placeholders.") }
+        let language = language.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard language.range(of: #"^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$"#, options: .regularExpression) != nil else {
+            throw InputError("Enter a subtitle language such as en, id, or en-US.")
+        }
+        return SubtitleInput(url: input.url, language: language)
+    }
+}
