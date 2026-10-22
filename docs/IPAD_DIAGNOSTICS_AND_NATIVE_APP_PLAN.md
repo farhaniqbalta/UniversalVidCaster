@@ -3,6 +3,12 @@
 Date: 2026-10-21. Status: Part 1 software implemented (2026-10-21), physical iPad/target-site validation pending. Part 2 software implemented; physical native-iPad validation pending. See [diagnostic run guide](SAFARI_DIAGNOSTICS.md).
 Target hardware: user's M1 iPad Pro, reported iPadOS 27.0.1.
 
+Physical update (2026-10-23): user confirmed native iPad flower MP4 playback on
+the TV and Pause/Play/Seek/Stop. Next is native HLS format configuration followed
+by website playback using a fresh Mac bridge playlist. Receiver telemetry,
+background/reconnect behavior, and a Mac-free Safari flow remain unvalidated.
+See [native results](IPAD_NATIVE_CAST_RESULTS.md). Subtitles remain deferred.
+
 Latest priority update (2026-10-21): finish the Mac HLS bridge aging test, then
 continue physical native iPad validation. Subtitle support and subtitle-specific
 Safari diagnostic enhancements are **deferred** and are not acceptance criteria

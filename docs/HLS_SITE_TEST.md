@@ -5,6 +5,12 @@ then validate iPad casting. The Mac manifest bridge playback test passed per use
 
 ## Latest priority — subtitles deferred
 
+Update 2026-10-23: the user reports completing the documentation/commit step and
+Mac aging-test step. Duration and detailed stall/expiry observations were not
+provided; do not infer a specific endurance duration or token-recovery result.
+Proceed to native iPad validation with the public flower MP4, followed by the
+Mac bridge playlist. Subtitle work remains deferred.
+
 As of 2026-10-21, the user has deferred subtitle work. Continue video/audio aging
 tests on the Mac bridge, then physical iPad Cast validation. External subtitle
 loading, subtitle URL discovery/copying in Safari, language selection, TV display,
