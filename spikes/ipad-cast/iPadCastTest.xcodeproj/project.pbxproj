@@ -1,41 +1,264 @@
 // !$*UTF8*$!
-{ archiveVersion = 1; classes = {}; objectVersion = 56; objects = {
-00000000000000000000000A = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeCastApp.swift; sourceTree = "<group>"; };
-000000000000000000000014 = { isa = PBXBuildFile; fileRef = 00000000000000000000000A; };
-00000000000000000000000B = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastService.swift; sourceTree = "<group>"; };
-000000000000000000000015 = { isa = PBXBuildFile; fileRef = 00000000000000000000000B; };
-00000000000000000000000C = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaInput.swift; sourceTree = "<group>"; };
-000000000000000000000016 = { isa = PBXBuildFile; fileRef = 00000000000000000000000C; };
-00000000000000000000001E = { isa = PBXFileReference; explicitFileType = wrapper.application; path = iPadCastTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
-00000000000000000000001F = { isa = PBXGroup; children = (000000000000000000000020, 000000000000000000000021); sourceTree = "<group>"; };
-000000000000000000000020 = { isa = PBXGroup; path = Sources; sourceTree = "<group>"; children = (00000000000000000000000A, 00000000000000000000000B, 00000000000000000000000C); };
-000000000000000000000021 = { isa = PBXGroup; name = Products; sourceTree = "<group>"; children = (00000000000000000000001E); };
-000000000000000000000028 = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (000000000000000000000014, 000000000000000000000015, 000000000000000000000016); runOnlyForDeploymentPostprocessing = 0; };
-000000000000000000000029 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (00000000000000000000003E); runOnlyForDeploymentPostprocessing = 0; };
-00000000000000000000002A = { isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-00000000000000000000003C = { isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/googlecast/google-cast-ios-sdk"; requirement = { kind = exactVersion; version = 4.8.6; }; };
-00000000000000000000003D = { isa = XCSwiftPackageProductDependency; package = 00000000000000000000003C; productName = GoogleCastDynamic; };
-00000000000000000000003E = { isa = PBXBuildFile; productRef = 00000000000000000000003D; };
-000000000000000000000046 = { isa = XCBuildConfiguration; name = Debug; buildSettings = { SDKROOT = iphoneos; IPHONEOS_DEPLOYMENT_TARGET = 17.0; CLANG_ENABLE_MODULES = YES; SWIFT_VERSION = 5.0; }; };
-000000000000000000000047 = { isa = XCBuildConfiguration; name = Release; buildSettings = { SDKROOT = iphoneos; IPHONEOS_DEPLOYMENT_TARGET = 17.0; CLANG_ENABLE_MODULES = YES; SWIFT_VERSION = 5.0; }; };
-000000000000000000000048 = { isa = XCBuildConfiguration; name = Debug; buildSettings = { PRODUCT_BUNDLE_IDENTIFIER = dev.universalvidcaster.ipadcasttest;
-PRODUCT_NAME = "$(TARGET_NAME)"; CODE_SIGN_STYLE = Automatic;
-GENERATE_INFOPLIST_FILE = YES; INFOPLIST_FILE = Info.plist;
-INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-TARGETED_DEVICE_FAMILY = 2; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-SUPPORTS_MACCATALYST = NO; MARKETING_VERSION = 0.1.0; CURRENT_PROJECT_VERSION = 1;
-LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-SWIFT_EMIT_LOC_STRINGS = YES; }; };
-000000000000000000000049 = { isa = XCBuildConfiguration; name = Release; buildSettings = { PRODUCT_BUNDLE_IDENTIFIER = dev.universalvidcaster.ipadcasttest;
-PRODUCT_NAME = "$(TARGET_NAME)"; CODE_SIGN_STYLE = Automatic;
-GENERATE_INFOPLIST_FILE = YES; INFOPLIST_FILE = Info.plist;
-INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-TARGETED_DEVICE_FAMILY = 2; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-SUPPORTS_MACCATALYST = NO; MARKETING_VERSION = 0.1.0; CURRENT_PROJECT_VERSION = 1;
-LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-SWIFT_EMIT_LOC_STRINGS = YES; }; };
-00000000000000000000004A = { isa = XCConfigurationList; buildConfigurations = (000000000000000000000046, 000000000000000000000047); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-00000000000000000000004B = { isa = XCConfigurationList; buildConfigurations = (000000000000000000000048, 000000000000000000000049); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-000000000000000000000050 = { isa = PBXNativeTarget; buildConfigurationList = 00000000000000000000004B; buildPhases = (000000000000000000000028, 000000000000000000000029, 00000000000000000000002A); buildRules = (); dependencies = (); name = iPadCastTest; productName = iPadCastTest; productReference = 00000000000000000000001E; productType = "com.apple.product-type.application"; packageProductDependencies = (00000000000000000000003D); };
-000000000000000000000001 = { isa = PBXProject; attributes = { LastUpgradeCheck = 1600; }; buildConfigurationList = 00000000000000000000004A; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; knownRegions = (en, Base); mainGroup = 00000000000000000000001F; productRefGroup = 000000000000000000000021; projectDirPath = ""; projectRoot = ""; targets = (000000000000000000000050); packageReferences = (00000000000000000000003C); };
-}; rootObject = 000000000000000000000001; }
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		000000000000000000000014 /* NativeCastApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000A /* NativeCastApp.swift */; };
+		000000000000000000000015 /* CastService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000B /* CastService.swift */; };
+		000000000000000000000016 /* MediaInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000C /* MediaInput.swift */; };
+		00000000000000000000003E /* GoogleCastDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 00000000000000000000003D /* GoogleCastDynamic */; };
+		000000000000000000000070 = {isa = PBXBuildFile; fileRef = 000000000000000000000060; };
+		000000000000000000000071 = {isa = PBXBuildFile; fileRef = 000000000000000000000061; };
+		000000000000000000000072 = {isa = PBXBuildFile; fileRef = 000000000000000000000062; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		00000000000000000000000A /* NativeCastApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeCastApp.swift; sourceTree = "<group>"; };
+		00000000000000000000000B /* CastService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastService.swift; sourceTree = "<group>"; };
+		00000000000000000000000C /* MediaInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaInput.swift; sourceTree = "<group>"; };
+		00000000000000000000001E /* iPadCastTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = iPadCastTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		000000000000000000000060 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManifestPreparation.swift; sourceTree = "<group>"; };
+		000000000000000000000061 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalManifestServer.swift; sourceTree = "<group>"; };
+		000000000000000000000062 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForegroundManifestHost.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		000000000000000000000029 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00000000000000000000003E /* GoogleCastDynamic in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00000000000000000000001F = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000020 /* Sources */,
+				000000000000000000000021 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		000000000000000000000020 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				00000000000000000000000A /* NativeCastApp.swift */,
+				00000000000000000000000B /* CastService.swift */,
+				00000000000000000000000C /* MediaInput.swift */,
+				000000000000000000000062 /* ForegroundManifestHost.swift */,
+				000000000000000000000061 /* LocalManifestServer.swift */,
+				000000000000000000000060 /* ManifestPreparation.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		000000000000000000000021 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00000000000000000000001E /* iPadCastTest.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		000000000000000000000050 /* iPadCastTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00000000000000000000004B /* Build configuration list for PBXNativeTarget "iPadCastTest" */;
+			buildPhases = (
+				000000000000000000000028 /* Sources */,
+				000000000000000000000029 /* Frameworks */,
+				00000000000000000000002A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iPadCastTest;
+			packageProductDependencies = (
+				00000000000000000000003D /* GoogleCastDynamic */,
+			);
+			productName = iPadCastTest;
+			productReference = 00000000000000000000001E /* iPadCastTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		000000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = 00000000000000000000004A /* Build configuration list for PBXProject "iPadCastTest" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 00000000000000000000001F;
+			packageReferences = (
+				00000000000000000000003C /* XCRemoteSwiftPackageReference "google-cast-ios-sdk" */,
+			);
+			productRefGroup = 000000000000000000000021 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				000000000000000000000050 /* iPadCastTest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		00000000000000000000002A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		000000000000000000000028 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000000000000000000014 /* NativeCastApp.swift in Sources */,
+				000000000000000000000015 /* CastService.swift in Sources */,
+				000000000000000000000016 /* MediaInput.swift in Sources */,
+				000000000000000000000072 /* ForegroundManifestHost.swift in Sources */,
+				000000000000000000000071 /* LocalManifestServer.swift in Sources */,
+				000000000000000000000070 /* ManifestPreparation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		000000000000000000000046 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		000000000000000000000047 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		000000000000000000000048 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YP5Q47APNV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "iPad Cast Test";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Find and control your existing Google Cast TV on your local network.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.universalvidcaster.ipadcasttest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		000000000000000000000049 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YP5Q47APNV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "iPad Cast Test";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Find and control your existing Google Cast TV on your local network.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.universalvidcaster.ipadcasttest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		00000000000000000000004A /* Build configuration list for PBXProject "iPadCastTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000000000046 /* Debug */,
+				000000000000000000000047 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00000000000000000000004B /* Build configuration list for PBXNativeTarget "iPadCastTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000000000048 /* Debug */,
+				000000000000000000000049 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		00000000000000000000003C /* XCRemoteSwiftPackageReference "google-cast-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlecast/google-cast-ios-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 4.8.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		00000000000000000000003D /* GoogleCastDynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00000000000000000000003C /* XCRemoteSwiftPackageReference "google-cast-ios-sdk" */;
+			productName = GoogleCastDynamic;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 000000000000000000000001 /* Project object */;
+}

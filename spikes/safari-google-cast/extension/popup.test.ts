@@ -13,12 +13,13 @@ async function mount(failInspection = false) {
     vi.fn().mockResolvedValueOnce([]).mockResolvedValueOnce([{ result: {
       report: redactReport(collectPageDiagnostics(doc)),
       originalCandidateUrls: collectPageDiagnostics(doc).candidates.map(candidate => candidate.url),
+      subtitles: [{ url: 'https://example.test/current.vtt?t=subtitle-secret', language: 'en', method: 'track-element', association: 'current-track-element' }],
     } }]);
   const native = vi.fn().mockRejectedValue(new Error('unavailable'));
   vi.stubGlobal('browser', { tabs: { query: vi.fn().mockResolvedValue([{ id: 1 }]) }, scripting: { executeScript }, runtime: { sendNativeMessage: native } });
   document.documentElement.innerHTML = html;
   await import('./popup');
-  return { native };
+  return { native, executeScript };
 }
 
 it('renders and exports redacted data independently of native messaging with clipboard fallback', async () => {
@@ -82,4 +83,48 @@ it('reveals original only after explicit copy fails and supports clearing it', a
   (document.getElementById('hide-original') as HTMLButtonElement).click();
   expect(field.value).toBe('');
   expect(document.getElementById('original-panel')!.hidden).toBe(true);
+});
+
+it('keeps original subtitle tokens private and copies MIME and subtitle only on click', async () => {
+  const writeText = vi.fn().mockResolvedValue(undefined);
+  Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+  await mount();
+  (document.getElementById('inspect') as HTMLButtonElement).click();
+  await vi.waitFor(() => expect(document.querySelector('#subtitles button')).not.toBeNull());
+  expect(writeText).not.toHaveBeenCalled();
+  expect(document.body.innerHTML).not.toContain('subtitle-secret');
+  expect((document.getElementById('report') as HTMLTextAreaElement).value).not.toContain('subtitle-secret');
+  (document.querySelector('#subtitles button') as HTMLButtonElement).click();
+  expect(writeText).toHaveBeenLastCalledWith('https://example.test/current.vtt?t=subtitle-secret');
+  (document.querySelectorAll('#candidates button')[1] as HTMLButtonElement).click();
+  expect(writeText).toHaveBeenLastCalledWith('video/mp4');
+});
+
+it('clears the previous subtitle buttons when refreshing for another video', async () => {
+  const { executeScript } = await mount();
+  (document.getElementById('inspect') as HTMLButtonElement).click();
+  await vi.waitFor(() => expect(document.querySelector('#subtitles button')).not.toBeNull());
+  const doc = document.implementation.createHTMLDocument();
+  doc.body.innerHTML = '<video src="https://example.test/new.mp4"></video>';
+  executeScript.mockResolvedValueOnce([]).mockResolvedValueOnce([{ result: {
+    report: redactReport(collectPageDiagnostics(doc)), originalCandidateUrls: ['https://example.test/new.mp4'], subtitles: [],
+  } }]);
+  (document.getElementById('inspect') as HTMLButtonElement).click();
+  await vi.waitFor(() => expect(document.getElementById('subtitles')!.textContent).toContain('No associated subtitle'));
+  expect(document.querySelector('#subtitles button')).toBeNull();
+  expect((document.getElementById('original-url') as HTMLTextAreaElement).value).toBe('');
+});
+
+it('distinguishes observed-but-unmatched subtitles and redacts diagnostic URLs again', async () => {
+  const { executeScript } = await mount();
+  const doc = document.implementation.createHTMLDocument();
+  executeScript.mockReset().mockResolvedValueOnce([]).mockResolvedValueOnce([{ result: {
+    report: redactReport(collectPageDiagnostics(doc)), originalCandidateUrls: [], subtitles: [],
+    subtitleDiagnostics: { currentMediaIdentityCount: 1, resourceEntryCount: 10, trackElementCount: 0, matchedSubtitleCount: 0,
+      observedVttUrls: ['https://example.test/old.vtt?t=never-display-this'] },
+  } }]);
+  (document.getElementById('inspect') as HTMLButtonElement).click();
+  await vi.waitFor(() => expect(document.getElementById('subtitles')!.textContent).toContain('could not be associated safely'));
+  expect(document.getElementById('subtitle-diagnostics')!.textContent).toContain('1 observed VTT');
+  expect((document.getElementById('report') as HTMLTextAreaElement).value).not.toContain('never-display-this');
 });

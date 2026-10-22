@@ -68,16 +68,30 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
         DispatchQueue.main.asyncAfter(deadline: .now() + 20, execute: deadline)
     }
 
-    func load(url: String, mime: String, start: String, title: String, live: Bool) {
+    func load(url: String, mime: String, start: String, title: String, live: Bool, hlsFMP4: Bool, subtitleURL: String = "", subtitleLanguage: String = "en") {
         guard !busy, let client, connected else { message = "Connect to a device first."; return }
         do {
             guard let seconds = Double(start) else { throw InputError("Enter a numeric start position.") }
-            let input = try MediaInput(url: url, mime: mime, startSeconds: seconds)
+            let input = try MediaInput(url: url, mime: mime, startSeconds: seconds, hlsFMP4: hlsFMP4)
+            let subtitle = try SubtitleInput.parse(url: subtitleURL, language: subtitleLanguage)
             let metadata = GCKMediaMetadata(metadataType: .generic)
             metadata.setString(title.isEmpty ? "Direct media test" : title, forKey: kGCKMetadataKeyTitle)
             let info = GCKMediaInformationBuilder(contentURL: input.url)
             info.contentType = input.mime; info.streamType = live ? .live : .buffered; info.metadata = metadata
+            if input.hlsFMP4 {
+                info.hlsSegmentFormat = .FMP4
+                info.hlsVideoSegmentFormat = .FMP4
+            }
             let data = GCKMediaLoadRequestDataBuilder()
+            if let subtitle {
+                guard let track = GCKMediaTrack(identifier: 1, contentIdentifier: subtitle.url.absoluteString,
+                                               contentType: "text/vtt", type: .text, textSubtype: .subtitles,
+                                               name: "\(subtitle.language) subtitles", languageCode: subtitle.language, customData: nil) else {
+                    throw InputError("Could not configure the subtitle track.")
+                }
+                info.mediaTracks = [track]
+                data.activeTrackIDs = [NSNumber(value: 1)]
+            }
             data.mediaInformation = info.build(); data.autoplay = true; data.startTime = input.startSeconds
             resetStatus()
             track(client.loadMedia(with: data.build()), label: "Load")

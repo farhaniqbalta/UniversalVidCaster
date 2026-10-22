@@ -1,5 +1,70 @@
 # Native iPad Cast test app
 
+## Optional native subtitles
+
+Native external WebVTT loading is implemented for direct, Mac bridge, and iPad-local
+HLS modes. Expand **Subtitles (optional WebVTT)**, turn on **Include subtitle on
+next load**, paste the complete original subtitle URL for the exact video, and
+enter language (`en`, `id`, or a language tag such as `en-US`). Load/prepare again
+to attach and activate the track. This reloads media using the start-position field.
+
+The TV fetches the subtitle directly with that URL's own token; it is not fetched
+or rewritten by the iPad playlist host. Appropriate CORS and valid authorization
+are required. Blank/invalid URLs and malformed language input are rejected without
+logging private values. Turn inclusion off and reload for a video without the
+external track. Existing playback is unaffected by merely editing/toggling input.
+No in-session toggle, automatic discovery, token renewal, translation, SRT conversion,
+or timing adjustment is implemented. Safari subtitle discovery remains deferred.
+
+Sixteen native tests and the unsigned iOS build pass. Physical subtitle rendering
+and synchronization remain pending; the video playback results do not cover them.
+
+## Foreground iPad hosting (no Mac bridge)
+
+Updated 2026-10-23: foreground operation is acceptable per the user's revised
+requirement. Native playlist preparation and hosting are implemented; physical
+Detailed Mac-free TV validation is pending; the user confirmed HLS preparation.
+Native subtitles are implemented as described above. All 16 native tests
+and the unsigned iOS build pass, including manifest authorization and loopback
+HTTP serving checks. Real iPad-to-TV local listener reachability is unverified.
+
+1. Build/run the updated app from Xcode on your iPad.
+2. Get a fresh original HTTPS master URL with `t` and `pm` from the Safari
+   diagnostic extension. Paste that original URL in the iPad app, not a Mac bridge
+   URL or redacted report link. Initial acquisition can still use Mac Safari;
+   iPad Safari detection/handoff is a separate pending step.
+3. Turn on **Prepare HLS on this iPad (no Mac)**. Connect to the TV on the same
+   Wi-Fi. Tap **Prepare on iPad & play**. HLS MIME/fMP4 and VOD are automatic.
+4. Keep the iPad app foregrounded; auto-lock is disabled during preparation and
+   hosting. Check correct video, audio, seek, pause/play, and stop.
+5. For independent validation, stop the Mac bridge before preparing this new
+   session. Buffered playback of an old Mac session does not establish success.
+6. Use **Stop iPad hosting and clear session** when finished to discard playlists,
+   close the listener, and restore auto-lock. Stop Cast playback first if desired.
+   Cast Stop/Disconnect alone does not clear the playlist host. Session expiry
+   after 30 minutes also stops hosting/restores auto-lock; source tokens may expire
+   earlier. Prepare a fresh session to recover.
+
+Implementation: preloads up to 32 playlists / nesting depth 4 into memory, up to
+1 MiB each and 8 MiB total. A selected master’s referenced video/audio/iframe
+playlists are prepared, so a large multi-variant master may hit these limits.
+HTTPS playlist requests use an ephemeral cookie-free session, no redirects, and
+15-second request / 20-second resource timeouts. Finite VOD only: no encryption,
+variable substitution, live streams, segment proxying, token refresh, or media
+transcoding. Existing child query bytes are preserved; missing t/pm are supplied
+from the original session. The TV downloads initialization/media directly.
+
+The listener uses the iPad's Wi-Fi IPv4 address and a dynamic TCP port, serves
+only prepared random paths, supports GET/HEAD/OPTIONS with CORS, limits connections
+and request sizes, and logs no URLs. No TV app, hosted service, or broad ATS
+exception was added. Local-network access and actual TV reachability still need
+physical validation. Switching away or locking may suspend hosting; return to the
+app to recover, and prepare a fresh session if necessary.
+
+Screen-awake behavior, Wi-Fi changes, permission failures, expiry recovery, and
+physical Mac-free playback remain device-test gates. This is not a Safari-only
+controller or a background server promise.
+
 Part 2 implementation, 2026-10-21. Standalone native test client using Google's
 official iOS Cast SDK, **not a Safari bridge**. No Python or macOS helper is used.
 The Safari diagnostic extension remains a separate target and is unchanged by
@@ -31,6 +96,32 @@ have not yet been validated on that device. An unsigned build is not installable
 directly on a physical iPad.
 
 ## Test the website candidate later
+
+### Mac bridge test after the flower baseline
+
+The user confirmed native flower MP4 TV playback and Pause/Play/Seek/Stop on
+2026-10-23. The app now offers **HLS uses fragmented MP4 audio/video** and
+**Use Mac bridge HLS settings**, mapped to both SDK audio/video segment formats.
+The flower preset resets the format option to off. Non-HLS MIME with the option
+on is rejected before loading. Seven native input tests and the unsigned iOS
+build pass; physical HLS playback from iPad remains pending.
+
+1. Build/run the updated iPadCastTest target on the iPad from Xcode.
+2. Keep the Mac awake on the TV's network and run `npm run bridge:hls` on it.
+3. On the Mac, open http://localhost:8787, paste a fresh original **master** URL,
+   choose the Mac's network address, and select **Prepare playlist**.
+4. Copy the generated `http://<Mac-address>:8787/hls/…/….m3u8` URL to the iPad
+   app's media URL field (Universal Clipboard or another private transfer).
+   Do not use localhost, the original unsigned child URL, or a redacted report URL.
+5. Select **Use Mac bridge HLS settings**, connect to the TV, and **Load & play**.
+   The button preserves the URL, sets HLS MIME and both fMP4 formats, start 0,
+   and live off. The iPad does not prepare playlists or automatically copy tokens.
+6. Confirm the correct video **and audio**, Pause/Play/Seek/Stop, and receiver
+   observations. Keep the Mac bridge running. Its sessions expire after 30 minutes;
+   upstream authorization may expire earlier. Do not share the generated secret URL.
+
+This is a native iPad sender with a Mac playlist host; it does not establish a
+Mac-free or Safari-only flow. Subtitles remain deferred.
 
 After the public preset works, enter a legitimate original direct-media URL and
 its MIME. The diagnostic report's `[REDACTED]` links cannot be played; this app

@@ -1,7 +1,37 @@
 # Plan: Safari diagnostics, then an iPad native Cast app
 
-Date: 2026-10-21. Status: Part 1 software implemented (2026-10-21), physical iPad/target-site validation pending. Part 2 software implemented; physical native-iPad validation pending. See [diagnostic run guide](SAFARI_DIAGNOSTICS.md).
+Date: 2026-10-21. Updated 2026-10-23: Part 1 software implemented; physical iPad Safari inspection remains pending. Part 2 flower playback/controls and website video/audio/seek via Mac bridge passed per user report. See [diagnostic run guide](SAFARI_DIAGNOSTICS.md).
 Target hardware: user's M1 iPad Pro, reported iPadOS 27.0.1.
+
+Revised requirement (2026-10-23): the user accepts the native iPad app remaining
+foregrounded and awake while casting. A foreground iPad-local VOD manifest host
+and prepare-and-play flow are implemented; next is physical Mac-free playback
+with the Mac bridge stopped. Staying in Safari/background hosting is no longer
+required for this iteration. Safari URL acquisition/handoff remains separate,
+and subtitles remain deferred. Earlier stay-in-Safari requirements below are
+historical and superseded for this iteration.
+
+Next architecture gate: [Mac-free iPad feasibility design](MAC_FREE_IPAD_FEASIBILITY.md).
+Start with a foreground iPad-local VOD manifest host using the Default Media
+Receiver, then test app suspension explicitly. This is a design, not implemented
+software or a promise of Safari/background operation. Hosted manifest services or
+a Custom Web Receiver require a separate scope decision.
+
+Physical update (2026-10-23): user confirmed native iPad flower MP4 playback on
+the TV and Pause/Play/Seek/Stop, then website video/audio/seek using a fresh Mac
+bridge playlist with the native HLS update. Switching to Safari and returning,
+plus brief lock/unlock, also passed per user report with playback and controls
+recovering while the Mac bridge remained running. Receiver telemetry, recovery
+after actual network/session loss, and a Mac-free Safari flow remain unvalidated.
+See [native results](IPAD_NATIVE_CAST_RESULTS.md). Subtitles remain deferred.
+
+Native HLS preparation is now implemented: the iPad app can explicitly set both
+audio/video fMP4 formats with a Mac bridge settings preset. Seven native input
+tests and an unsigned iOS build pass. The user installed the update and confirmed
+website video/audio/seek on the physical iPad; the Mac still hosts playlists.
+Next: Mac-free architecture feasibility. App-switch and brief lock/unlock checks
+passed with the Mac bridge; actual network-loss recovery is still pending.
+Do not assume an iPad-hosted server survives app suspension.
 
 Latest priority update (2026-10-21): finish the Mac HLS bridge aging test, then
 continue physical native iPad validation. Subtitle support and subtitle-specific

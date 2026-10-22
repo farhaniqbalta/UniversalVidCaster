@@ -101,3 +101,61 @@ are not required for the current Mac bridge aging test or initial native iPad
 video/audio validation. Existing video inspection and original video URL copying
 remain the baseline. Subtitle requests observed manually are not proof that an
 extension can discover them or that the TV can display them in sync.
+
+## Current-video subtitle association
+
+Flat-path fix (2026-10-23): the user supplied a report with one master URL at
+`/v/<media-id>/config-….json` and a VTT at
+`/v/<same-media-id>/subs-legacy/….vtt`, but diagnostics counted zero media IDs.
+The previous parser required an extra namespace segment. It now recognizes both
+observed layouts: `/v/z<number>/<media-id>/…` and `/v/<media-id>/…`. Layouts remain
+distinct; old-video and newer-playback checks apply to both. The watch also
+captures flat-path playback requests. No signed URLs are retained here.
+Eighty tests, type checks, and extension resource build pass, with regression
+coverage for flat-path matching, stale captions, and mixed-layout collisions.
+Physical retest after reinstalling the extension remains pending.
+
+If inspection finds no subtitle, the popup now distinguishes **no VTT requests
+observed** from **observed requests that could not be matched**. The redacted
+report adds `subtitleDiagnostics` with track/resource/current-ID/match counts and
+up to 20 redacted observed VTT paths. The user's earlier empty-observations report
+did not contain those diagnostics, so it did not establish which cause applied.
+
+For missing resource history: select **Watch new subtitle requests**, close the
+popup, switch subtitles off/on in the current player, reopen the popup, and inspect.
+The explicit watch uses Resource Timing's PerformanceObserver in the permitted
+document, not request interception or private player access. It keeps at most
+512 relevant URL observations in isolated-world memory for five minutes; Stop
+subtitle watch clears captured entries. Starting again resets the watch. Full
+page reload/navigation destroys that document's watch. No captured signed URL is
+logged, persisted, or sent to native messaging. Ordinary inspection can still see
+the browser's own history after the watch stops. If a player makes no new request,
+uses an uninspected frame, or URLs cannot be associated, detection may remain empty.
+
+Updated verification: 77 repository tests, type checks, and extension resource
+build pass. Physical request capture and subtitle matching retest remain pending.
+
+Update 2026-10-23: native subtitle loading was confirmed by the user, but a
+second video received a subtitle from the first video. Subtitle correctness and
+synchronization were therefore not established for that second load.
+
+The extension now collects current subtitle/caption track elements and `.vtt`
+Resource Timing entries. Timing history is **not** treated as the current video:
+for the observed provider URL layout `/v/<namespace>/<media-id>/…`, history-based
+subtitle URLs must match one unambiguous current media candidate identity.
+Mismatched IDs, multiple media IDs, and unassociated history are omitted. A newer
+playback request for a different media ID suppresses results from stale DOM
+sources. No arbitrary latest/first subtitle is selected. Refreshing inspection
+clears previous rows and original-copy fallback contents.
+
+This is provider-specific association evidence, not universal episode detection.
+DOM track URLs without a recognizable ID are labeled as current track elements;
+the page can still expose stale state. Matching IDs do not verify language or
+timing. If a page still exposes the old source, reload it, start the desired video,
+enable the desired subtitle, and inspect again. Missing resource entries or
+unrecognized provider layouts can yield no result rather than a guessed URL.
+
+Original URLs are copied only on an explicit click. `subtitleObservations` in
+the shared report are redacted. Video rows also offer **Copy MIME type**.
+Rebuild/run the macOS Safari extension target in Xcode after resource build;
+the installed extension does not automatically update when source files change.

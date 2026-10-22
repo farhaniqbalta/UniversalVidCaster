@@ -2,6 +2,17 @@ import XCTest
 @testable import MediaInput
 
 final class MediaInputTests: XCTestCase {
+    func testFMP4RequiresHLSAndPreservesLANBridgeURL() throws {
+        let raw = "http://192.168.1.20:8787/hls/session/playlist.m3u8"
+        for mime in ["application/vnd.apple.mpegurl", "application/x-mpegURL"] {
+            let input = try MediaInput(url: raw, mime: mime, startSeconds: 20, hlsFMP4: true)
+            XCTAssertTrue(input.hlsFMP4)
+            XCTAssertEqual(input.url.absoluteString, raw)
+            XCTAssertEqual(input.startSeconds, 20)
+        }
+        XCTAssertThrowsError(try MediaInput(url: MediaInput.flower, mime: "video/mp4", startSeconds: 0, hlsFMP4: true))
+        XCTAssertFalse(try MediaInput(url: MediaInput.flower, mime: "video/mp4", startSeconds: 0).hlsFMP4)
+    }
     func testPreservesSignedQueryWithoutLoggingOrRewritingIt() throws {
         let raw = "https://example.test/video.mp4?signature=a%2Bb&expires=100"
         let input = try MediaInput(url: raw, mime: "video/mp4", startSeconds: 1.25)
