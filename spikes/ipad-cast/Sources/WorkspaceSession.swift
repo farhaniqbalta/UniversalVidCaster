@@ -150,6 +150,14 @@ struct WorkspaceHostState {
         guard !working else { return }
         draft = PlaybackDraft(); draft.url = MediaInput.flower; draft.title = "Flower"
     }
+    @discardableResult func importSafariTransfer(_ text: String) -> Bool {
+        refresh(); guard !working else { return false }
+        do {
+            let imported = try SafariHandoff.draft(from: text)
+            draft = imported; error = nil
+            return true // Only input changes. Never load, clear, or disconnect.
+        } catch { self.error = (error as? InputError)?.message ?? "Could not import Safari transfer."; return false }
+    }
     func useMacHLSPreset() {
         guard !working else { return }
         draft.prepareOnIPad = false; draft.mime = "application/vnd.apple.mpegurl"; draft.fmp4 = true; draft.live = false

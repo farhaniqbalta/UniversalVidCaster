@@ -5,6 +5,15 @@ extension CastWorkspaceView {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 Text("Set up your video").font(.title2.bold())
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Paste Safari transfer").font(.headline)
+                    PasteButton(payloadType: String.self) { values in
+                        guard let text = values.first, session.importSafariTransfer(text) else { return }
+                        editingVideo = false; editingSubtitle = false
+                        languageChoice = ["en", "id"].contains(draft.language) ? draft.language : "other"
+                    }.accessibilityLabel("Paste Safari transfer")
+                    Text("In the Safari extension, inspect and copy video + subtitle for app. Paste here to fill this form, then review and cast.").font(.footnote)
+                }.vcCard().disabled(working)
                 VStack(alignment: .leading, spacing: 14) {
                     CardHeader(number: "1", title: "Video link")
                     PrivateLinkField(title: "Original media link", value: $session.draft.url, editing: $editingVideo)
@@ -31,7 +40,7 @@ extension CastWorkspaceView {
                             PrivateLinkField(title: "Original WebVTT subtitle link", value: $session.draft.subtitleURL, editing: $editingSubtitle)
                             Picker("Language", selection: $languageChoice) {
                                 Text("English").tag("en"); Text("Indonesian").tag("id"); Text("Other…").tag("other")
-                            }.onChange(of: languageChoice) { _, value in if value != "other" { draft.language = value } else { draft.language = "" } }
+                            }.onChange(of: languageChoice) { _, value in if value != "other" { draft.language = value } }
                             if languageChoice == "other" {
                                 TextField("Language code, e.g. en-US", text: $session.draft.language).textInputAutocapitalization(.never).autocorrectionDisabled().vcField()
                             }

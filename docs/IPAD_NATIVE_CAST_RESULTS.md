@@ -1,5 +1,18 @@
 # Native iPad Cast validation
 
+Latest physical result (2026-10-23): user confirmed Safari transfer Paste, then
+video, sound, and subtitles after the instruction to prepare/cast from iPad with
+Mac bridge stopped. The explicit iPad Safari -> clipboard import -> native
+foreground preparation -> TV flow passed per user report. Detailed endurance,
+expiry/recovery, final seek checks, and timing measurements were not provided.
+This supersedes earlier handoff-pending entries below. See
+[handoff result](IPAD_SAFARI_HANDOFF.md).
+
+Architecture follow-up (2026-10-23): user confirmed “all the fucntions” worked
+after the refactor smoke-test checklist. The explicit bundled Safari transfer and
+embedded iPad extension subsequently passed the physical transfer/playback flow
+as recorded above. See [handoff test guide](IPAD_SAFARI_HANDOFF.md).
+
 UI follow-up (2026-10-23): after the portrait/landscape, website/subtitle, seeking,
 replacement, and End casting checklist, the user reported “it workss~”. Record
 those UI checks as user-confirmed for the pre-refactor redesigned app; no detailed
