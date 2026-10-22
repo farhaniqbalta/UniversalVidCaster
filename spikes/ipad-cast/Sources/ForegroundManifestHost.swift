@@ -5,6 +5,8 @@ import UIKit
 final class ForegroundManifestHost: ObservableObject {
     @Published var busy = false
     @Published var hosting = false
+    @Published private(set) var endsAt: Date?
+    @Published private(set) var expired = false
     @Published var message = "Paste the original master URL. Keep this app open while casting."
     private var server: LocalManifestServer?
     private var expiryTask: Task<Void, Never>?
@@ -27,11 +29,12 @@ final class ForegroundManifestHost: ObservableObject {
             await candidate.publish(prepared.pages)
             clear()
             server = candidate; hosting = true; UIApplication.shared.isIdleTimerDisabled = true
+            endsAt = Date().addingTimeInterval(1800)
             message = "iPad hosting ready (30-minute session). Keep this app open and screen awake."
             expiryTask = Task { [weak self] in
                 try? await Task.sleep(nanoseconds: 1_800_000_000_000)
                 guard !Task.isCancelled else { return }
-                self?.clear(); self?.message = "Hosting session expired. Prepare a fresh URL to continue."
+                self?.clear(); self?.expired = true; self?.message = "Sharing ended after 30 minutes. Prepare a fresh original link to continue."
             }
             return prepared.entry
         } catch {
@@ -43,6 +46,7 @@ final class ForegroundManifestHost: ObservableObject {
     func clear() {
         expiryTask?.cancel(); expiryTask = nil
         server?.stop(); server = nil; hosting = false
+        endsAt = nil; expired = false
         UIApplication.shared.isIdleTimerDisabled = false
         message = "iPad hosting stopped and session cleared."
     }

@@ -15,11 +15,14 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
     @Published var busy = false
     @Published var message = "Tap the Cast icon to select a device."
     @Published var logs: [String] = []
+    @Published var mediaTitle = ""
+    private var pendingOutcome: ((Bool) -> Void)?
     private var active = true
     private var client: GCKRemoteMediaClient?
     private var pending: GCKRequest?
     private var timeout: DispatchWorkItem?
     private var pendingLabel = ""
+    private var pendingStartedAt = Date.distantPast
     private var manager: GCKSessionManager { GCKCastContext.sharedInstance().sessionManager }
 
     override init() {
@@ -46,22 +49,26 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
     private func resetStatus() {
         playback = "UNKNOWN"; position = 0; duration = 0; hasMedia = false; canSeek = false
         lastStatusAt = nil
+        mediaTitle = ""
     }
 
-    private func finish(_ text: String) {
+    private func finish(_ text: String, succeeded: Bool = false) {
         timeout?.cancel(); timeout = nil
         pending?.delegate = nil; pending = nil; busy = false
         message = text; log(text)
+        let outcome = pendingOutcome; pendingOutcome = nil; outcome?(succeeded)
     }
 
     private func track(_ request: GCKRequest, label: String) {
         pending = request; pendingLabel = label; busy = true
+        pendingStartedAt = Date()
         request.delegate = self
         message = "\(label) requested. Waiting for receiver response."
         let deadline = DispatchWorkItem { [weak self] in
             guard let self, self.pending?.requestID == request.requestID else { return }
             request.delegate = nil
             request.cancel()
+            if self.lastStatusAt == nil || self.lastStatusAt! < self.pendingStartedAt { self.resetStatus() }
             self.finish("\(label) timed out. Receiver outcome is unknown; refresh status before retrying.")
         }
         timeout = deadline
@@ -119,9 +126,21 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
         track(client.seek(with: options), label: "Seek")
     }
 
-    func disconnect() {
-        guard !busy, connected else { return }
-        message = manager.endSessionAndStopCasting(false) ? "Disconnect requested; receiver may keep playing." : "Could not request disconnection."
+    @discardableResult
+    func disconnect() -> Bool {
+        guard !busy, connected else { return false }
+        let requested = manager.endSessionAndStopCasting(false)
+        message = requested ? "Disconnect requested; receiver may keep playing." : "Could not request disconnection."
+        return requested
+    }
+
+    func stopForEnding() async -> Bool {
+        guard !busy, connected, let client else { return false }
+        if !hasMedia { return playback == "IDLE" && lastStatusAt != nil }
+        return await withCheckedContinuation { continuation in
+            pendingOutcome = { continuation.resume(returning: $0) }
+            track(client.stop(), label: "Stop")
+        }
     }
 
     func foreground() {
@@ -140,6 +159,7 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
         guard active, client === self.client else { return }
         guard let status = mediaStatus else { resetStatus(); return }
         lastStatusAt = Date()
+        mediaTitle = status.mediaInformation?.metadata?.string(forKey: kGCKMetadataKeyTitle) ?? ""
         let previous = playback
         switch status.playerState {
         case .playing: playback = "PLAYING"
@@ -158,7 +178,7 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
 
     func requestDidComplete(_ request: GCKRequest) {
         guard pending?.requestID == request.requestID else { return }
-        finish("\(pendingLabel) request completed. Playback is determined by receiver status.")
+        finish("\(pendingLabel) request completed. Playback is determined by receiver status.", succeeded: true)
     }
     func request(_ request: GCKRequest, didFailWithError error: GCKError) {
         guard pending?.requestID == request.requestID else { return }

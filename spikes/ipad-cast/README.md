@@ -1,5 +1,34 @@
 # Native iPad Cast test app
 
+## Redesigned workspace
+
+Design changes are isolated from session behavior. See the
+[architecture and design-swap guide](../../docs/NATIVE_APP_ARCHITECTURE.md).
+WorkspaceSession owns state/actions behind injectable Cast/host interfaces;
+presentation, theme tokens, and fake design previews can be edited independently.
+The app composition root keeps a single session alive across screen changes.
+
+The app now displays as **Universal VidCaster**, with Setup and Now Playing side
+by side on wide iPad windows. On smaller widths, tap the mini-player to open Now
+Playing. Existing Cast and iPad playlist services are retained.
+
+Paste the original media URL, choose **Direct** or **Prepare on iPad**, optionally
+include WebVTT subtitles, select a TV with the official Cast icon, and cast. iPad
+mode sets HLS/fMP4/VOD automatically. Use Advanced for direct MIME overrides;
+the public flower and legacy Mac settings presets moved to **Diagnostics** (•••).
+The URL field collapses to its hostname summary after Paste; Edit reveals it.
+
+Player controls now include a seek slider, +/-15 seconds, Play/Pause, and Stop.
+Session actions distinguish Disconnect, Stop sharing, and End casting. Replacement
+and hosting cleanup require confirmation. End casting reports what was acknowledged,
+cleared, or requested; it does not force receiver truth to idle/disconnected.
+Host expiry is separate from token expiry. Foreground operation remains required.
+
+See [design integration notes](../../docs/CastDesign/INTEGRATION_NOTES.md) for changes
+and physical review steps. Nineteen native tests and unsigned device/simulator
+builds pass; physical verification of this new UI remains pending. Earlier form-based
+instructions below document the service baseline and may use old button names.
+
 ## Optional native subtitles
 
 Native external WebVTT loading is implemented for direct, Mac bridge, and iPad-local
