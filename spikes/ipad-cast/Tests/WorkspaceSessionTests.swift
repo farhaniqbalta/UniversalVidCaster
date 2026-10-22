@@ -7,6 +7,9 @@ import Combine
     let changes = PassthroughSubject<Void, Never>()
     var workspaceChanges: AnyPublisher<Void, Never> { changes.eraseToAnyPublisher() }
     var loads: [(url: String, mime: String, subtitle: String, fmp4: Bool)] = []
+    var rates: [Double] = []
+    var volumes: [Double] = []
+    var mutes: [Bool] = []
     var seeks: [Double] = []
     var actions: [String] = []
     var stopResult = false
@@ -15,6 +18,9 @@ import Combine
         loads.append((url, mime, subtitleURL, hlsFMP4))
     }
     func control(_ action: String) { actions.append(action) }
+    func setPlaybackRate(_ rate: Double) { rates.append(rate) }
+    func setVolume(_ volume: Double) { volumes.append(volume) }
+    func setMuted(_ muted: Bool) { mutes.append(muted) }
     func seek(_ text: String) { seeks.append(Double(text)!) }
     func disconnect() -> Bool { actions.append("disconnect"); return disconnectResult }
     func stopForEnding() async -> Bool { actions.append("stop"); return stopResult }
@@ -44,6 +50,44 @@ import Combine
 }
 
 final class WorkspaceSessionTests: XCTestCase {
+    @MainActor func testMediaAdjustmentsValidateAndKeepReceiverTruth() {
+        let cast = FakeCastClient()
+        cast.workspaceState.hasMedia = true
+        cast.workspaceState.lastStatusAt = Date()
+        cast.workspaceState.canChangeRate = true
+        cast.workspaceState.canChangeVolume = true
+        cast.workspaceState.canMute = true
+        let session = WorkspaceSession(cast: cast, host: FakeHostClient())
+        session.setPlaybackRate(1.5); session.setPlaybackRate(2)
+        session.setPlaybackRate(.nan); session.setPlaybackRate(3)
+        session.setVolume(0.4); session.setVolume(-1); session.setVolume(2); session.setVolume(.nan)
+        session.setMuted(true)
+        XCTAssertEqual(cast.rates, [1.5, 2]); XCTAssertEqual(cast.volumes, [0.4]); XCTAssertEqual(cast.mutes, [true])
+        XCTAssertEqual(session.cast.playbackRate, 1)
+        XCTAssertEqual(session.cast.volume, 0)
+        XCTAssertFalse(session.cast.muted)
+        cast.workspaceState.canChangeRate = false
+        cast.workspaceState.canChangeVolume = false
+        cast.workspaceState.canMute = false
+        session.setPlaybackRate(1); session.setVolume(0.8); session.setMuted(false)
+        XCTAssertEqual(cast.rates.count, 2); XCTAssertEqual(cast.volumes.count, 1); XCTAssertEqual(cast.mutes.count, 1)
+    }
+    @MainActor func testMediaAdjustmentsRequireActiveFreshIdleClient() {
+        let cast = FakeCastClient()
+        cast.workspaceState.hasMedia = true
+        cast.workspaceState.canChangeRate = true
+        cast.workspaceState.canChangeVolume = true
+        cast.workspaceState.canMute = true
+        let session = WorkspaceSession(cast: cast, host: FakeHostClient())
+        func attempt() { session.setPlaybackRate(2); session.setVolume(1); session.setMuted(true) }
+        attempt() // No receiver status yet.
+        cast.workspaceState.lastStatusAt = Date(); cast.workspaceState.busy = true; attempt()
+        cast.workspaceState.busy = false; cast.workspaceState.connected = false; attempt()
+        cast.workspaceState.connected = true; cast.workspaceState.hasMedia = false; attempt()
+        cast.workspaceState.hasMedia = true; session.setActive(false); attempt()
+        XCTAssertTrue(cast.rates.isEmpty); XCTAssertTrue(cast.volumes.isEmpty); XCTAssertTrue(cast.mutes.isEmpty)
+    }
+
     @MainActor func testImportOnlyUpdatesDraftClearsOldSubtitleAndRetainsPlayback() {
         let cast = FakeCastClient(); let host = FakeHostClient()
         cast.workspaceState.playback = "PLAYING"; cast.workspaceState.hasMedia = true

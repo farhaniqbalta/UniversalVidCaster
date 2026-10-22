@@ -1,6 +1,45 @@
 import SwiftUI
 
 extension CastWorkspaceView {
+    var mediaAdjustments: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text("Playback speed").font(.subheadline.weight(.semibold))
+                    Spacer()
+                    Text(cast.lastStatusAt == nil ? "Unknown" : "\(cast.playbackRate.formatted())×")
+                        .font(.subheadline.monospacedDigit()).foregroundStyle(VC.Palette.textSecondary)
+                }
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 76), spacing: 8)], spacing: 8) {
+                    ForEach(WorkspaceSession.playbackRates, id: \.self) { rate in
+                        let selected = cast.lastStatusAt != nil && abs(cast.playbackRate - rate) < 0.01
+                        Button { session.setPlaybackRate(rate) } label: {
+                            Text("\(rate.formatted())×")
+                                .font(.body.weight(selected ? .bold : .regular))
+                                .frame(maxWidth: .infinity, minHeight: 44)
+                                .background(selected ? VC.Palette.accent.opacity(0.16) : VC.Palette.surfaceRaised,
+                                            in: RoundedRectangle(cornerRadius: 10))
+                                .overlay(RoundedRectangle(cornerRadius: 10)
+                                    .strokeBorder(selected ? VC.Palette.accent : Color.clear, lineWidth: 2))
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Playback speed \(rate.formatted()) times")
+                        .accessibilityAddTraits(selected ? [.isSelected] : [])
+                        .disabled(!session.canAdjustMedia || !cast.canChangeRate)
+                        .opacity(session.canAdjustMedia && cast.canChangeRate ? 1 : 0.5)
+                    }
+                }
+            }
+            MediaVolumeControl(volume: cast.volume, muted: cast.muted,
+                               enabled: session.canAdjustMedia && cast.canChangeVolume,
+                               muteEnabled: session.canAdjustMedia && cast.canMute,
+                               setVolume: session.setVolume, setMuted: session.setMuted)
+            if !cast.canChangeRate || !cast.canChangeVolume || !cast.canMute {
+                Text("Unavailable controls need a fresh media session that supports them.")
+                    .font(.footnote).foregroundStyle(VC.Palette.textSecondary)
+            }
+        }
+    }
     var player: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("Now Playing").font(.title2.bold())
@@ -33,6 +72,7 @@ extension CastWorkspaceView {
                     HStack { Text(Format.time(dragging ? seekDraft : cast.position)); Spacer(); Text(cast.duration > 0 ? Format.time(cast.duration) : "Duration unknown") }.monospacedDigit()
                     if !canSeek { Text("Seeking needs a fresh, seekable receiver session.").font(.footnote).foregroundStyle(VC.Palette.textSecondary) }
                     transportRow
+                    mediaAdjustments
                     Button("Refresh receiver status", systemImage: "arrow.clockwise") { session.control("status") }.disabled(!cast.connected || working)
                     if let date = cast.lastStatusAt { Text("Last TV update: \(date.formatted(date: .omitted, time: .standard))").font(.caption).foregroundStyle(VC.Palette.textSecondary) }
                 }.vcCard()
@@ -83,4 +123,34 @@ extension CastWorkspaceView {
         }.disabled(!cast.hasMedia || working || !["PLAYING", "PAUSED"].contains(cast.playback))
     }
 
+}
+
+private struct MediaVolumeControl: View {
+    let volume: Double
+    let muted: Bool
+    let enabled: Bool
+    let muteEnabled: Bool
+    let setVolume: (Double) -> Void
+    let setMuted: (Bool) -> Void
+    @State private var editing = false
+    @State private var draft = 0.0
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Media volume · \(Int((min(max(editing ? draft : volume, 0), 1) * 100).rounded()))%")
+                .font(.subheadline)
+            HStack {
+                Button { setMuted(!muted) } label: {
+                    Image(systemName: muted ? "speaker.slash.fill" : "speaker.wave.2.fill")
+                        .frame(minWidth: 44, minHeight: 44)
+                }.accessibilityLabel(muted ? "Unmute media" : "Mute media").disabled(!muteEnabled)
+                Slider(value: Binding(get: { editing ? draft : min(max(volume, 0), 1) },
+                                      set: { draft = $0 }), in: 0...1,
+                       onEditingChanged: { dragging in
+                           if dragging { draft = min(max(volume, 0), 1); editing = true }
+                           else { editing = false; setVolume(draft) }
+                       })
+                    .disabled(!enabled).accessibilityLabel("Media volume")
+            }
+        }
+    }
 }
