@@ -15,7 +15,9 @@ Public receiver-accessible media can be loaded directly.
 
 The user confirmed iPad Safari transfer, Mac-free foreground HLS preparation,
 and TV video/audio/subtitles. Native playback controls and the redesigned app
-also passed user-reported checks. These are observations on the tested setup,
+also passed user-reported checks. Now Playing includes one-tap playback-speed
+presets (0.5×–2×), media volume, and mute/unmute; the user confirmed these work
+on the tested TV. See [speed and volume controls](docs/CAST_SPEED_VOLUME.md). These are observations on the tested setup,
 not a universal website/device compatibility guarantee.
 
 Keep the native app open and the screen awake while it hosts playlists. The TV

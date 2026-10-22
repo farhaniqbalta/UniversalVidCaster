@@ -55,7 +55,13 @@ toggle website captions off/on, then reopen and Refresh. Association is
 provider-specific and does not prove exact timing or universal discovery.
 
 Player controls include Play/Pause, Stop, a seek slider, and +/-15 seconds where
-supported. Disconnect, Stop sharing, and End casting have distinct effects;
+supported. Immediately below transport controls, one-tap presets select 0.5×,
+0.75×, 1×, 1.25×, 1.5×, or 2× playback. The media-volume slider sends changes on
+release; mute/unmute affects the current media stream. These are receiver-confirmed
+values, not iPad speaker or necessarily TV system-wide volume. Unsupported actions
+are disabled. See [speed/volume details](../../docs/CAST_SPEED_VOLUME.md).
+
+Disconnect, Stop sharing, and End casting have distinct effects;
 replacement and hosting cleanup require confirmation. End casting reports partial
 outcomes without fabricating receiver state. Stop/Disconnect alone do not clear
 hosting. Detailed session semantics and design ownership are in the

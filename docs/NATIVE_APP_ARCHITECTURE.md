@@ -80,10 +80,17 @@ discard hosting, or end playback. No persistence beyond app lifetime is added.
 
 - State: `draft`, read-only `cast` and `host` snapshots, `error`, `preparing`,
   `ending`, `isActive`, subtitle configuration, and End casting result.
-- Derived: `working`, `canSeek`, `sessionExists`, `playerTitle`, `playbackLabel`.
+- Derived: `working`, `canSeek`, `canAdjustMedia`, `sessionExists`, `playerTitle`, `playbackLabel`.
 - Actions: `validateDraft()`, `load()`, `control(_:)`, `seek(to:)`, `skip(_:)`,
-  `disconnect()`, `clearHosting()`, `endCasting()`, and testing presets.
+  `setPlaybackRate(_:)`, `setVolume(_:)`, `setMuted(_:)`, `disconnect()`,
+  `clearHosting()`, `endCasting()`, and testing presets.
 - Lifecycle: only the composition root calls `setActive(_:)`.
+
+Speed, media volume/mute, and their command capabilities are part of the Cast
+snapshot. Session actions validate input and availability; CastService dispatches
+tracked SDK requests. Views render receiver-confirmed values, while volume drag
+state remains local to the view. No preference persistence or optimistic receiver
+state is added. See [control behavior](CAST_SPEED_VOLUME.md).
 
 The model observes production changes through Combine and publishes settled
 snapshots; SDK receiver callbacks remain authoritative. Neither load completion,
@@ -103,7 +110,8 @@ input retention, duplicate load protection, app-inactive load blocking, receiver
 updates, bounded seeks, and partial End casting without false state changes.
 These tests have no SwiftUI or Google Cast dependency.
 
-Verification: 26 native tests pass, including seven session-contract tests; the
+Latest recorded verification: 31 native tests pass, including session-contract,
+handoff, and speed/volume gating checks; the
 final unsigned iOS build and whitespace check pass. No real TV was commanded
 during the architecture tests. The user subsequently confirmed the refactor smoke checks worked.
 

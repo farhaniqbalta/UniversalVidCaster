@@ -24,6 +24,7 @@ receiver telemetry. See [setup](../spikes/ipad-cast/README.md),
 | Redesigned UI and architecture refactor | User confirmed the supplied functional smoke checks worked, including seeking, replacement, and End casting; no per-action telemetry |
 | iPad Safari transfer -> native Paste -> iPad preparation -> TV | Video, audio, and subtitles confirmed after instruction to stop the Mac bridge |
 | Subtitle association | Initial stale-video subtitle issue reported; filtering/layout fixes followed by user confirmation that subtitles work after website captions off/on |
+| Playback speed, media volume, mute/unmute | User-confirmed functional pass; individual presets/path combinations were not separately reported |
 | iPad Safari popup width | Wider popup confirmed working after CSS correction |
 | Mac-hosted aging step | Reported complete; precise duration and expiry telemetry not supplied |
 
@@ -35,9 +36,12 @@ session parameters. Matching media identity does not measure subtitle timing.
 
 ## Automated evidence
 
-Latest recorded native check: 29 tests pass, covering input/subtitle validation,
+Latest recorded native check: 31 tests pass, covering input/subtitle validation,
 manifest graph preparation and authorization, local HTTP serving, session
-contracts, and Safari handoff validation. Unsigned iOS packaging with the embedded
+contracts, Safari handoff validation, and speed/volume command validation and
+capability gating. The speed/volume update and unsigned iPad build passed; its
+physical controls subsequently passed per user report. See
+[control-specific results](CAST_SPEED_VOLUME.md). Unsigned iOS packaging with the embedded
 extension passed. Latest recorded web check: 85 tests, TypeScript checks, and
 extension resource build passed. These are recorded development results, not a
 new test run performed by this documentation cleanup.

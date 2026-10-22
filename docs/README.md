@@ -12,6 +12,7 @@ are not the current product plan.
 | [Safari handoff](IPAD_SAFARI_HANDOFF.md) | Extension installation, explicit copy/Paste flow, privacy contract |
 | [Native results](IPAD_NATIVE_CAST_RESULTS.md) | Consolidated user-confirmed results and remaining gates |
 | [Diagnostic results](IPAD_DIAGNOSTIC_RESULTS.md) | Inspection-specific evidence and untested cases |
+| [Speed and volume](CAST_SPEED_VOLUME.md) | Presets, media-volume/mute behavior, and physical checks |
 | [Native architecture](NATIVE_APP_ARCHITECTURE.md) | Session ownership, service contracts, design swaps |
 | [Safari diagnostics](SAFARI_DIAGNOSTICS.md) | Collection, redaction, subtitle association, capture limits |
 | [Extension UX](SAFARI_EXTENSION_UX.md) | Popup design, width fix, and UI verification |
