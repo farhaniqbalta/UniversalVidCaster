@@ -25,6 +25,11 @@ For the current aging test, keep the established video/audio session unchanged.
 
 ## Physical result — 2026-10-21
 
+Follow-up 2026-10-23: native iPad playback via the Mac bridge passed per user
+report for website video, sound, and seeking. The Mac remained the playlist host;
+this does not prove a Mac-free iPad or Safari-only flow. See
+[native validation results](IPAD_NATIVE_CAST_RESULTS.md).
+
 The harness now also supports a single-page **Mac HLS bridge** mode: paste the
 original master URL, confirm the Mac network address, connect, and choose
 **Prepare & play**. MIME/fMP4 and bridge URL handoff are automatic. Run both the

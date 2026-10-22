@@ -5,8 +5,9 @@ struct MediaInput {
     let url: URL
     let mime: String
     let startSeconds: Double
+    let hlsFMP4: Bool
 
-    init(url text: String, mime: String, startSeconds: Double) throws {
+    init(url text: String, mime: String, startSeconds: Double, hlsFMP4: Bool = false) throws {
         let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.contains("[REDACTED]"),
               !(text.removingPercentEncoding ?? text).contains("[REDACTED]"),
@@ -25,7 +26,10 @@ struct MediaInput {
         guard startSeconds.isFinite, startSeconds >= 0 else {
             throw InputError("Start position must be a finite non-negative number.")
         }
-        self.url = url; self.mime = mime; self.startSeconds = startSeconds
+        guard !hlsFMP4 || ["application/vnd.apple.mpegurl", "application/x-mpegurl"].contains(mime.lowercased()) else {
+            throw InputError("Fragmented MP4 requires an HLS MIME type: application/vnd.apple.mpegurl.")
+        }
+        self.url = url; self.mime = mime; self.startSeconds = startSeconds; self.hlsFMP4 = hlsFMP4
     }
 }
 

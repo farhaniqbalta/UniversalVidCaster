@@ -31,6 +31,7 @@ struct CastTestView: View {
     @State private var start = "0"
     @State private var seek = "1"
     @State private var live = false
+    @State private var hlsFMP4 = false
 
     var body: some View {
         NavigationStack {
@@ -45,8 +46,11 @@ struct CastTestView: View {
                     TextField("Title", text: $title)
                     TextField("Start at (seconds)", text: $start).keyboardType(.decimalPad)
                     Toggle("Live stream (select only when known)", isOn: $live)
-                    Button("Use flower MP4 preset") { url = MediaInput.flower; mime = "video/mp4"; title = "Flower — iPad Cast test"; start = "0"; live = false }
-                    Button("Load & play") { cast.load(url: url, mime: mime, start: start, title: title, live: live) }.disabled(!cast.connected || cast.busy)
+                    Toggle("HLS uses fragmented MP4 audio/video", isOn: $hlsFMP4)
+                    Button("Use Mac bridge HLS settings") { mime = "application/vnd.apple.mpegurl"; hlsFMP4 = true; live = false; start = "0"; title = "Mac bridge — iPad Cast test" }
+                    Text("For Mac bridge playback, paste its generated LAN playlist URL above, then use the HLS settings button. Keep the Mac bridge running. This app does not prepare playlists.").font(.footnote)
+                    Button("Use flower MP4 preset") { url = MediaInput.flower; mime = "video/mp4"; title = "Flower — iPad Cast test"; start = "0"; live = false; hlsFMP4 = false }
+                    Button("Load & play") { cast.load(url: url, mime: mime, start: start, title: title, live: live, hlsFMP4: hlsFMP4) }.disabled(!cast.connected || cast.busy)
                     Text("Use the original URL, not a redacted diagnostic link. The TV fetches it directly. No Safari cookies are transferred. Inputs are not saved by this app.").font(.footnote)
                 }
                 Section("3. Playback controls") {

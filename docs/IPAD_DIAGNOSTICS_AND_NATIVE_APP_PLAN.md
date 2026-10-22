@@ -1,13 +1,20 @@
 # Plan: Safari diagnostics, then an iPad native Cast app
 
-Date: 2026-10-21. Status: Part 1 software implemented (2026-10-21), physical iPad/target-site validation pending. Part 2 software implemented; physical native-iPad validation pending. See [diagnostic run guide](SAFARI_DIAGNOSTICS.md).
+Date: 2026-10-21. Updated 2026-10-23: Part 1 software implemented; physical iPad Safari inspection remains pending. Part 2 flower playback/controls and website video/audio/seek via Mac bridge passed per user report. See [diagnostic run guide](SAFARI_DIAGNOSTICS.md).
 Target hardware: user's M1 iPad Pro, reported iPadOS 27.0.1.
 
 Physical update (2026-10-23): user confirmed native iPad flower MP4 playback on
-the TV and Pause/Play/Seek/Stop. Next is native HLS format configuration followed
-by website playback using a fresh Mac bridge playlist. Receiver telemetry,
+the TV and Pause/Play/Seek/Stop, then website video/audio/seek using a fresh Mac
+bridge playlist with the native HLS update. Receiver telemetry,
 background/reconnect behavior, and a Mac-free Safari flow remain unvalidated.
 See [native results](IPAD_NATIVE_CAST_RESULTS.md). Subtitles remain deferred.
+
+Native HLS preparation is now implemented: the iPad app can explicitly set both
+audio/video fMP4 formats with a Mac bridge settings preset. Seven native input
+tests and an unsigned iOS build pass. The user installed the update and confirmed
+website video/audio/seek on the physical iPad; the Mac still hosts playlists.
+Next: background/foreground and reconnection checks, then Mac-free architecture
+feasibility. Do not assume an iPad-hosted server survives app suspension.
 
 Latest priority update (2026-10-21): finish the Mac HLS bridge aging test, then
 continue physical native iPad validation. Subtitle support and subtitle-specific

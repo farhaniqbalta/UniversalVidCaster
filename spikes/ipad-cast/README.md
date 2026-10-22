@@ -32,6 +32,32 @@ directly on a physical iPad.
 
 ## Test the website candidate later
 
+### Mac bridge test after the flower baseline
+
+The user confirmed native flower MP4 TV playback and Pause/Play/Seek/Stop on
+2026-10-23. The app now offers **HLS uses fragmented MP4 audio/video** and
+**Use Mac bridge HLS settings**, mapped to both SDK audio/video segment formats.
+The flower preset resets the format option to off. Non-HLS MIME with the option
+on is rejected before loading. Seven native input tests and the unsigned iOS
+build pass; physical HLS playback from iPad remains pending.
+
+1. Build/run the updated iPadCastTest target on the iPad from Xcode.
+2. Keep the Mac awake on the TV's network and run `npm run bridge:hls` on it.
+3. On the Mac, open http://localhost:8787, paste a fresh original **master** URL,
+   choose the Mac's network address, and select **Prepare playlist**.
+4. Copy the generated `http://<Mac-address>:8787/hls/…/….m3u8` URL to the iPad
+   app's media URL field (Universal Clipboard or another private transfer).
+   Do not use localhost, the original unsigned child URL, or a redacted report URL.
+5. Select **Use Mac bridge HLS settings**, connect to the TV, and **Load & play**.
+   The button preserves the URL, sets HLS MIME and both fMP4 formats, start 0,
+   and live off. The iPad does not prepare playlists or automatically copy tokens.
+6. Confirm the correct video **and audio**, Pause/Play/Seek/Stop, and receiver
+   observations. Keep the Mac bridge running. Its sessions expire after 30 minutes;
+   upstream authorization may expire earlier. Do not share the generated secret URL.
+
+This is a native iPad sender with a Mac playlist host; it does not establish a
+Mac-free or Safari-only flow. Subtitles remain deferred.
+
 After the public preset works, enter a legitimate original direct-media URL and
 its MIME. The diagnostic report's `[REDACTED]` links cannot be played; this app
 rejects them. A `.json` extension does not itself establish JSON versus HLS

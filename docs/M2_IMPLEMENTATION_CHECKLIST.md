@@ -1,9 +1,12 @@
 # M2 implementation checklist — Safari feasibility first
 
-## Latest priority update — 2026-10-21
+## Latest priority update — 2026-10-23
 
-- [ ] Complete the Mac HLS bridge aging test; record duration, stalls, seek behavior, and expiry/recovery results.
-- [ ] Continue physical native iPad Cast validation after the Mac baseline check.
+- [x] Complete the Mac HLS bridge aging-test step (user-reported complete; detailed duration/expiry results not supplied).
+- [x] Validate native iPad flower MP4 playback and Pause/Play/Seek/Stop (user report).
+- [x] Validate website video/audio/seek from native iPad using Mac bridge playlists (user report).
+- [ ] Check iPad background/foreground, lock/unlock, and reconnection; record playback and control recovery separately.
+- [ ] Evaluate Mac-free playlist hosting and Safari handoff against iPad lifecycle limits.
 - [ ] **Deferred:** external WebVTT subtitle loading, selection, display, and synchronization validation.
 - [ ] **Deferred:** subtitle URL detection/copying enhancements in the Safari extension.
 

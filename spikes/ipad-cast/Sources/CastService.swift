@@ -68,15 +68,19 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
         DispatchQueue.main.asyncAfter(deadline: .now() + 20, execute: deadline)
     }
 
-    func load(url: String, mime: String, start: String, title: String, live: Bool) {
+    func load(url: String, mime: String, start: String, title: String, live: Bool, hlsFMP4: Bool) {
         guard !busy, let client, connected else { message = "Connect to a device first."; return }
         do {
             guard let seconds = Double(start) else { throw InputError("Enter a numeric start position.") }
-            let input = try MediaInput(url: url, mime: mime, startSeconds: seconds)
+            let input = try MediaInput(url: url, mime: mime, startSeconds: seconds, hlsFMP4: hlsFMP4)
             let metadata = GCKMediaMetadata(metadataType: .generic)
             metadata.setString(title.isEmpty ? "Direct media test" : title, forKey: kGCKMetadataKeyTitle)
             let info = GCKMediaInformationBuilder(contentURL: input.url)
             info.contentType = input.mime; info.streamType = live ? .live : .buffered; info.metadata = metadata
+            if input.hlsFMP4 {
+                info.hlsSegmentFormat = .FMP4
+                info.hlsVideoSegmentFormat = .FMP4
+            }
             let data = GCKMediaLoadRequestDataBuilder()
             data.mediaInformation = info.build(); data.autoplay = true; data.startTime = input.startSeconds
             resetStatus()
