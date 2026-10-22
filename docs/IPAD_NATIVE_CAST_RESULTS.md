@@ -1,5 +1,18 @@
 # Native iPad Cast validation
 
+UI follow-up (2026-10-23): after the portrait/landscape, website/subtitle, seeking,
+replacement, and End casting checklist, the user reported “it workss~”. Record
+those UI checks as user-confirmed for the pre-refactor redesigned app; no detailed
+logs or endurance measurements were supplied. The subsequent architecture-only
+separation needs a device smoke test; see [architecture](NATIVE_APP_ARCHITECTURE.md).
+
+UI integration update (2026-10-23): the proposed design is adopted into an
+adaptive Setup/Now Playing workspace using the existing SDK/hosting services.
+Nineteen native tests and unsigned device/simulator builds pass. Physical review
+of the redesigned screens, seeking, replacement, and End casting remains pending;
+earlier user-reported passes refer to the previous UI. See
+[integration notes](CastDesign/INTEGRATION_NOTES.md).
+
 Latest subtitle result (2026-10-23): user confirmed subtitle loading works, but
 reported the Safari extension supplied the previous video's subtitle on a second
 video. Record loading as user-confirmed; correct matching/timing on the second

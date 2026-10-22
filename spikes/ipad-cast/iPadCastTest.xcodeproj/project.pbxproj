@@ -14,6 +14,16 @@
 		000000000000000000000070 = {isa = PBXBuildFile; fileRef = 000000000000000000000060; };
 		000000000000000000000071 = {isa = PBXBuildFile; fileRef = 000000000000000000000061; };
 		000000000000000000000072 = {isa = PBXBuildFile; fileRef = 000000000000000000000062; };
+		000000000000000000000090 = {isa = PBXBuildFile; fileRef = 000000000000000000000080; };
+		000000000000000000000091 = {isa = PBXBuildFile; fileRef = 000000000000000000000081; };
+		000000000000000000000092 = {isa = PBXBuildFile; fileRef = 000000000000000000000082; };
+		0000000000000000000000B0 = {isa = PBXBuildFile; fileRef = 0000000000000000000000A0; };
+		0000000000000000000000B1 = {isa = PBXBuildFile; fileRef = 0000000000000000000000A1; };
+		0000000000000000000000B2 = {isa = PBXBuildFile; fileRef = 0000000000000000000000A2; };
+		0000000000000000000000B3 = {isa = PBXBuildFile; fileRef = 0000000000000000000000A3; };
+		0000000000000000000000B4 = {isa = PBXBuildFile; fileRef = 0000000000000000000000A4; };
+		0000000000000000000000B5 = {isa = PBXBuildFile; fileRef = 0000000000000000000000A5; };
+		0000000000000000000000D0 = {isa = PBXBuildFile; fileRef = 0000000000000000000000C0; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +34,16 @@
 		000000000000000000000060 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManifestPreparation.swift; sourceTree = "<group>"; };
 		000000000000000000000061 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalManifestServer.swift; sourceTree = "<group>"; };
 		000000000000000000000062 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForegroundManifestHost.swift; sourceTree = "<group>"; };
+		000000000000000000000080 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
+		000000000000000000000081 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackDraft.swift; sourceTree = "<group>"; };
+		000000000000000000000082 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastWorkspaceView.swift; sourceTree = "<group>"; };
+		0000000000000000000000A0 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceSession.swift; sourceTree = "<group>"; };
+		0000000000000000000000A1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceServices.swift; sourceTree = "<group>"; };
+		0000000000000000000000A2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceSetupView.swift; sourceTree = "<group>"; };
+		0000000000000000000000A3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspacePlayerView.swift; sourceTree = "<group>"; };
+		0000000000000000000000A4 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceDiagnosticsView.swift; sourceTree = "<group>"; };
+		0000000000000000000000A5 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceComponents.swift; sourceTree = "<group>"; };
+		0000000000000000000000C0 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspacePreviews.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +72,16 @@
 				00000000000000000000000A /* NativeCastApp.swift */,
 				00000000000000000000000B /* CastService.swift */,
 				00000000000000000000000C /* MediaInput.swift */,
+				0000000000000000000000C0 /* WorkspacePreviews.swift */,
+				0000000000000000000000A5 /* WorkspaceComponents.swift */,
+				0000000000000000000000A4 /* WorkspaceDiagnosticsView.swift */,
+				0000000000000000000000A3 /* WorkspacePlayerView.swift */,
+				0000000000000000000000A2 /* WorkspaceSetupView.swift */,
+				0000000000000000000000A1 /* WorkspaceServices.swift */,
+				0000000000000000000000A0 /* WorkspaceSession.swift */,
+				000000000000000000000082 /* CastWorkspaceView.swift */,
+				000000000000000000000081 /* PlaybackDraft.swift */,
+				000000000000000000000080 /* DesignTokens.swift */,
 				000000000000000000000062 /* ForegroundManifestHost.swift */,
 				000000000000000000000061 /* LocalManifestServer.swift */,
 				000000000000000000000060 /* ManifestPreparation.swift */,
@@ -137,6 +167,16 @@
 				000000000000000000000014 /* NativeCastApp.swift in Sources */,
 				000000000000000000000015 /* CastService.swift in Sources */,
 				000000000000000000000016 /* MediaInput.swift in Sources */,
+				0000000000000000000000D0 /* WorkspacePreviews.swift in Sources */,
+				0000000000000000000000B5 /* WorkspaceComponents.swift in Sources */,
+				0000000000000000000000B4 /* WorkspaceDiagnosticsView.swift in Sources */,
+				0000000000000000000000B3 /* WorkspacePlayerView.swift in Sources */,
+				0000000000000000000000B2 /* WorkspaceSetupView.swift in Sources */,
+				0000000000000000000000B1 /* WorkspaceServices.swift in Sources */,
+				0000000000000000000000B0 /* WorkspaceSession.swift in Sources */,
+				000000000000000000000092 /* CastWorkspaceView.swift in Sources */,
+				000000000000000000000091 /* PlaybackDraft.swift in Sources */,
+				000000000000000000000090 /* DesignTokens.swift in Sources */,
 				000000000000000000000072 /* ForegroundManifestHost.swift in Sources */,
 				000000000000000000000071 /* LocalManifestServer.swift in Sources */,
 				000000000000000000000070 /* ManifestPreparation.swift in Sources */,
@@ -174,7 +214,7 @@
 				DEVELOPMENT_TEAM = YP5Q47APNV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "iPad Cast Test";
+				INFOPLIST_KEY_CFBundleDisplayName = "Universal VidCaster";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Find and control your existing Google Cast TV on your local network.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -200,7 +240,7 @@
 				DEVELOPMENT_TEAM = YP5Q47APNV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "iPad Cast Test";
+				INFOPLIST_KEY_CFBundleDisplayName = "Universal VidCaster";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Find and control your existing Google Cast TV on your local network.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
