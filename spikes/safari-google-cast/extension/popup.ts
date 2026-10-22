@@ -1,5 +1,6 @@
 import { redactReport, redactDiagnosticUrl } from '@uvc/detector';
 import type { DiagnosticSnapshot } from './snapshot';
+import { createHandoff, type HandoffMethod } from './handoff';
 
 declare const browser: {
   tabs: { query(options: object): Promise<{ id?: number }[]> };
@@ -15,6 +16,31 @@ const originalPanel = document.getElementById('original-panel')!;
 const originalField = document.getElementById('original-url') as HTMLTextAreaElement;
 const originalStatus = document.getElementById('original-status')!;
 let inspectionGeneration = 0;
+let handoffSnapshot: DiagnosticSnapshot | undefined;
+const handoffVideo = document.getElementById('handoff-video') as HTMLSelectElement;
+const handoffSubtitle = document.getElementById('handoff-subtitle') as HTMLSelectElement;
+document.getElementById('copy-handoff')!.onclick = async () => {
+  const label = document.getElementById('handoff-status')!;
+  const generation = inspectionGeneration;
+  try {
+    const snapshot = handoffSnapshot;
+    if (!snapshot || handoffVideo.value === '') throw new Error();
+    const index = Number(handoffVideo.value);
+    const subtitle = handoffSubtitle.value === '' ? undefined : snapshot.subtitles?.[Number(handoffSubtitle.value)];
+    const payload = createHandoff({ url: snapshot.originalCandidateUrls[index], mimeType: snapshot.report.candidates[index].mimeType },
+      (document.getElementById('handoff-method') as HTMLSelectElement).value as HandoffMethod,
+      subtitle ? { url: subtitle.url, language: (document.getElementById('handoff-language') as HTMLInputElement).value.trim() } : undefined);
+    clearOriginal();
+    try {
+      await navigator.clipboard.writeText(payload);
+      if (generation === inspectionGeneration) label.textContent = 'Transfer copied. Open the app and tap Paste Safari transfer. Contains private links; do not share.';
+    } catch {
+      if (generation !== inspectionGeneration) return;
+      originalPanel.hidden = false; originalField.value = payload; originalField.focus(); originalField.select();
+      label.textContent = 'Clipboard unavailable. Transfer selected below; copy manually, then hide and clear it.';
+    }
+  } catch { label.textContent = 'Check selected video, playback method, and subtitle language. Prepare on iPad needs an original HTTPS master with t and pm.'; }
+};
 function clearOriginal() {
   originalPanel.hidden = true; originalField.value = ''; originalStatus.textContent = '';
 }
@@ -51,6 +77,10 @@ document.getElementById('inspect')!.onclick = async () => {
   const generation = ++inspectionGeneration;
   inspect.disabled = true;
   clearOriginal();
+  handoffSnapshot = undefined;
+  handoffVideo.replaceChildren(); handoffSubtitle.replaceChildren(new Option('No subtitle', ''));
+  (document.getElementById('copy-handoff') as HTMLButtonElement).disabled = true;
+  document.getElementById('handoff-status')!.textContent = '';
   preview.value = ''; copy.disabled = true; copyStatus.textContent = '';
   try {
     list('candidates', []); list('limitations', []); list('videos', []); list('subtitles', []);
@@ -68,6 +98,8 @@ document.getElementById('inspect')!.onclick = async () => {
     } });
     if (!snapshot?.result) throw new Error('No inspection result was returned.');
     const result = redactReport(snapshot.result.report);
+    handoffSnapshot = snapshot.result;
+    if (result.candidates.length !== 1) handoffVideo.add(new Option('Choose a video', ''));
     const candidates = document.getElementById('candidates')!;
     result.candidates.forEach((candidate, index) => {
       const item = document.createElement('li');
@@ -93,6 +125,7 @@ document.getElementById('inspect')!.onclick = async () => {
         }
       };
       item.append(description, action); candidates.append(item);
+      handoffVideo.add(new Option(`Video ${index + 1} · ${candidate.mimeType ?? 'MIME unknown'}`, String(index)));
       const mime = document.createElement('button');
       mime.type = 'button'; mime.textContent = 'Copy MIME type'; mime.disabled = !candidate.mimeType;
       mime.onclick = () => copyValue(candidate.mimeType!, generation, 'MIME type');
@@ -102,6 +135,7 @@ document.getElementById('inspect')!.onclick = async () => {
     const safeSubtitles = subtitles.map(subtitle => ({ ...subtitle, url: redactDiagnosticUrl(subtitle.url) }));
     const subtitleList = document.getElementById('subtitles')!;
     safeSubtitles.forEach((subtitle, index) => {
+      handoffSubtitle.add(new Option(`Subtitle ${index + 1} · ${subtitle.language ?? 'choose language below'} · ${subtitle.url}`, String(index)));
       const row = document.createElement('li');
       const label = document.createElement('div');
       label.textContent = `${subtitle.url} · ${subtitle.language ?? 'language unknown'} · ${subtitle.association}`;
@@ -109,6 +143,7 @@ document.getElementById('inspect')!.onclick = async () => {
       action.onclick = () => copyValue(subtitles[index].url, generation, 'Subtitle URL');
       row.append(label, action); subtitleList.append(row);
     });
+    (document.getElementById('copy-handoff') as HTMLButtonElement).disabled = !result.candidates.length;
     const diagnostics = snapshot.result.subtitleDiagnostics;
     if (diagnostics) {
       document.getElementById('subtitle-diagnostics')!.textContent = `${diagnostics.trackElementCount} track element(s), ${diagnostics.observedVttUrls.length} observed VTT URL(s), ${diagnostics.currentMediaIdentityCount} current media ID(s), ${subtitles.length} match(es).`;

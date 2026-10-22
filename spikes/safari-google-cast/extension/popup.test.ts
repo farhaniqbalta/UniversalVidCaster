@@ -128,3 +128,22 @@ it('distinguishes observed-but-unmatched subtitles and redacts diagnostic URLs a
   expect(document.getElementById('subtitle-diagnostics')!.textContent).toContain('1 observed VTT');
   expect((document.getElementById('report') as HTMLTextAreaElement).value).not.toContain('never-display-this');
 });
+
+it('copies a combined selected transfer only on click and leaves the diagnostic report redacted', async () => {
+  const writeText = vi.fn().mockResolvedValue(undefined);
+  Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+  await mount();
+  (document.getElementById('inspect') as HTMLButtonElement).click();
+  await vi.waitFor(() => expect((document.getElementById('copy-handoff') as HTMLButtonElement).disabled).toBe(false));
+  expect(writeText).not.toHaveBeenCalled();
+  (document.getElementById('handoff-subtitle') as HTMLSelectElement).value = '0';
+  (document.getElementById('handoff-language') as HTMLInputElement).value = 'id';
+  (document.getElementById('copy-handoff') as HTMLButtonElement).click();
+  expect(JSON.parse(writeText.mock.calls[0][0])).toMatchObject({
+    type: 'universal-vidcaster.handoff', version: 1,
+    video: { url: 'https://example.test/clip.mp4?sig=private-value#private-fragment', method: 'direct' },
+    subtitle: { url: 'https://example.test/current.vtt?t=subtitle-secret', language: 'id' },
+  });
+  expect((document.getElementById('report') as HTMLTextAreaElement).value).not.toContain('private-value');
+  expect(document.body.innerHTML).not.toContain('subtitle-secret');
+});

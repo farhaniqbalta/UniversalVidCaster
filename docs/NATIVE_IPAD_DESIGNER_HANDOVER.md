@@ -1,6 +1,18 @@
 # Universal VidCaster — native iPad UX/UI designer handover
 
 Prepared: 2026-10-23. Audience: a designer agent with **no repository access**.
+
+Latest implementation/validation update (2026-10-23): the redesigned UI and its
+architecture-refactor smoke tests passed per user report. The iPad app now embeds
+the Safari extension. Users explicitly select video/method/optional subtitle,
+copy one transfer, switch to the app, and Paste Safari transfer to fill setup.
+Import does not auto-cast or alter current playback. The user confirmed transfer,
+video, sound, and subtitle playback after being asked to stop the Mac bridge.
+Foreground operation is still required. This supersedes earlier statements below
+that handoff is absent or subtitle rendering is unconfirmed. Automatic app opening,
+in-session subtitle toggling, and precise endurance/expiry recovery remain outside
+the validated flow. Subtitle capture can still require watching and toggling
+subtitles off/on in the original player before inspection.
 This document contains the product context, current behavior, constraints, and
 design assignment. Do not assume you can inspect source code or other project
 documents. Deliver a design specification; implementation is handled separately.

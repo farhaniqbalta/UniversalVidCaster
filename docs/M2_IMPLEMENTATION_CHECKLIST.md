@@ -2,6 +2,13 @@
 
 ## Latest priority update — 2026-10-23
 
+- [x] User-confirmed architecture-refactor smoke test: all requested functions worked.
+- [x] Add selected video/optional-subtitle clipboard bundle and native validated import.
+- [x] Embed shared Safari extension in the iPad app; unsigned build verified.
+- [x] Verify iPad Safari explicit clipboard import and video/audio/subtitle playback
+  after requesting Mac bridge stopped (user-confirmed; [result](IPAD_SAFARI_HANDOFF.md)).
+- [ ] Record extended iPad-only playback, token expiry/recovery, and actual network-loss recovery.
+
 Native subtitle loading was reinstated by the user and is now implemented:
 optional WebVTT URL/language plus activation on load. Sixteen native tests and
 unsigned iOS build pass. TV rendering/synchronization remain pending; Safari

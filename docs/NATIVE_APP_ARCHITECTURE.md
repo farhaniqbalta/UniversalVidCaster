@@ -4,6 +4,13 @@ Updated 2026-10-23. The user confirmed the redesigned UI checks worked and asked
 that later designs be easy to replace. Session behavior now lives outside the
 screens, behind injectable service contracts.
 
+The user subsequently confirmed all architecture-refactor smoke-test functions
+worked. A new explicit Safari transfer is added through `SafariHandoff.swift`
+validation and `WorkspaceSession.importSafariTransfer(_:)`, separate from visual
+components and media preparation. The embedded extension has no Cast SDK/session
+owner. Its physical iPad handoff test remains pending; see
+[handoff guide](IPAD_SAFARI_HANDOFF.md).
+
 ```mermaid
 flowchart TD
   Root[CastAppRoot: lifetime and lifecycle] --> UI[Replaceable workspace screens]

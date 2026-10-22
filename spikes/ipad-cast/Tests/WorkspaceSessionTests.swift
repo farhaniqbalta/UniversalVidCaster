@@ -44,6 +44,20 @@ import Combine
 }
 
 final class WorkspaceSessionTests: XCTestCase {
+    @MainActor func testImportOnlyUpdatesDraftClearsOldSubtitleAndRetainsPlayback() {
+        let cast = FakeCastClient(); let host = FakeHostClient()
+        cast.workspaceState.playback = "PLAYING"; cast.workspaceState.hasMedia = true
+        let session = WorkspaceSession(cast: cast, host: host)
+        session.draft.includeSubtitle = true; session.draft.subtitleURL = "https://old.test/a.vtt"
+        XCTAssertTrue(session.importSafariTransfer(#"{"type":"universal-vidcaster.handoff","version":1,"video":{"url":"https://media.test/a.mp4","method":"direct","startSeconds":0}}"#))
+        XCTAssertFalse(session.draft.includeSubtitle)
+        XCTAssertEqual(session.cast.playback, "PLAYING")
+        XCTAssertTrue(cast.loads.isEmpty); XCTAssertFalse(host.cleared)
+        let draft = session.draft.url
+        XCTAssertFalse(session.importSafariTransfer("private-invalid-input"))
+        XCTAssertEqual(session.draft.url, draft)
+        XCTAssertFalse(session.error?.contains("private-invalid-input") == true)
+    }
     @MainActor func testDirectLoadPreservesSubtitleWithoutClaimingPlaying() async {
         let cast = FakeCastClient(); let host = FakeHostClient()
         let session = WorkspaceSession(cast: cast, host: host)

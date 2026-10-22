@@ -1,5 +1,15 @@
 # Native iPad Cast test app
 
+## Safari transfer (new)
+
+The app now embeds the shared Safari diagnostic extension as **VidCasterSafari**.
+Select video/method/optional subtitle in Safari and use **Copy video + subtitle for
+app**, then **Paste Safari transfer** in the app to fill setup together. Playback
+still requires review and an explicit Cast action. See the
+[installation and iPad test guide](../../docs/IPAD_SAFARI_HANDOFF.md), including
+Team selection for the new extension target. Build extension resources with
+`npm run build:safari-probe` before Xcode builds. Physical iPad handoff is pending.
+
 ## Redesigned workspace
 
 Design changes are isolated from session behavior. See the
