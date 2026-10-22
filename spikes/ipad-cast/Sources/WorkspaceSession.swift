@@ -9,6 +9,12 @@ struct WorkspaceCastState {
     var position = 0.0
     var duration = 0.0
     var canSeek = false
+    var playbackRate = 1.0
+    var volume = 0.0
+    var muted = false
+    var canChangeRate = false
+    var canChangeVolume = false
+    var canMute = false
     var hasMedia = false
     var lastStatusAt: Date?
     var busy = false
@@ -31,6 +37,9 @@ struct WorkspaceHostState {
     func load(url: String, mime: String, start: String, title: String, live: Bool, hlsFMP4: Bool, subtitleURL: String, subtitleLanguage: String)
     func control(_ action: String)
     func seek(_ text: String)
+    func setPlaybackRate(_ rate: Double)
+    func setVolume(_ volume: Double)
+    func setMuted(_ muted: Bool)
     @discardableResult func disconnect() -> Bool
     func stopForEnding() async -> Bool
     func foreground()
@@ -118,6 +127,20 @@ struct WorkspaceHostState {
     func seek(to position: Double) {
         refresh(); guard canSeek, position.isFinite else { return }
         castClient.seek(String(min(max(0, position), cast.duration))); refresh()
+    }
+    static let playbackRates: [Double] = [0.5, 0.75, 1, 1.25, 1.5, 2]
+    var canAdjustMedia: Bool { isActive && cast.connected && cast.hasMedia && cast.lastStatusAt != nil && !working }
+    func setPlaybackRate(_ rate: Double) {
+        refresh(); guard canAdjustMedia, cast.canChangeRate, Self.playbackRates.contains(rate) else { return }
+        castClient.setPlaybackRate(rate); refresh()
+    }
+    func setVolume(_ volume: Double) {
+        refresh(); guard canAdjustMedia, cast.canChangeVolume, volume.isFinite, (0...1).contains(volume) else { return }
+        castClient.setVolume(volume); refresh()
+    }
+    func setMuted(_ muted: Bool) {
+        refresh(); guard canAdjustMedia, cast.canMute else { return }
+        castClient.setMuted(muted); refresh()
     }
     func skip(_ delta: Double) { seek(to: cast.position + delta) }
     func disconnect() {

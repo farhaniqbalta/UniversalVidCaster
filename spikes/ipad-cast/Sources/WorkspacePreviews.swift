@@ -10,6 +10,8 @@ import Combine
         workspaceState = WorkspaceCastState(connected: true, device: "Living Room TV", playback: playing ? "PLAYING" : "IDLE",
                                             position: playing ? 78 : 0, duration: 1440, canSeek: playing, hasMedia: playing,
                                             lastStatusAt: Date(), message: "Design preview · no real TV connected.", mediaTitle: playing ? "Sample episode" : "")
+        workspaceState.volume = 0.5
+        workspaceState.canChangeRate = playing; workspaceState.canChangeVolume = playing; workspaceState.canMute = playing
     }
     func load(url: String, mime: String, start: String, title: String, live: Bool, hlsFMP4: Bool, subtitleURL: String, subtitleLanguage: String) {
         workspaceState.playback = "PLAYING"; workspaceState.hasMedia = true; workspaceState.canSeek = true
@@ -21,6 +23,9 @@ import Combine
         if action == "stop" { workspaceState.playback = "IDLE"; workspaceState.hasMedia = false }
         workspaceState.lastStatusAt = Date()
     }
+    func setPlaybackRate(_ rate: Double) { workspaceState.playbackRate = rate }
+    func setVolume(_ volume: Double) { workspaceState.volume = volume }
+    func setMuted(_ muted: Bool) { workspaceState.muted = muted }
     func seek(_ text: String) { workspaceState.position = Double(text) ?? 0 }
     func disconnect() -> Bool { workspaceState.connected = false; return true }
     func stopForEnding() async -> Bool { control("stop"); return true }

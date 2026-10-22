@@ -6,6 +6,8 @@ extension CastService: WorkspaceCastClient {
     var workspaceState: WorkspaceCastState {
         WorkspaceCastState(connected: connected, device: device, playback: playback,
                            position: position, duration: duration, canSeek: canSeek,
+                           playbackRate: playbackRate, volume: volume, muted: muted,
+                           canChangeRate: canChangeRate, canChangeVolume: canChangeVolume, canMute: canMute,
                            hasMedia: hasMedia, lastStatusAt: lastStatusAt, busy: busy,
                            message: message, logs: logs, mediaTitle: mediaTitle)
     }

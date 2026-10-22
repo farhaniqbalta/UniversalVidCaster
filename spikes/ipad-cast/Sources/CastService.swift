@@ -10,6 +10,12 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
     @Published var position = 0.0
     @Published var duration = 0.0
     @Published var canSeek = false
+    @Published var playbackRate = 1.0
+    @Published var volume = 0.0
+    @Published var muted = false
+    @Published var canChangeRate = false
+    @Published var canChangeVolume = false
+    @Published var canMute = false
     @Published var hasMedia = false
     @Published var lastStatusAt: Date?
     @Published var busy = false
@@ -48,6 +54,8 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
 
     private func resetStatus() {
         playback = "UNKNOWN"; position = 0; duration = 0; hasMedia = false; canSeek = false
+        playbackRate = 1; volume = 0; muted = false
+        canChangeRate = false; canChangeVolume = false; canMute = false
         lastStatusAt = nil
         mediaTitle = ""
     }
@@ -118,6 +126,21 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
         }
     }
 
+    func setPlaybackRate(_ rate: Double) {
+        guard !busy, connected, hasMedia, canChangeRate, let client,
+              WorkspaceSession.playbackRates.contains(rate) else { return }
+        track(client.setPlaybackRate(Float(rate)), label: "Playback speed")
+    }
+    func setVolume(_ volume: Double) {
+        guard !busy, connected, hasMedia, canChangeVolume, let client,
+              volume.isFinite, (0...1).contains(volume) else { return }
+        track(client.setStreamVolume(Float(volume)), label: "Media volume")
+    }
+    func setMuted(_ muted: Bool) {
+        guard !busy, connected, hasMedia, canMute, let client else { return }
+        track(client.setStreamMuted(muted), label: muted ? "Mute" : "Unmute")
+    }
+
     func seek(_ text: String) {
         guard !busy, let client, connected, hasMedia, canSeek else { message = "This media is not seekable."; return }
         guard let seconds = Double(text), seconds.isFinite, seconds >= 0,
@@ -172,6 +195,11 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
         let seconds = status.mediaInformation?.streamDuration ?? 0
         duration = seconds.isFinite ? seconds : 0
         hasMedia = status.mediaInformation != nil && status.playerState != .idle
+        playbackRate = Double(status.playbackRate)
+        volume = Double(status.volume); muted = status.isMuted
+        canChangeRate = status.isMediaCommandSupported(kGCKMediaCommandSetPlaybackRate)
+        canChangeVolume = status.isMediaCommandSupported(kGCKMediaCommandSetVolume)
+        canMute = status.isMediaCommandSupported(kGCKMediaCommandToggleMute)
         canSeek = status.isMediaCommandSupported(kGCKMediaCommandSeek)
         if previous != playback { log("Receiver: \(playback); idle reason: \(status.idleReason.rawValue)") }
     }
@@ -182,7 +210,7 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
     }
     func request(_ request: GCKRequest, didFailWithError error: GCKError) {
         guard pending?.requestID == request.requestID else { return }
-        finish("\(pendingLabel) failed (Cast code \(error.code)). Authorization/DRM causes remain unknown.")
+        finish("\(pendingLabel) failed (Cast code \(error.code)). Check receiver status and whether the TV supports this action.")
     }
     func request(_ request: GCKRequest, didAbortWith abortReason: GCKRequestAbortReason) {
         guard pending?.requestID == request.requestID else { return }
