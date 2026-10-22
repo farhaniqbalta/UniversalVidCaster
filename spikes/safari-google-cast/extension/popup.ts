@@ -1,6 +1,7 @@
 import { redactReport, redactDiagnosticUrl } from '@uvc/detector';
 import type { DiagnosticSnapshot } from './snapshot';
 import { createHandoff, type HandoffMethod } from './handoff';
+import { sourceHost, mediaLabel, updateTransferView } from './popupView';
 
 declare const browser: {
   tabs: { query(options: object): Promise<{ id?: number }[]> };
@@ -19,6 +20,15 @@ let inspectionGeneration = 0;
 let handoffSnapshot: DiagnosticSnapshot | undefined;
 const handoffVideo = document.getElementById('handoff-video') as HTMLSelectElement;
 const handoffSubtitle = document.getElementById('handoff-subtitle') as HTMLSelectElement;
+for (const id of ['handoff-video', 'handoff-subtitle', 'handoff-method', 'handoff-language']) {
+  document.getElementById(id)!.addEventListener(id === 'handoff-language' ? 'input' : 'change', () => {
+    updateTransferView(handoffSnapshot);
+    const label = document.getElementById('handoff-status')!;
+    label.dataset.state = 'idle'; label.textContent = 'Then open Universal VidCaster → Paste Safari transfer.';
+    document.getElementById('copy-handoff')!.textContent = 'Copy transfer for iPad';
+  });
+}
+updateTransferView();
 document.getElementById('copy-handoff')!.onclick = async () => {
   const label = document.getElementById('handoff-status')!;
   const generation = inspectionGeneration;
@@ -33,13 +43,18 @@ document.getElementById('copy-handoff')!.onclick = async () => {
     clearOriginal();
     try {
       await navigator.clipboard.writeText(payload);
-      if (generation === inspectionGeneration) label.textContent = 'Transfer copied. Open the app and tap Paste Safari transfer. Contains private links; do not share.';
+      if (generation === inspectionGeneration) {
+        label.dataset.state = 'success';
+        label.textContent = 'Copied. Open Universal VidCaster → Paste Safari transfer.';
+        document.getElementById('copy-handoff')!.textContent = 'Copied · Copy again';
+      }
     } catch {
       if (generation !== inspectionGeneration) return;
       originalPanel.hidden = false; originalField.value = payload; originalField.focus(); originalField.select();
-      label.textContent = 'Clipboard unavailable. Transfer selected below; copy manually, then hide and clear it.';
+      label.dataset.state = 'error';
+      label.textContent = 'Clipboard unavailable. Transfer selected above; copy manually, then hide and clear it.';
     }
-  } catch { label.textContent = 'Check selected video, playback method, and subtitle language. Prepare on iPad needs an original HTTPS master with t and pm.'; }
+  } catch { label.dataset.state = 'error'; label.textContent = 'Check your selection. Prepare on iPad needs an original HTTPS master with t and pm.'; }
 };
 function clearOriginal() {
   originalPanel.hidden = true; originalField.value = ''; originalStatus.textContent = '';
@@ -76,11 +91,17 @@ const list = (id: string, values: string[]) => {
 document.getElementById('inspect')!.onclick = async () => {
   const generation = ++inspectionGeneration;
   inspect.disabled = true;
+  inspect.textContent = 'Finding…';
+  status.dataset.state = 'loading';
+  document.getElementById('handoff-section')!.setAttribute('aria-busy', 'true');
   clearOriginal();
   handoffSnapshot = undefined;
   handoffVideo.replaceChildren(); handoffSubtitle.replaceChildren(new Option('No subtitle', ''));
   (document.getElementById('copy-handoff') as HTMLButtonElement).disabled = true;
-  document.getElementById('handoff-status')!.textContent = '';
+  document.getElementById('handoff-status')!.textContent = 'Then open Universal VidCaster → Paste Safari transfer.';
+  document.getElementById('handoff-status')!.dataset.state = 'idle';
+  document.getElementById('copy-handoff')!.textContent = 'Copy transfer for iPad';
+  updateTransferView();
   preview.value = ''; copy.disabled = true; copyStatus.textContent = '';
   try {
     list('candidates', []); list('limitations', []); list('videos', []); list('subtitles', []);
@@ -125,7 +146,7 @@ document.getElementById('inspect')!.onclick = async () => {
         }
       };
       item.append(description, action); candidates.append(item);
-      handoffVideo.add(new Option(`Video ${index + 1} · ${candidate.mimeType ?? 'MIME unknown'}`, String(index)));
+      handoffVideo.add(new Option(`Video ${index + 1} · ${mediaLabel(candidate.mimeType)} · ${sourceHost(candidate.url)}`, String(index)));
       const mime = document.createElement('button');
       mime.type = 'button'; mime.textContent = 'Copy MIME type'; mime.disabled = !candidate.mimeType;
       mime.onclick = () => copyValue(candidate.mimeType!, generation, 'MIME type');
@@ -135,7 +156,7 @@ document.getElementById('inspect')!.onclick = async () => {
     const safeSubtitles = subtitles.map(subtitle => ({ ...subtitle, url: redactDiagnosticUrl(subtitle.url) }));
     const subtitleList = document.getElementById('subtitles')!;
     safeSubtitles.forEach((subtitle, index) => {
-      handoffSubtitle.add(new Option(`Subtitle ${index + 1} · ${subtitle.language ?? 'choose language below'} · ${subtitle.url}`, String(index)));
+      handoffSubtitle.add(new Option(`Subtitle ${index + 1} · ${subtitle.language ?? 'language unknown'} · ${sourceHost(subtitle.url)}`, String(index)));
       const row = document.createElement('li');
       const label = document.createElement('div');
       label.textContent = `${subtitle.url} · ${subtitle.language ?? 'language unknown'} · ${subtitle.association}`;
@@ -143,7 +164,7 @@ document.getElementById('inspect')!.onclick = async () => {
       action.onclick = () => copyValue(subtitles[index].url, generation, 'Subtitle URL');
       row.append(label, action); subtitleList.append(row);
     });
-    (document.getElementById('copy-handoff') as HTMLButtonElement).disabled = !result.candidates.length;
+    updateTransferView(snapshot.result);
     const diagnostics = snapshot.result.subtitleDiagnostics;
     if (diagnostics) {
       document.getElementById('subtitle-diagnostics')!.textContent = `${diagnostics.trackElementCount} track element(s), ${diagnostics.observedVttUrls.length} observed VTT URL(s), ${diagnostics.currentMediaIdentityCount} current media ID(s), ${subtitles.length} match(es).`;
@@ -159,9 +180,15 @@ document.getElementById('inspect')!.onclick = async () => {
     const safeDiagnostics = diagnostics ? { ...diagnostics, observedVttUrls: diagnostics.observedVttUrls.map(redactDiagnosticUrl) } : undefined;
     preview.value = JSON.stringify({ ...result, subtitleObservations: safeSubtitles, subtitleDiagnostics: safeDiagnostics }, null, 2);
     copy.disabled = false;
-    status.textContent = `${result.videos.length} video(s), ${result.candidates.length} direct candidate(s), ${result.frames.length} uninspected frame(s). Playback compatibility remains unknown.`;
-  } catch { status.textContent = 'Inspection failed. Allow access to this website, use a normal webpage, and retry. Browser-internal and restricted pages may not allow inspection.'; }
-  finally { inspect.disabled = false; }
+    status.dataset.state = result.candidates.length ? 'ready' : 'empty';
+    status.textContent = result.candidates.length
+      ? `${result.candidates.length} video ${result.candidates.length === 1 ? 'link' : 'links'} found · ${subtitles.length} ${subtitles.length === 1 ? 'subtitle' : 'subtitles'} available. Review your selection below.`
+      : 'No transferable video link found. Start the video and try again. Embedded or protected players may not expose one.';
+  } catch { status.dataset.state = 'error'; status.textContent = 'Couldn’t inspect this page. Allow website access in Safari, start the video, and try again.'; }
+  finally {
+    inspect.disabled = false; inspect.textContent = 'Refresh';
+    document.getElementById('handoff-section')!.setAttribute('aria-busy', 'false');
+  }
 };
 document.getElementById('watch-subtitles')!.onclick = async () => {
   const label = document.getElementById('subtitle-watch-status')!;

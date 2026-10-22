@@ -104,6 +104,11 @@ extension can discover them or that the TV can display them in sync.
 
 ## Current-video subtitle association
 
+Popup UI 0.0.5 now puts video selection and transfer first, with individual links,
+observations, and report export under **Diagnostics & individual links**. Find
+video becomes Refresh after inspection. Detection/copy semantics are preserved;
+see [UX research and redesign](SAFARI_EXTENSION_UX.md).
+
 Flat-path fix (2026-10-23): the user supplied a report with one master URL at
 `/v/<media-id>/config-….json` and a VTT at
 `/v/<same-media-id>/subs-legacy/….vtt`, but diagnostics counted zero media IDs.

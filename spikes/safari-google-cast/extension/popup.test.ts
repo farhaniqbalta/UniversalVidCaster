@@ -42,7 +42,7 @@ it('reports permission failures without leaking error URLs or leaving an old rep
   await mount(true);
   (document.getElementById('report') as HTMLTextAreaElement).value = 'old report';
   (document.getElementById('inspect') as HTMLButtonElement).click();
-  await vi.waitFor(() => expect(document.getElementById('status')!.textContent).toContain('Inspection failed'));
+  await vi.waitFor(() => expect(document.getElementById('status')!.textContent).toContain('Couldn’t inspect'));
   expect(document.body.textContent).not.toContain('private-value');
   expect((document.getElementById('report') as HTMLTextAreaElement).value).toBe('');
   expect((document.getElementById('copy') as HTMLButtonElement).disabled).toBe(true);
@@ -146,4 +146,29 @@ it('copies a combined selected transfer only on click and leaves the diagnostic 
   });
   expect((document.getElementById('report') as HTMLTextAreaElement).value).not.toContain('private-value');
   expect(document.body.innerHTML).not.toContain('subtitle-secret');
+});
+
+it('starts focused on transfer with diagnostics collapsed and no inspection or clipboard access', async () => {
+  const { executeScript } = await mount();
+  expect(executeScript).not.toHaveBeenCalled();
+  expect((document.getElementById('diagnostics') as HTMLDetailsElement).open).toBe(false);
+  expect((document.getElementById('copy-handoff') as HTMLButtonElement).disabled).toBe(true);
+  expect((document.getElementById('handoff-video') as HTMLSelectElement).disabled).toBe(true);
+  expect(document.getElementById('language-field')!.hidden).toBe(true);
+});
+
+it('shows language only for selected subtitles and blocks invalid language before copying', async () => {
+  await mount();
+  (document.getElementById('inspect') as HTMLButtonElement).click();
+  await vi.waitFor(() => expect((document.getElementById('copy-handoff') as HTMLButtonElement).disabled).toBe(false));
+  const select = document.getElementById('handoff-subtitle') as HTMLSelectElement;
+  select.value = '0'; select.dispatchEvent(new Event('change'));
+  expect(document.getElementById('language-field')!.hidden).toBe(false);
+  const language = document.getElementById('handoff-language') as HTMLInputElement;
+  language.value = 'not a tag'; language.dispatchEvent(new Event('input'));
+  expect((document.getElementById('copy-handoff') as HTMLButtonElement).disabled).toBe(true);
+  expect(language.getAttribute('aria-invalid')).toBe('true');
+  select.value = ''; select.dispatchEvent(new Event('change'));
+  expect((document.getElementById('copy-handoff') as HTMLButtonElement).disabled).toBe(false);
+  expect(document.getElementById('language-field')!.hidden).toBe(true);
 });

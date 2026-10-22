@@ -1,41 +1,76 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Safari video diagnostics</title>
-<link rel="stylesheet" href="popup.css"></head><body>
-<h1>Video diagnostics</h1>
-<p>Inspect video information exposed by this page. No casting or protected-stream extraction is performed.</p>
-<button id="inspect">Inspect / Refresh page</button>
-<p id="status" role="status" aria-live="polite">Start the page's video, then inspect. Only the permitted main document is inspected.</p>
-<h2>Direct media candidates</h2><ul id="candidates"></ul>
-<section aria-labelledby="handoff-heading">
-<h2 id="handoff-heading">Transfer to iPad app</h2>
-<label>Video<select id="handoff-video"></select></label>
-<label>Playback method<select id="handoff-method"><option value="direct">Direct media</option><option value="prepare-on-ipad">Prepare on iPad (signed HLS master)</option></select></label>
-<label>Subtitle<select id="handoff-subtitle"><option value="">No subtitle</option></select></label>
-<label>Subtitle language<input id="handoff-language" value="en" placeholder="en or id" /></label>
-<button id="copy-handoff" type="button" disabled>Copy video + subtitle for app</button>
-<p>Copies original private links together. Open Universal VidCaster and use Paste Safari transfer. Review before casting. Playback does not start automatically. No subtitle clears any previous subtitle from the imported draft.</p>
-<p id="handoff-status" role="status" aria-live="polite"></p>
-</section>
-<h2>Subtitle candidates for this video</h2><ul id="subtitles"></ul>
-<button id="watch-subtitles" type="button">Watch new subtitle requests</button>
-<button id="stop-subtitle-watch" type="button">Stop subtitle watch</button>
-<p id="subtitle-watch-status" role="status" aria-live="polite"></p>
-<p id="subtitle-diagnostics"></p>
-<p>Enable the desired subtitle in the current player, then inspect again. Resource-history URLs are shown only when their media ID matches a single current video candidate. Unmatched or ambiguous history is omitted. Current track elements are also inspected; matching IDs do not verify subtitle language or timing.</p>
-<p>Copy original URL is for local playback testing. It includes any private query values and is separate from the redacted report.</p>
-<p id="original-status" role="status" aria-live="polite"></p>
-<div id="original-panel" hidden>
-<label for="original-url">Original URL — local use only, not part of the report</label>
-<textarea id="original-url" readonly spellcheck="false" rows="3"></textarea>
-<button id="hide-original" type="button">Hide and clear original URL</button>
-</div>
-<h2>Video observations</h2><ul id="videos"></ul>
-<h2>Limitations</h2><ul id="limitations"></ul>
-<h2>Share a diagnostic report</h2>
-<p>Query values, fragments, URL credentials, and titles are removed from the report. Hostnames, paths, and query names remain and can still be identifying. Review before sharing. Redacted URLs are not usable playback links.</p>
-<label for="report">Redacted JSON report</label>
-<textarea id="report" readonly spellcheck="false" rows="10" placeholder="Inspect a page to generate a report."></textarea>
-<button id="copy" disabled>Copy redacted report</button>
-<p id="copy-status" role="status" aria-live="polite"></p>
-<details><summary>Native transport diagnostic (optional)</summary><p>This check is separate from page inspection.</p><button id="native">Check native bridge</button></details>
-<script src="popup.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark"><title>Universal VidCaster · Safari</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-mark" aria-hidden="true">VC</div>
+    <div><h1>Universal VidCaster</h1><p class="eyebrow">SAFARI → IPAD</p></div>
+  </header>
+  <main>
+    <section class="scan-card" aria-labelledby="scan-heading">
+      <div class="section-heading"><h2 id="scan-heading">Find your video</h2><button id="inspect" type="button" class="secondary">Find video</button></div>
+      <p id="status" role="status" aria-live="polite" data-state="idle">Play a video on this page, then choose Find video.</p>
+      <p class="hint">Only this permitted page is inspected.</p>
+    </section>
+    <section id="handoff-section" class="card" aria-labelledby="handoff-heading">
+      <div class="section-heading"><h2 id="handoff-heading">Ready for your TV</h2><span class="badge">Via iPad app</span></div>
+      <p class="section-intro">Choose what to transfer. You’ll review and cast in the app.</p>
+      <label for="handoff-video">Video</label>
+      <select id="handoff-video" aria-describedby="video-help" disabled><option value="">Find a video first</option></select>
+      <p id="video-help" class="field-help">Media links are copied with their original access information.</p>
+      <label for="handoff-method">Playback method</label>
+      <select id="handoff-method" aria-describedby="method-help"><option value="direct">Direct media</option><option value="prepare-on-ipad">Prepare on iPad</option></select>
+      <p id="method-help" class="field-help">For ordinary MP4 or other direct media links.</p>
+      <div class="field-heading"><label for="handoff-subtitle">Subtitles</label><span class="optional">Optional</span></div>
+      <select id="handoff-subtitle" disabled><option value="">No subtitle</option></select>
+      <div id="language-field" hidden>
+        <label for="handoff-language">Subtitle language</label>
+        <input id="handoff-language" value="en" placeholder="en or id" autocapitalize="none" spellcheck="false" aria-describedby="language-help">
+        <p id="language-help" class="field-help">en = English · id = Indonesian. Other language tags work too.</p>
+      </div>
+      <p id="selection-summary" class="selection-summary">No video selected yet.</p>
+    </section>
+    <details class="card help-card" id="subtitle-help">
+      <summary>Can’t find subtitles?</summary>
+      <p>Some players load captions before inspection. Capture a new request:</p>
+      <ol><li>Start watching below, then close this panel.</li><li>In the website player, switch subtitles off, then on.</li><li>Reopen VidCaster and choose Find video again.</li></ol>
+      <div class="button-row"><button id="watch-subtitles" type="button" class="secondary">Watch new subtitle requests</button><button id="stop-subtitle-watch" type="button" class="quiet">Stop watching</button></div>
+      <p id="subtitle-watch-status" role="status" aria-live="polite"></p>
+      <p class="hint">Watch lasts up to 5 minutes. A page reload ends it. Only subtitles associated with this video are offered.</p>
+    </details>
+    <details id="diagnostics" class="diagnostics">
+      <summary>Diagnostics &amp; individual links</summary>
+      <div class="diagnostics-content">
+        <p class="hint">For troubleshooting. Playback compatibility is not verified by inspection.</p>
+        <h2>Video links</h2><ul id="candidates"></ul>
+        <h2>Subtitle links</h2><ul id="subtitles"></ul>
+        <p id="subtitle-diagnostics" class="hint"></p>
+        <p id="original-status" role="status" aria-live="polite"></p>
+        <h2>Video observations</h2><ul id="videos"></ul>
+        <h2>Inspection limits</h2><ul id="limitations"></ul>
+        <h2>Redacted report</h2>
+        <p class="hint">Query values and titles are removed. Hostnames and paths remain; review before sharing. Redacted links cannot play.</p>
+        <label for="report">Diagnostic JSON</label><textarea id="report" readonly spellcheck="false" rows="8" placeholder="Find a video to generate a report."></textarea>
+        <button id="copy" type="button" class="secondary" disabled>Copy redacted report</button>
+        <p id="copy-status" role="status" aria-live="polite"></p>
+        <details><summary>Native messaging test</summary><p class="hint">Separate from inspection and casting.</p><button id="native" type="button" class="quiet">Check native bridge</button></details>
+      </div>
+    </details>
+    <section id="original-panel" class="card original-panel" hidden aria-label="Manual copy fallback">
+      <h2>Copy manually</h2><label for="original-url">Private value · local use only</label>
+      <textarea id="original-url" readonly spellcheck="false" rows="3"></textarea>
+      <button id="hide-original" type="button" class="secondary">Hide and clear original URL</button>
+    </section>
+  </main>
+  <footer class="action-bar">
+    <button id="copy-handoff" type="button" class="primary" disabled>Copy transfer for iPad</button>
+    <p id="handoff-status" role="status" aria-live="polite">Then open Universal VidCaster → Paste Safari transfer.</p>
+    <p class="privacy-note">Includes private media links. Nothing starts playing until you cast.</p>
+  </footer>
+  <script src="popup.js"></script>
+</body>
+</html>

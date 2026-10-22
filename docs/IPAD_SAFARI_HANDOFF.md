@@ -1,5 +1,15 @@
 # iPad Safari to native app: explicit bundled transfer
 
+UI update (2026-10-23): popup 0.0.5 uses **Find video / Refresh** and **Copy transfer
+for iPad**, with Diagnostics collapsed and subtitle capture help in its own section.
+The transfer schema and native Paste action are unchanged. Older button names below
+describe the validated baseline. See [UI research and redesign](SAFARI_EXTENSION_UX.md).
+
+Popup width fix (2026-10-23): user confirmed the wider popup works in iPad Safari.
+The stylesheet requests an 800px preferred width without clamping it to the
+initial narrow popup viewport. Safari controls the final outer size. Narrow
+Safari windows and iPhone layouts remain separate validation items.
+
 Implemented 2026-10-23. User-confirmed physical transfer and video/audio/subtitle
 playback pass on 2026-10-23. Existing playback architecture
 is retained; inputs are imported into WorkspaceSession rather than triggering
@@ -20,7 +30,7 @@ app launching, persistent shared storage, or a Safari-hosted Cast sender.
 4. Build/run on the iPad. Enable the app's extension in Safari's extension settings
    and allow it on the test website. If an older probe extension is installed,
    disable that old one to avoid opening outdated popup code. Current shared
-   extension manifest version is 0.0.4.
+   extension manifest version is 0.0.5.
 
 ## Use
 
