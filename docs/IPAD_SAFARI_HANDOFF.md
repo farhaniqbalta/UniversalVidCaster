@@ -15,6 +15,65 @@ is retained; inputs are imported into WorkspaceSession rather than triggering
 SDK calls from the extension. This is an explicit clipboard handoff, not automatic
 app launching, persistent shared storage, or a Safari-hosted Cast sender.
 
+## Open in app — implementation update (2026-10-25)
+
+Extension 0.0.6 adds **Open in Universal VidCaster** as the primary action after
+Find video/Refresh and selection. It requests opening the native app with the
+selected video/method/subtitle already filled. The app still requires review,
+TV selection if needed, and an explicit Cast action. It never auto-loads, stops
+TV media, or clears the current host on import. This supersedes the earlier
+clipboard-only description above; Copy transfer/Paste remains the fallback.
+
+Normal inspection already collects exposed track URLs and associated subtitle
+resource entries. One associated subtitle with a known valid language is now
+preselected; multiple/unknown-language results remain manual choices. Choose
+No subtitle to omit it. If none is available, expand the watch help and use the
+existing off/on workflow. No automatic request interception or player internals
+were added, and absent results are never guessed.
+
+The explicit click builds `universalvidcaster://import#<encoded-transfer>` and
+requests synchronous navigation inside the user gesture. The native app
+registers that scheme and validates route, size, schema, original URLs, method,
+and language before changing the draft. Invalid/busy imports preserve it.
+Safari may ask for confirmation or refuse the transition; opening requested is
+not proof of import success. Canceling does not trigger clipboard reads or playback.
+
+Privacy change: this optional route carries original signed URLs in an encoded
+URL fragment passed to the OS. Encoding is not encryption. The extension does
+not place it in an anchor, report, webpage, logs, storage, or a server request,
+but OS URL handling is outside the app's control and custom schemes are not
+exclusive ownership/authenticated channels. Do not share these links. The
+clipboard path is still available; no App Group/signing entitlement is required.
+A future stronger handoff could pass an opaque ID through a shared native store.
+
+Implementation references: [Apple custom URL schemes](https://developer.apple.com/documentation/Xcode/defining-a-custom-url-scheme-for-your-app).
+Physical result (2026-10-25): the user confirmed the update works on the iPad.
+Record the Safari **Open in Universal VidCaster** transition and native setup
+import as a user-reported pass. Individual cold/warm launch, cancellation, busy
+session, and subtitle fallback cases were not separately reported; retain the
+checklist below for broader regression coverage.
+
+Automated verification: 88 web tests and 33 native tests pass, along with
+TypeScript checks, shared extension resources, plist validation, and the unsigned
+iPad app/embedded-extension build. The subsequent user-reported physical pass
+is recorded above, separately from these automated checks.
+
+### Physical check for this update
+
+1. Rebuild shared extension resources and Run the iPad app from Xcode to install
+   both the app URL registration and extension 0.0.6.
+2. Start a website video with captions. Find video; check the single associated
+   subtitle and language are offered without starting a watch. If missing, use
+   the fallback. Confirm multiple choices are not silently guessed.
+3. Choose method and tap Open in Universal VidCaster. Accept Safari's prompt if
+   shown. Confirm setup imports without Paste, preserving original authorization.
+4. Review and cast. Confirm video/audio/subtitles. Repeat when the app is closed
+   and already open, and while a previous video is playing (import must not stop it).
+5. Cancel opening, then confirm Copy transfer/Paste still works. Test refresh and
+   No subtitle so old captions are not retained. Unsupported/oversized links must
+   not replace the existing draft.
+
+
 ## Install/update
 
 1. Run `npm run build:safari-probe` from the repo root. This generates the shared
@@ -29,7 +88,7 @@ app launching, persistent shared storage, or a Safari-hosted Cast sender.
 4. Build/run on the iPad. Enable the app's extension in Safari's extension settings
    and allow it on the test website. If an older probe extension is installed,
    disable that old one to avoid opening outdated popup code. Current shared
-   extension manifest version is 0.0.5.
+   extension manifest version is 0.0.6.
 
 ## Use
 
@@ -83,8 +142,9 @@ redaction placeholders, language, finite start time, size, and mode-specific
 requirements are validated before the draft changes. Subtitle authorization
 remains independent. These example domains and values are not playable links.
 
-No original payload is appended to the redacted diagnostic export, logged, sent
-through native messaging, persisted in extension storage, or put into a deep link.
+For the clipboard fallback, no original payload is appended to the redacted
+diagnostic export, logged, sent through native messaging, or persisted in
+extension storage. The optional Open route uses an app link as described above.
 It lives in popup memory and the clipboard the user explicitly writes, then the
 app's in-memory draft. OS clipboard behavior is outside app persistence; replacing
 the clipboard contents removes that copy. No passive clipboard reading is added.

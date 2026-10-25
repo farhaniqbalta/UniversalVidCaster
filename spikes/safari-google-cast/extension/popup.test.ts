@@ -172,3 +172,35 @@ it('shows language only for selected subtitles and blocks invalid language befor
   expect((document.getElementById('copy-handoff') as HTMLButtonElement).disabled).toBe(false);
   expect(document.getElementById('language-field')!.hidden).toBe(true);
 });
+
+it('offers one associated known-language subtitle on the first inspection without watching', async () => {
+  const { executeScript } = await mount();
+  expect((document.getElementById('open-app') as HTMLButtonElement).disabled).toBe(true);
+  (document.getElementById('inspect') as HTMLButtonElement).click();
+  await vi.waitFor(() => expect((document.getElementById('open-app') as HTMLButtonElement).disabled).toBe(false));
+  expect((document.getElementById('handoff-subtitle') as HTMLSelectElement).value).toBe('0');
+  expect((document.getElementById('handoff-language') as HTMLInputElement).value).toBe('en');
+  expect(executeScript).toHaveBeenCalledTimes(2); // Inject + inspect, not watch.
+  expect(document.body.innerHTML).not.toContain('subtitle-secret');
+  const language = document.getElementById('handoff-language') as HTMLInputElement;
+  language.value = 'invalid tag'; language.dispatchEvent(new Event('input'));
+  expect((document.getElementById('open-app') as HTMLButtonElement).disabled).toBe(true);
+});
+
+it('requires a subtitle choice for ambiguous or unknown-language results and clears old selections', async () => {
+  const { executeScript } = await mount();
+  const doc = document.implementation.createHTMLDocument('Example');
+  doc.body.innerHTML = '<video src="https://media.test/a.mp4"></video>';
+  const known = { url: 'https://media.test/en.vtt', language: 'en', method: 'track-element', association: 'current-track-element' };
+  for (const subtitles of [[known, { ...known, url: 'https://media.test/id.vtt', language: 'id' }], [{ ...known, language: undefined }], []]) {
+    // Replace the pending injection/inspection results on each new scan.
+    executeScript.mockReset();
+    executeScript.mockResolvedValueOnce([]).mockResolvedValueOnce([{ result: {
+      report: redactReport(collectPageDiagnostics(doc)), originalCandidateUrls: ['https://media.test/a.mp4'], subtitles,
+    } }]);
+    (document.getElementById('inspect') as HTMLButtonElement).click();
+    await vi.waitFor(() => expect((document.getElementById('open-app') as HTMLButtonElement).disabled).toBe(false));
+    expect((document.getElementById('handoff-subtitle') as HTMLSelectElement).value).toBe('');
+    expect(document.getElementById('language-field')!.hidden).toBe(true);
+  }
+});

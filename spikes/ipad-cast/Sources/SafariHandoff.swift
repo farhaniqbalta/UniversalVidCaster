@@ -1,6 +1,6 @@
 import Foundation
 
-/// Explicit clipboard import only; never an executable URL or auto-load command.
+/// Validated setup import from clipboard or an explicit app link; never auto-load.
 struct SafariHandoff: Decodable {
     struct Video: Decodable {
         let url: String
@@ -14,12 +14,26 @@ struct SafariHandoff: Decodable {
     let video: Video
     let subtitle: Subtitle?
 
+    static func transfer(from url: URL) throws -> String {
+        guard url.absoluteString.utf8.count <= 196_608,
+              let parts = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              parts.scheme == "universalvidcaster", parts.host == "import",
+              parts.path.isEmpty, parts.query == nil, parts.user == nil,
+              parts.password == nil, parts.port == nil,
+              let encoded = parts.percentEncodedFragment,
+              let text = encoded.removingPercentEncoding else {
+            throw InputError("Invalid app transfer. Inspect the video again or use Paste Safari transfer.")
+        }
+        _ = try draft(from: text)
+        return text
+    }
+
     static func draft(from text: String) throws -> PlaybackDraft {
         let data = Data(text.utf8)
         guard data.count <= 65536 else { throw InputError("Safari transfer is too large. Copy the selected video again.") }
         let payload: SafariHandoff
         do { payload = try JSONDecoder().decode(Self.self, from: data) }
-        catch { throw InputError("This is not a Safari transfer. Use Copy video + subtitle for app in the extension.") }
+        catch { throw InputError("This is not a Safari transfer. Use Open in Universal VidCaster or Copy transfer for iPad in the extension.") }
         guard payload.type == "universal-vidcaster.handoff", payload.version == 1,
               ["direct", "prepare-on-ipad"].contains(payload.video.method),
               payload.video.startSeconds.isFinite, payload.video.startSeconds >= 0,

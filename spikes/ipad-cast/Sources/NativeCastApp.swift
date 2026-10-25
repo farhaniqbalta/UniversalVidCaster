@@ -27,6 +27,7 @@ struct CastAppRoot: View {
     @Environment(\.scenePhase) private var phase
     var body: some View {
         CastWorkspaceView(session: session, devicePicker: AnyView(CastButton()))
+            .onOpenURL { url in _ = session.importSafariURL(url) }
             .onChange(of: phase) { _, value in session.setActive(value == .active) }
     }
 }

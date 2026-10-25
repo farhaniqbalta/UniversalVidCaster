@@ -18,3 +18,9 @@ export function createHandoff(video: { url: string; mimeType?: string }, method:
   if (payload.length > 32768) throw new Error('Transfer is too large.');
   return payload;
 }
+
+/** Built only inside the user's Open click; never added to reports or stored. */
+export function createAppLink(payload: string): string {
+  if (payload.length > 32768) throw new Error('Transfer is too large.');
+  return `universalvidcaster://import#${encodeURIComponent(payload)}`;
+}

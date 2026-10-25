@@ -1,6 +1,6 @@
 import { redactReport, redactDiagnosticUrl } from '@uvc/detector';
 import type { DiagnosticSnapshot } from './snapshot';
-import { createHandoff, type HandoffMethod } from './handoff';
+import { createHandoff, createAppLink, type HandoffMethod } from './handoff';
 import { sourceHost, mediaLabel, updateTransferView } from './popupView';
 
 declare const browser: {
@@ -24,22 +24,40 @@ for (const id of ['handoff-video', 'handoff-subtitle', 'handoff-method', 'handof
   document.getElementById(id)!.addEventListener(id === 'handoff-language' ? 'input' : 'change', () => {
     updateTransferView(handoffSnapshot);
     const label = document.getElementById('handoff-status')!;
-    label.dataset.state = 'idle'; label.textContent = 'Then open Universal VidCaster → Paste Safari transfer.';
+    label.dataset.state = 'idle'; label.textContent = 'Review your selection, then open the app. Copy transfer is available as a fallback.';
     document.getElementById('copy-handoff')!.textContent = 'Copy transfer for iPad';
   });
 }
 updateTransferView();
-document.getElementById('copy-handoff')!.onclick = async () => {
-  const label = document.getElementById('handoff-status')!;
-  const generation = inspectionGeneration;
-  try {
+function selectedTransfer(): string {
     const snapshot = handoffSnapshot;
     if (!snapshot || handoffVideo.value === '') throw new Error();
     const index = Number(handoffVideo.value);
     const subtitle = handoffSubtitle.value === '' ? undefined : snapshot.subtitles?.[Number(handoffSubtitle.value)];
-    const payload = createHandoff({ url: snapshot.originalCandidateUrls[index], mimeType: snapshot.report.candidates[index].mimeType },
+    return createHandoff({ url: snapshot.originalCandidateUrls[index], mimeType: snapshot.report.candidates[index].mimeType },
       (document.getElementById('handoff-method') as HTMLSelectElement).value as HandoffMethod,
       subtitle ? { url: subtitle.url, language: (document.getElementById('handoff-language') as HTMLInputElement).value.trim() } : undefined);
+}
+document.getElementById('open-app')!.onclick = () => {
+  const label = document.getElementById('handoff-status')!;
+  try {
+    const link = createAppLink(selectedTransfer());
+    clearOriginal();
+    // Synchronous navigation stays inside the user gesture. Never put the private
+    // link in an anchor, webpage, report, persistent storage, or a diagnostic log.
+    label.dataset.state = 'idle';
+    label.textContent = 'Opening requested. Review in the app. If it stays here, use Copy transfer, then Paste Safari transfer in the app.';
+    window.location.assign(link);
+  } catch {
+    label.dataset.state = 'error';
+    label.textContent = 'Could not open. Check your selection or use Copy transfer for iPad.';
+  }
+};
+document.getElementById('copy-handoff')!.onclick = async () => {
+  const label = document.getElementById('handoff-status')!;
+  const generation = inspectionGeneration;
+  try {
+    const payload = selectedTransfer();
     clearOriginal();
     try {
       await navigator.clipboard.writeText(payload);
@@ -98,7 +116,8 @@ document.getElementById('inspect')!.onclick = async () => {
   handoffSnapshot = undefined;
   handoffVideo.replaceChildren(); handoffSubtitle.replaceChildren(new Option('No subtitle', ''));
   (document.getElementById('copy-handoff') as HTMLButtonElement).disabled = true;
-  document.getElementById('handoff-status')!.textContent = 'Then open Universal VidCaster → Paste Safari transfer.';
+  (document.getElementById('open-app') as HTMLButtonElement).disabled = true;
+  document.getElementById('handoff-status')!.textContent = 'Review your selection, then open the app. Copy transfer is available as a fallback.';
   document.getElementById('handoff-status')!.dataset.state = 'idle';
   document.getElementById('copy-handoff')!.textContent = 'Copy transfer for iPad';
   updateTransferView();
@@ -164,6 +183,12 @@ document.getElementById('inspect')!.onclick = async () => {
       action.onclick = () => copyValue(subtitles[index].url, generation, 'Subtitle URL');
       row.append(label, action); subtitleList.append(row);
     });
+    // One current associated caption with a known language needs no extra choice.
+    // Multiple results and unknown languages remain explicit selections.
+    if (subtitles.length === 1 && subtitles[0].language && /^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/.test(subtitles[0].language)) {
+      handoffSubtitle.value = '0';
+      (document.getElementById('handoff-language') as HTMLInputElement).value = subtitles[0].language;
+    }
     updateTransferView(snapshot.result);
     const diagnostics = snapshot.result.subtitleDiagnostics;
     if (diagnostics) {

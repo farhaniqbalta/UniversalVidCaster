@@ -13,3 +13,15 @@ it('rejects redacted inputs, credential URLs and unsigned preparation requests',
   }
   expect(() => createHandoff({ url: 'https://media.test/a.m3u8' }, 'prepare-on-ipad')).toThrow();
 });
+
+it('encodes an explicit app link without changing original authorization or Unicode', async () => {
+  const { createAppLink } = await import('./handoff');
+  const payload = createHandoff({ url: 'https://media.test/日本.mp4?t=a%2Bb&pm=browser#fragment' }, 'direct',
+    { url: 'https://sub.test/en.vtt?t=own%2Ftoken', language: 'en' });
+  const link = new URL(createAppLink(payload));
+  expect(link.protocol).toBe('universalvidcaster:');
+  expect(link.hostname).toBe('import');
+  expect(link.search).toBe('');
+  expect(decodeURIComponent(link.hash.slice(1))).toBe(payload);
+  expect(() => createAppLink('x'.repeat(32769))).toThrow();
+});
