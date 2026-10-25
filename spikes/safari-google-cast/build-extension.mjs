@@ -1,5 +1,5 @@
 import { build } from 'vite';
-import { copyFile, mkdir } from 'node:fs/promises';
+import { copyFile, mkdir, cp } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('./', import.meta.url));
@@ -17,3 +17,5 @@ await mkdir(outDir, { recursive: true });
 for (const file of ['manifest.json', 'popup.html', 'popup.css']) {
   await copyFile(`${root}extension/${file}`, `${outDir}/${file}`);
 }
+
+await cp(`${root}extension/images`, `${outDir}/images`, { recursive: true });

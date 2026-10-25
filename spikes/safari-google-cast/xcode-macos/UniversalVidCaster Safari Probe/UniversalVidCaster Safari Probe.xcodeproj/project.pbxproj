@@ -22,6 +22,7 @@
 		CE407A8930853CA0004E4B59 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = CE407A8430853CA0004E4B59 /* manifest.json */; };
 		CE407A8A30853CA0004E4B59 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = CE407A8530853CA0004E4B59 /* popup.css */; };
 		CE407A8B30853CA0004E4B59 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = CE407A8630853CA0004E4B59 /* content.js */; };
+		A1C010000000000000000002 /* images in Resources */ = {isa = PBXBuildFile; fileRef = A1C010000000000000000001 /* images */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		CE407A8430853CA0004E4B59 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../dist/manifest.json; sourceTree = "<group>"; };
 		CE407A8530853CA0004E4B59 /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = popup.css; path = ../../../dist/popup.css; sourceTree = "<group>"; };
 		CE407A8630853CA0004E4B59 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = ../../../dist/content.js; sourceTree = "<group>"; };
+		A1C010000000000000000001 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = ../../../dist/images; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +142,7 @@
 				CE407A8330853CA0004E4B59 /* popup.html */,
 				CE407A8430853CA0004E4B59 /* manifest.json */,
 				CE407A8530853CA0004E4B59 /* popup.css */,
+				A1C010000000000000000001 /* images */,
 				CE407A8630853CA0004E4B59 /* content.js */,
 			);
 			name = Resources;
@@ -237,6 +240,7 @@
 			isa = PBXResourcesBuildPhase;
 			files = (
 				CE407A8A30853CA0004E4B59 /* popup.css in Resources */,
+				A1C010000000000000000002 /* images in Resources */,
 				CE407A8730853CA0004E4B59 /* popup.js in Resources */,
 				CE407A8930853CA0004E4B59 /* manifest.json in Resources */,
 				CE407A8830853CA0004E4B59 /* popup.html in Resources */,
