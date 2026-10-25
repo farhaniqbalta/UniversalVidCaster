@@ -173,6 +173,15 @@ struct WorkspaceHostState {
         guard !working else { return }
         draft = PlaybackDraft(); draft.url = MediaInput.flower; draft.title = "Flower"
     }
+    @discardableResult func importSafariURL(_ url: URL) -> Bool {
+        refresh()
+        guard !working else {
+            error = "Finish the current action, then reopen the transfer from Safari."
+            return false
+        }
+        do { return importSafariTransfer(try SafariHandoff.transfer(from: url)) }
+        catch { self.error = "Could not import the app link. Inspect again or use Paste Safari transfer."; return false }
+    }
     @discardableResult func importSafariTransfer(_ text: String) -> Bool {
         refresh(); guard !working else { return false }
         do {

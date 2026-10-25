@@ -24,6 +24,7 @@ export function updateTransferView(snapshot?: DiagnosticSnapshot) {
   const validLanguage = subtitle.value === '' || /^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/.test(language.value.trim());
   language.setAttribute('aria-invalid', String(!validLanguage));
   button.disabled = !hasVideo || !validLanguage;
+  (document.getElementById('open-app') as HTMLButtonElement).disabled = button.disabled;
   const prepared = method.value === 'prepare-on-ipad';
   document.getElementById('method-help')!.textContent = prepared
     ? 'For a signed HLS master link. Keep the iPad app open while casting.'

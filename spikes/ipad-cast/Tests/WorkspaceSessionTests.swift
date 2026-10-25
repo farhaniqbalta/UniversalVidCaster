@@ -50,6 +50,26 @@ import Combine
 }
 
 final class WorkspaceSessionTests: XCTestCase {
+    @MainActor func testAppLinkOnlyImportsDraftAndPreservesPlaybackAndInvalidDraft() {
+        let cast = FakeCastClient(); let host = FakeHostClient()
+        cast.workspaceState.hasMedia = true
+        host.workspaceState.hosting = true
+        let session = WorkspaceSession(cast: cast, host: host)
+        session.draft.includeSubtitle = true; session.draft.subtitleURL = "https://old.test/en.vtt"
+        let raw = #"{"type":"universal-vidcaster.handoff","version":1,"video":{"url":"https://media.test/a.mp4","method":"direct","startSeconds":0}}"#
+        var parts = URLComponents(); parts.scheme = "universalvidcaster"; parts.host = "import"; parts.fragment = raw
+        XCTAssertTrue(session.importSafariURL(parts.url!))
+        XCTAssertEqual(session.draft.url, "https://media.test/a.mp4")
+        XCTAssertFalse(session.draft.includeSubtitle)
+        XCTAssertTrue(cast.loads.isEmpty); XCTAssertTrue(cast.actions.isEmpty)
+        XCTAssertTrue(session.host.hosting); XCTAssertTrue(session.cast.hasMedia)
+        XCTAssertFalse(session.importSafariURL(URL(string: "universalvidcaster://import#invalid")!))
+        XCTAssertEqual(session.draft.url, "https://media.test/a.mp4")
+        cast.workspaceState.busy = true
+        XCTAssertFalse(session.importSafariURL(parts.url!))
+        XCTAssertTrue(cast.loads.isEmpty)
+    }
+
     @MainActor func testMediaAdjustmentsValidateAndKeepReceiverTruth() {
         let cast = FakeCastClient()
         cast.workspaceState.hasMedia = true

@@ -36,7 +36,7 @@
     </section>
     <details class="card help-card" id="subtitle-help">
       <summary>Can’t find subtitles?</summary>
-      <p>Some players load captions before inspection. Capture a new request:</p>
+      <p>Find video also checks available subtitles. Only if none are found, capture a new request:</p>
       <ol><li>Start watching below, then close this panel.</li><li>In the website player, switch subtitles off, then on.</li><li>Reopen VidCaster and choose Find video again.</li></ol>
       <div class="button-row"><button id="watch-subtitles" type="button" class="secondary">Watch new subtitle requests</button><button id="stop-subtitle-watch" type="button" class="quiet">Stop watching</button></div>
       <p id="subtitle-watch-status" role="status" aria-live="polite"></p>
@@ -67,8 +67,9 @@
     </section>
   </main>
   <footer class="action-bar">
-    <button id="copy-handoff" type="button" class="primary" disabled>Copy transfer for iPad</button>
-    <p id="handoff-status" role="status" aria-live="polite">Then open Universal VidCaster → Paste Safari transfer.</p>
+    <button id="open-app" type="button" class="primary" disabled>Open in Universal VidCaster</button>
+    <button id="copy-handoff" type="button" class="quiet" disabled>Copy transfer for iPad</button>
+    <p id="handoff-status" role="status" aria-live="polite">Review your selection, then open the app. Copy transfer is available as a fallback.</p>
     <p class="privacy-note">Includes private media links. Nothing starts playing until you cast.</p>
   </footer>
   <script src="popup.js"></script>
