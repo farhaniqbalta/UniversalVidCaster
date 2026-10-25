@@ -6,6 +6,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         let criteria = GCKDiscoveryCriteria(applicationID: kGCKDefaultMediaReceiverApplicationID)
         let options = GCKCastOptions(discoveryCriteria: criteria)
         options.startDiscoveryAfterFirstTapOnCastButton = true
+        // User-confirmed on the tested iPad (2026-10-25). Google still documents
+        // iOS limitations, so other OS/device combinations need verification.
+        options.physicalVolumeButtonsWillControlDeviceVolume = true
         GCKCastContext.setSharedInstanceWith(options)
         return true
     }

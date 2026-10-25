@@ -1,5 +1,55 @@
 # Cast playback speed and media volume
 
+## Current behavior — media slider and hardware TV buttons (2026-10-25)
+
+At the user's request, the on-screen slider and mute again control media-stream
+volume and use media status/capabilities. New loads still initialize media volume
+to 100% and unmute the stream after load acknowledgement. Device volume/mute
+is not changed by that initialization. No extra on-screen TV controls were added.
+
+The app now enables `physicalVolumeButtonsWillControlDeviceVolume` before
+initializing CastContext. The user confirmed on 2026-10-25 that this combination
+works on the tested iPad/TV: the app slider controls media volume and physical
+iPad buttons control TV/device volume. This is a user-reported functional pass.
+Compatibility with other setups is not established: [Google's current guide](https://developers.google.com/cast/docs/ios_sender/integrate#physical_button_volume_control)
+warns physical-button support is unavailable due to iOS changes despite retaining
+the SDK option. The local physical result does not remove that documented
+limitation for other devices or OS versions.
+This supersedes the device-slider implementation below.
+
+Test with the app foregrounded and a Cast session playing: lower the media slider,
+confirm audio changes, then press the iPad hardware volume buttons. Check whether
+the TV volume changes independently and whether the media slider stays unchanged.
+Also check normal local volume behavior after disconnect. Test at a comfortable
+TV level. No volume interception workaround or background guarantee is included.
+
+## Device-volume update — 2026-10-25
+
+The existing slider and mute button now control **TV device volume**, using
+Cast session device-volume/mute requests and session-reported values. This
+supersedes the media-volume behavior described in the original implementation
+record below. Playback-speed behavior and layout are unchanged.
+
+Device capability traits gate the controls, independently of loaded media and
+its supported media commands. No optimistic changes or automatic maximum-volume
+device requests are added. Requests retain existing timeout/failure reporting.
+
+Each successful new media load is followed by tracked stream-volume 100% and
+stream-unmute requests. These normalize the player audio beneath device volume;
+they do not raise or unmute the TV device. The pinned SDK has no load-time
+stream-volume field, so this runs after the load acknowledgement and a brief
+initial interval may still use the receiver's previous stream level. Controls
+stay busy through initialization; errors/timeouts are reported without inventing
+success. Physical confirmation of this initialization remains pending.
+
+Physical check: run from Xcode, cast a video, lower device volume slightly, then
+raise it moderately. Test mute/unmute and use the TV remote to check whether the
+slider follows external changes. Check the TV's own volume indicator: some Cast
+devices expose receiver output volume rather than the TV's system level.
+The earlier user-confirmed media-volume result does not validate this change.
+
+## Original implementation record
+
 Implemented on `feat/cast-speed-volume-control` and merged into `main`. The
 `docs-cleanup` branch now includes this implementation through a merge from main;
 the broader documentation cleanup remains separate.

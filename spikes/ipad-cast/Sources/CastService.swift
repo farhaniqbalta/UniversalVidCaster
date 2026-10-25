@@ -132,13 +132,13 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
         track(client.setPlaybackRate(Float(rate)), label: "Playback speed")
     }
     func setVolume(_ volume: Double) {
-        guard !busy, connected, hasMedia, canChangeVolume, let client,
+        guard active, !busy, connected, hasMedia, canChangeVolume, let client,
               volume.isFinite, (0...1).contains(volume) else { return }
         track(client.setStreamVolume(Float(volume)), label: "Media volume")
     }
     func setMuted(_ muted: Bool) {
-        guard !busy, connected, hasMedia, canMute, let client else { return }
-        track(client.setStreamMuted(muted), label: muted ? "Mute" : "Unmute")
+        guard active, !busy, connected, hasMedia, canMute, let client else { return }
+        track(client.setStreamMuted(muted), label: muted ? "Mute media" : "Unmute media")
     }
 
     func seek(_ text: String) {
@@ -195,17 +195,32 @@ final class CastService: NSObject, ObservableObject, @preconcurrency GCKSessionM
         let seconds = status.mediaInformation?.streamDuration ?? 0
         duration = seconds.isFinite ? seconds : 0
         hasMedia = status.mediaInformation != nil && status.playerState != .idle
-        playbackRate = Double(status.playbackRate)
         volume = Double(status.volume); muted = status.isMuted
-        canChangeRate = status.isMediaCommandSupported(kGCKMediaCommandSetPlaybackRate)
         canChangeVolume = status.isMediaCommandSupported(kGCKMediaCommandSetVolume)
         canMute = status.isMediaCommandSupported(kGCKMediaCommandToggleMute)
+        playbackRate = Double(status.playbackRate)
+        canChangeRate = status.isMediaCommandSupported(kGCKMediaCommandSetPlaybackRate)
         canSeek = status.isMediaCommandSupported(kGCKMediaCommandSeek)
         if previous != playback { log("Receiver: \(playback); idle reason: \(status.idleReason.rawValue)") }
     }
 
     func requestDidComplete(_ request: GCKRequest) {
         guard pending?.requestID == request.requestID else { return }
+        // LOAD has no stream-volume field in the pinned SDK. Normalize the new
+        // media session after its load acknowledgement, never the device volume.
+        // Track each step so controls stay busy and errors/timeouts remain visible.
+        if connected, active, let client {
+            if pendingLabel == "Load" {
+                pending?.delegate = nil
+                track(client.setStreamVolume(1), label: "Initialize media volume")
+                return
+            }
+            if pendingLabel == "Initialize media volume" {
+                pending?.delegate = nil
+                track(client.setStreamMuted(false), label: "Initialize media audio")
+                return
+            }
+        }
         finish("\(pendingLabel) request completed. Playback is determined by receiver status.", succeeded: true)
     }
     func request(_ request: GCKRequest, didFailWithError error: GCKError) {

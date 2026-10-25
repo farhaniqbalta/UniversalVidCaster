@@ -50,6 +50,22 @@ import Combine
 }
 
 final class WorkspaceSessionTests: XCTestCase {
+    @MainActor func testMediaVolumeRequiresMediaAndKeepsReceiverValues() {
+        let cast = FakeCastClient()
+        cast.workspaceState.canChangeVolume = true; cast.workspaceState.canMute = true
+        cast.workspaceState.volume = 0.3
+        let session = WorkspaceSession(cast: cast, host: FakeHostClient())
+        session.setVolume(0.5); session.setMuted(true)
+        XCTAssertTrue(cast.volumes.isEmpty); XCTAssertTrue(cast.mutes.isEmpty)
+        cast.workspaceState.hasMedia = true; cast.workspaceState.lastStatusAt = Date()
+        session.setVolume(0.5); session.setMuted(true)
+        XCTAssertEqual(cast.volumes, [0.5]); XCTAssertEqual(cast.mutes, [true])
+        XCTAssertEqual(session.cast.volume, 0.3); XCTAssertFalse(session.cast.muted)
+        cast.workspaceState.connected = false
+        session.setVolume(0.8); session.setMuted(false)
+        XCTAssertEqual(cast.volumes, [0.5]); XCTAssertEqual(cast.mutes, [true])
+    }
+
     @MainActor func testAppLinkOnlyImportsDraftAndPreservesPlaybackAndInvalidDraft() {
         let cast = FakeCastClient(); let host = FakeHostClient()
         cast.workspaceState.hasMedia = true
