@@ -78,8 +78,9 @@ is recorded above, separately from these automated checks.
 
 1. Run `npm run build:safari-probe` from the repo root. This generates the shared
    extension resources used by the Mac probe and iPad app; generated files stay ignored.
-2. Open `spikes/ipad-cast/iPadCastTest.xcodeproj`. The existing iPadCastTest scheme
-   now builds and embeds a **VidCasterSafari** extension target as well.
+2. Open `apps/ipad/UniversalVidCaster.xcodeproj`. The shared
+   **UniversalVidCasterApp** scheme builds and embeds the
+   **UniversalVidCasterSafariExtension** target.
 3. For signed installation, select the same development Team for the app and the
    new extension target. If the app uses a custom bundle identifier, set the
    extension target's `UVC_CONTAINER_BUNDLE_ID` to that app identifier so its
@@ -169,6 +170,6 @@ the accepted requirement; automatic app launch is not implemented.
 - 29 native tests pass, including independent subtitle authorization, rejected
   versions/oversized payloads, atomic import, clearing old subtitle input, and no
   playback/host side effects on import.
-- Unsigned iOS build includes the VidCasterSafari extension bundle. The user's
+- Unsigned iOS build includes the Safari extension bundle. The user's
   subsequent physical result above establishes the tested transfer/playback flow;
   permission denial/recovery and broader website compatibility remain untested.

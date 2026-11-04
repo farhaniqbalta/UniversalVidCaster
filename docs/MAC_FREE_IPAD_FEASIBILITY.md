@@ -10,7 +10,7 @@ iPad app foregrounded and awake while casting. Foreground iPad-local preparation
 and HTTP hosting are now implemented; physical Mac-free playback remains pending.
 No hosted service or custom receiver was introduced. Subtitles remain deferred.
 
-The implementation and run steps are in the [native app guide](../spikes/ipad-cast/README.md).
+The implementation and run steps are in the [native app guide](../apps/ipad/README.md).
 The design below records rationale; background hosting is no longer an acceptance
 criterion. Safari video URL acquisition/handoff remains separate pending work.
 
@@ -65,7 +65,7 @@ The critical uncertainty is serving playlists after app suspension.
    Keep temporary app inactivity separate from explicit teardown, and fail clearly
    on expired or unreachable sessions. Do not change expiry based on UI events.
 
-Implemented areas: `spikes/ipad-cast/Sources/ManifestPreparation.swift`,
+Implemented areas: `apps/ipad/Sources/ManifestPreparation.swift`,
 `LocalManifestServer.swift`, `ForegroundManifestHost.swift`, native preparation
 and loopback server tests, and the existing app's iPad-hosting toggle/button.
 The first implementation preloads all referenced playlists within its bounds,

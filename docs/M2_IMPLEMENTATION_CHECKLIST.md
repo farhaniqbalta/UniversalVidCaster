@@ -56,10 +56,10 @@ The website can be closed; continue native iPad testing with the flower baseline
 
 
 Latest Part 2 update (2026-10-21): a dedicated native iPad Cast test app is
-implemented under `spikes/ipad-cast`, pinned to official Cast SDK 4.8.6. Unsigned
+implemented under `apps/ipad`, pinned to official Cast SDK 4.8.6. Unsigned
 build and six input tests pass. Signing/install and receiver playback remain
 pending. This supersedes earlier Part 2 not-started statements below. See the
-[native app guide](../spikes/ipad-cast/README.md).
+[native app guide](../apps/ipad/README.md).
 
 Part 1 update (2026-10-21): Safari diagnostics software is implemented with 53
 passing tests, type checks, web/Safari builds, and unsigned iPadOS/macOS packaging

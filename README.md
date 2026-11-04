@@ -7,7 +7,7 @@ Public receiver-accessible media can be loaded directly.
 
 ## Start here
 
-1. Follow the [iPad setup and usage guide](spikes/ipad-cast/README.md).
+1. Follow the [iPad setup and usage guide](apps/ipad/README.md).
 2. Use the [Safari transfer guide](docs/IPAD_SAFARI_HANDOFF.md) to select a video
    and optional subtitle, copy a transfer, and paste it into the native app.
 3. Review [validation results](docs/IPAD_NATIVE_CAST_RESULTS.md) and the
@@ -24,7 +24,7 @@ Keep the native app open and the screen awake while it hosts playlists. The TV
 fetches actual media directly from source servers. No Mac playlist host, cloud
 service, or additional TV app is needed for this path. Safari capture may require
 starting a subtitle watch and toggling captions off/on in the website player.
-Automatic app launch, token renewal, live/encrypted HLS preparation, transcoding,
+Automatic playback on import, token renewal, live/encrypted HLS preparation, transcoding,
 and mirroring are not implemented.
 
 ## Development setup
@@ -38,8 +38,10 @@ npm run build:safari-probe
 
 If npm is missing, install Node.js or correct its PATH and reopen the terminal.
 With nvm already installed, use `nvm install` and `nvm use`.
-Open `spikes/ipad-cast/iPadCastTest.xcodeproj` in full Xcode, configure signing
-for both app and extension, and run on the iPad. See the setup guide for details.
+For first installation, open `apps/ipad/UniversalVidCaster.xcodeproj` in full
+Xcode, select the shared **UniversalVidCasterApp** scheme, configure signing
+for both targets, and run on the iPad. For weekly Personal Team reinstalls,
+follow the [short reinstall steps](apps/ipad/README.md#weekly-reinstall-with-a-free-apple-account).
 Source changes to the extension require rebuilding resources and reinstalling
 through Xcode; they do not update an installed extension automatically.
 
@@ -65,7 +67,7 @@ npm test
 npm run typecheck
 npm run build
 npm run build:safari-probe
-DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swift test --package-path spikes/ipad-cast
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swift test --package-path apps/ipad
 ```
 
 Automated tests do not replace physical TV checks. See the validation guide for
@@ -73,7 +75,7 @@ remaining endurance, token-expiry, network-loss, and accessibility checks.
 
 ## Repository layout
 
-- `spikes/ipad-cast`: native iPad app, embedded Safari extension target, and native tests.
+- `apps/ipad`: native iPad app, embedded Safari extension target, and native tests.
 - `spikes/safari-google-cast`: shared Safari inspection/copy UI and packaging probes.
 - `packages/core`, `packages/cast-web`, `packages/detector`: TypeScript validation,
   controller, Web Sender adapter, and DOM detection.
