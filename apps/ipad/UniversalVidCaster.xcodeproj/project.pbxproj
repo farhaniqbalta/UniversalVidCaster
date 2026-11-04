@@ -1,0 +1,490 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		000000000000000000000014 /* NativeCastApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000A /* NativeCastApp.swift */; };
+		000000000000000000000015 /* CastService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000B /* CastService.swift */; };
+		000000000000000000000016 /* MediaInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000000C /* MediaInput.swift */; };
+		00000000000000000000003E /* GoogleCastDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 00000000000000000000003D /* GoogleCastDynamic */; };
+		000000000000000000000070 /* ManifestPreparation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000060 /* ManifestPreparation.swift */; };
+		000000000000000000000071 /* LocalManifestServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000061 /* LocalManifestServer.swift */; };
+		000000000000000000000072 /* ForegroundManifestHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000062 /* ForegroundManifestHost.swift */; };
+		000000000000000000000090 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000080 /* DesignTokens.swift */; };
+		000000000000000000000091 /* PlaybackDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000081 /* PlaybackDraft.swift */; };
+		000000000000000000000092 /* CastWorkspaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000082 /* CastWorkspaceView.swift */; };
+		0000000000000000000000B0 /* WorkspaceSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000000000000000000000A0 /* WorkspaceSession.swift */; };
+		0000000000000000000000B1 /* WorkspaceServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000000000000000000000A1 /* WorkspaceServices.swift */; };
+		0000000000000000000000B2 /* WorkspaceSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000000000000000000000A2 /* WorkspaceSetupView.swift */; };
+		0000000000000000000000B3 /* WorkspacePlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000000000000000000000A3 /* WorkspacePlayerView.swift */; };
+		0000000000000000000000B4 /* WorkspaceDiagnosticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000000000000000000000A4 /* WorkspaceDiagnosticsView.swift */; };
+		0000000000000000000000B5 /* WorkspaceComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000000000000000000000A5 /* WorkspaceComponents.swift */; };
+		0000000000000000000000D0 /* WorkspacePreviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000000000000000000000C0 /* WorkspacePreviews.swift */; };
+		000000000000000000000110 /* Sources/SafariHandoff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000100 /* Sources/SafariHandoff.swift */; };
+		000000000000000000000111 /* SafariExtension/SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000101 /* SafariExtension/SafariWebExtensionHandler.swift */; };
+		000000000000000000000112 /* UniversalVidCasterSafariExtension.appex in Embed Safari Extension */ = {isa = PBXBuildFile; fileRef = 000000000000000000000102 /* UniversalVidCasterSafariExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		000000000000000000000130 /* ../../spikes/safari-google-cast/dist/manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000120 /* ../../spikes/safari-google-cast/dist/manifest.json */; };
+		000000000000000000000131 /* ../../spikes/safari-google-cast/dist/popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000121 /* ../../spikes/safari-google-cast/dist/popup.js */; };
+		000000000000000000000132 /* ../../spikes/safari-google-cast/dist/content.js in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000122 /* ../../spikes/safari-google-cast/dist/content.js */; };
+		000000000000000000000133 /* ../../spikes/safari-google-cast/dist/popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000123 /* ../../spikes/safari-google-cast/dist/popup.html */; };
+		000000000000000000000134 /* ../../spikes/safari-google-cast/dist/popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000124 /* ../../spikes/safari-google-cast/dist/popup.css */; };
+		000000000000000000000181 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000180 /* Assets.xcassets */; };
+		000000000000000000000183 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000182 /* images */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		000000000000000000000154 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 000000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 000000000000000000000160;
+			remoteInfo = UniversalVidCasterSafariExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		000000000000000000000153 /* Embed Safari Extension */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				000000000000000000000112 /* UniversalVidCasterSafariExtension.appex in Embed Safari Extension */,
+			);
+			name = "Embed Safari Extension";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		00000000000000000000000A /* NativeCastApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeCastApp.swift; sourceTree = "<group>"; };
+		00000000000000000000000B /* CastService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastService.swift; sourceTree = "<group>"; };
+		00000000000000000000000C /* MediaInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaInput.swift; sourceTree = "<group>"; };
+		00000000000000000000001E /* UniversalVidCasterApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = UniversalVidCasterApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		000000000000000000000060 /* ManifestPreparation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManifestPreparation.swift; sourceTree = "<group>"; };
+		000000000000000000000061 /* LocalManifestServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalManifestServer.swift; sourceTree = "<group>"; };
+		000000000000000000000062 /* ForegroundManifestHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForegroundManifestHost.swift; sourceTree = "<group>"; };
+		000000000000000000000080 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
+		000000000000000000000081 /* PlaybackDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackDraft.swift; sourceTree = "<group>"; };
+		000000000000000000000082 /* CastWorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastWorkspaceView.swift; sourceTree = "<group>"; };
+		0000000000000000000000A0 /* WorkspaceSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceSession.swift; sourceTree = "<group>"; };
+		0000000000000000000000A1 /* WorkspaceServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceServices.swift; sourceTree = "<group>"; };
+		0000000000000000000000A2 /* WorkspaceSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceSetupView.swift; sourceTree = "<group>"; };
+		0000000000000000000000A3 /* WorkspacePlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspacePlayerView.swift; sourceTree = "<group>"; };
+		0000000000000000000000A4 /* WorkspaceDiagnosticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceDiagnosticsView.swift; sourceTree = "<group>"; };
+		0000000000000000000000A5 /* WorkspaceComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceComponents.swift; sourceTree = "<group>"; };
+		0000000000000000000000C0 /* WorkspacePreviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspacePreviews.swift; sourceTree = "<group>"; };
+		000000000000000000000100 /* Sources/SafariHandoff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/SafariHandoff.swift; sourceTree = SOURCE_ROOT; };
+		000000000000000000000101 /* SafariExtension/SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariExtension/SafariWebExtensionHandler.swift; sourceTree = SOURCE_ROOT; };
+		000000000000000000000102 /* UniversalVidCasterSafariExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; path = UniversalVidCasterSafariExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		000000000000000000000120 /* ../../spikes/safari-google-cast/dist/manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "../../spikes/safari-google-cast/dist/manifest.json"; sourceTree = SOURCE_ROOT; };
+		000000000000000000000121 /* ../../spikes/safari-google-cast/dist/popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "../../spikes/safari-google-cast/dist/popup.js"; sourceTree = SOURCE_ROOT; };
+		000000000000000000000122 /* ../../spikes/safari-google-cast/dist/content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "../../spikes/safari-google-cast/dist/content.js"; sourceTree = SOURCE_ROOT; };
+		000000000000000000000123 /* ../../spikes/safari-google-cast/dist/popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "../../spikes/safari-google-cast/dist/popup.html"; sourceTree = SOURCE_ROOT; };
+		000000000000000000000124 /* ../../spikes/safari-google-cast/dist/popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = "../../spikes/safari-google-cast/dist/popup.css"; sourceTree = SOURCE_ROOT; };
+		000000000000000000000180 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		000000000000000000000182 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = "../../spikes/safari-google-cast/dist/images"; sourceTree = SOURCE_ROOT; };
+		000000000000000000000184 /* Safari Web Source */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Safari Web Source (TypeScript)"; path = "../../spikes/safari-google-cast/extension"; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		000000000000000000000029 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00000000000000000000003E /* GoogleCastDynamic in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000152 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00000000000000000000001F = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000020 /* Sources */,
+				000000000000000000000180 /* Assets.xcassets */,
+				000000000000000000000140 /* Safari Extension */,
+				000000000000000000000100 /* Sources/SafariHandoff.swift */,
+				000000000000000000000021 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		000000000000000000000020 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				00000000000000000000000A /* NativeCastApp.swift */,
+				00000000000000000000000B /* CastService.swift */,
+				00000000000000000000000C /* MediaInput.swift */,
+				0000000000000000000000C0 /* WorkspacePreviews.swift */,
+				0000000000000000000000A5 /* WorkspaceComponents.swift */,
+				0000000000000000000000A4 /* WorkspaceDiagnosticsView.swift */,
+				0000000000000000000000A3 /* WorkspacePlayerView.swift */,
+				0000000000000000000000A2 /* WorkspaceSetupView.swift */,
+				0000000000000000000000A1 /* WorkspaceServices.swift */,
+				0000000000000000000000A0 /* WorkspaceSession.swift */,
+				000000000000000000000082 /* CastWorkspaceView.swift */,
+				000000000000000000000081 /* PlaybackDraft.swift */,
+				000000000000000000000080 /* DesignTokens.swift */,
+				000000000000000000000062 /* ForegroundManifestHost.swift */,
+				000000000000000000000061 /* LocalManifestServer.swift */,
+				000000000000000000000060 /* ManifestPreparation.swift */,
+			);
+			name = "iPad App Source";
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		000000000000000000000021 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00000000000000000000001E /* UniversalVidCasterApp.app */,
+				000000000000000000000102 /* UniversalVidCasterSafariExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		000000000000000000000140 /* Safari Extension */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000101 /* SafariExtension/SafariWebExtensionHandler.swift */,
+				000000000000000000000184 /* Safari Web Source */,
+				000000000000000000000120 /* ../../spikes/safari-google-cast/dist/manifest.json */,
+				000000000000000000000121 /* ../../spikes/safari-google-cast/dist/popup.js */,
+				000000000000000000000122 /* ../../spikes/safari-google-cast/dist/content.js */,
+				000000000000000000000123 /* ../../spikes/safari-google-cast/dist/popup.html */,
+				000000000000000000000124 /* ../../spikes/safari-google-cast/dist/popup.css */,
+				000000000000000000000182 /* images */,
+			);
+			name = "iPad Safari Extension";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		000000000000000000000050 /* UniversalVidCasterApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00000000000000000000004B /* Build configuration list for PBXNativeTarget "UniversalVidCasterApp" */;
+			buildPhases = (
+				000000000000000000000028 /* Sources */,
+				000000000000000000000029 /* Frameworks */,
+				00000000000000000000002A /* Resources */,
+				000000000000000000000153 /* Embed Safari Extension */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				000000000000000000000155 /* PBXTargetDependency */,
+			);
+			name = UniversalVidCasterApp;
+			packageProductDependencies = (
+				00000000000000000000003D /* GoogleCastDynamic */,
+			);
+			productName = UniversalVidCasterApp;
+			productReference = 00000000000000000000001E /* UniversalVidCasterApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		000000000000000000000160 /* UniversalVidCasterSafariExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 000000000000000000000163 /* Build configuration list for PBXNativeTarget "UniversalVidCasterSafariExtension" */;
+			buildPhases = (
+				000000000000000000000150 /* Sources */,
+				000000000000000000000152 /* Frameworks */,
+				000000000000000000000151 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UniversalVidCasterSafariExtension;
+			productName = UniversalVidCasterSafariExtension;
+			productReference = 000000000000000000000102 /* UniversalVidCasterSafariExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		000000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = 00000000000000000000004A /* Build configuration list for PBXProject "UniversalVidCasterApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 00000000000000000000001F;
+			packageReferences = (
+				00000000000000000000003C /* XCRemoteSwiftPackageReference "google-cast-ios-sdk" */,
+			);
+			productRefGroup = 000000000000000000000021 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				000000000000000000000050 /* UniversalVidCasterApp */,
+				000000000000000000000160 /* UniversalVidCasterSafariExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		00000000000000000000002A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000000000000000000181 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000151 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000000000000000000130 /* ../../spikes/safari-google-cast/dist/manifest.json in Resources */,
+				000000000000000000000131 /* ../../spikes/safari-google-cast/dist/popup.js in Resources */,
+				000000000000000000000132 /* ../../spikes/safari-google-cast/dist/content.js in Resources */,
+				000000000000000000000133 /* ../../spikes/safari-google-cast/dist/popup.html in Resources */,
+				000000000000000000000134 /* ../../spikes/safari-google-cast/dist/popup.css in Resources */,
+				000000000000000000000183 /* images in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		000000000000000000000028 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000000000000000000014 /* NativeCastApp.swift in Sources */,
+				000000000000000000000015 /* CastService.swift in Sources */,
+				000000000000000000000016 /* MediaInput.swift in Sources */,
+				000000000000000000000110 /* Sources/SafariHandoff.swift in Sources */,
+				0000000000000000000000D0 /* WorkspacePreviews.swift in Sources */,
+				0000000000000000000000B5 /* WorkspaceComponents.swift in Sources */,
+				0000000000000000000000B4 /* WorkspaceDiagnosticsView.swift in Sources */,
+				0000000000000000000000B3 /* WorkspacePlayerView.swift in Sources */,
+				0000000000000000000000B2 /* WorkspaceSetupView.swift in Sources */,
+				0000000000000000000000B1 /* WorkspaceServices.swift in Sources */,
+				0000000000000000000000B0 /* WorkspaceSession.swift in Sources */,
+				000000000000000000000092 /* CastWorkspaceView.swift in Sources */,
+				000000000000000000000091 /* PlaybackDraft.swift in Sources */,
+				000000000000000000000090 /* DesignTokens.swift in Sources */,
+				000000000000000000000072 /* ForegroundManifestHost.swift in Sources */,
+				000000000000000000000071 /* LocalManifestServer.swift in Sources */,
+				000000000000000000000070 /* ManifestPreparation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000150 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000000000000000000111 /* SafariExtension/SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		000000000000000000000155 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 000000000000000000000160 /* UniversalVidCasterSafariExtension */;
+			targetProxy = 000000000000000000000154 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		000000000000000000000046 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		000000000000000000000047 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		000000000000000000000048 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YP5Q47APNV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_KEY_CFBundleDisplayName = "Universal VidCaster";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Find and control your existing Google Cast TV on your local network.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.universalvidcaster.ipadcasttest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		000000000000000000000049 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YP5Q47APNV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_KEY_CFBundleDisplayName = "Universal VidCaster";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Find and control your existing Google Cast TV on your local network.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.universalvidcaster.ipadcasttest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
+		000000000000000000000161 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YP5Q47APNV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SafariExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "VidCaster Safari";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(UVC_CONTAINER_BUNDLE_ID).safari";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+				UVC_CONTAINER_BUNDLE_ID = dev.universalvidcaster.ipadcasttest;
+			};
+			name = Debug;
+		};
+		000000000000000000000162 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YP5Q47APNV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SafariExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "VidCaster Safari";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(UVC_CONTAINER_BUNDLE_ID).safari";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+				UVC_CONTAINER_BUNDLE_ID = dev.universalvidcaster.ipadcasttest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		00000000000000000000004A /* Build configuration list for PBXProject "UniversalVidCasterApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000000000046 /* Debug */,
+				000000000000000000000047 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00000000000000000000004B /* Build configuration list for PBXNativeTarget "UniversalVidCasterApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000000000048 /* Debug */,
+				000000000000000000000049 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		000000000000000000000163 /* Build configuration list for PBXNativeTarget "UniversalVidCasterSafariExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000000000161 /* Debug */,
+				000000000000000000000162 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		00000000000000000000003C /* XCRemoteSwiftPackageReference "google-cast-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlecast/google-cast-ios-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 4.8.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		00000000000000000000003D /* GoogleCastDynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00000000000000000000003C /* XCRemoteSwiftPackageReference "google-cast-ios-sdk" */;
+			productName = GoogleCastDynamic;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 000000000000000000000001 /* Project object */;
+}

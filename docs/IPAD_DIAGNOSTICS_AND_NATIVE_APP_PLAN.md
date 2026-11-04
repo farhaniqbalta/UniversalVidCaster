@@ -165,13 +165,13 @@ casting or silently replace Safari controls with native-app controls.
 | Export privacy | `packages/detector/src/diagnostics/redactReport.ts` and tests |
 | Extension UI | Update `spikes/safari-google-cast/extension/content.ts`, `popup.ts`, `popup.html`, and `popup.css` |
 | iPad extension packaging | Reuse existing `spikes/safari-google-cast/xcode/` target; update configuration only as needed |
-| Native test app | Proposed `spikes/ipad-cast/` Swift/Xcode target, media validation, session service, UI, SDK pinning, tests and run notes; final structure chosen after inspecting existing targets |
+| Native test app | Proposed `apps/ipad/` Swift/Xcode target, media validation, session service, UI, SDK pinning, tests and run notes; final structure chosen after inspecting existing targets |
 | Validation documentation | `docs/IPAD_DIAGNOSTIC_RESULTS.md` and `docs/IPAD_NATIVE_CAST_RESULTS.md`, created when the corresponding tests begin |
 
 Implementation order: report contract and export privacy -> collection and tests
 -> popup -> physical iPad diagnostics -> native SDK app -> physical native Cast
 validation -> Safari/native feasibility decision.
 
-Part 2 implementation: [native app guide](../spikes/ipad-cast/README.md), with
+Part 2 implementation: [native app guide](../apps/ipad/README.md), with
 six native input tests and an unsigned generic-iOS build passing. Physical
 results are tracked in [IPAD_NATIVE_CAST_RESULTS.md](IPAD_NATIVE_CAST_RESULTS.md).

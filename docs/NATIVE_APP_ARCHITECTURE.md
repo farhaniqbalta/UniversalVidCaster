@@ -115,7 +115,7 @@ handoff, and speed/volume gating checks; the
 final unsigned iOS build and whitespace check pass. No real TV was commanded
 during the architecture tests. The user subsequently confirmed the refactor smoke checks worked.
 
-Run `xcrun swift test --package-path spikes/ipad-cast` with full Xcode selected,
+Run `xcrun swift test --package-path apps/ipad` with full Xcode selected,
 then build the iPad target. Physical UI/playback checks remain necessary after a
 design swap. Both the redesigned UI and architecture refactor received user-confirmed
 smoke passes; later changes still require their own regression checks.

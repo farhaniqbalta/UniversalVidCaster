@@ -2,7 +2,7 @@
 
 Part 1 implementation, 2026-10-21. Diagnostics do not require native messaging
 or a working Cast transport. Part 2 is now a separate
-[native iPad app](../spikes/ipad-cast/README.md). The iPad Safari transfer and
+[native iPad app](../apps/ipad/README.md). The iPad Safari transfer and
 TV video/audio/subtitle flow are user-confirmed. See [current results](IPAD_NATIVE_CAST_RESULTS.md).
 
 ## What is collected
@@ -51,7 +51,7 @@ redacted JSON report. Reports remain redacted even after copying an original URL
 
 ## Build and install on the iPad
 
-Use the embedded **VidCasterSafari** target in the native iPad app. Follow the
+Use the embedded **UniversalVidCasterSafariExtension** target in the native iPad app. Follow the
 [current installation guide](IPAD_SAFARI_HANDOFF.md#installupdate), including
 resource generation and signing both targets. The standalone Probe project is
 retained for isolated packaging experiments, not the primary installation path.

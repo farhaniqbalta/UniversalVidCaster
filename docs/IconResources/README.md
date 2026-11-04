@@ -5,7 +5,7 @@ modifications. The ZIP, SVGs, and preview remain design references.
 
 Production assets:
 
-- `spikes/ipad-cast/Assets.xcassets/AppIcon.appiconset`: default, dark, and tinted
+- `apps/ipad/Assets.xcassets/AppIcon.appiconset`: default, dark, and tinted
   app icons. The app target compiles this catalog and selects `AppIcon` in both
   Debug and Release configurations.
 - `spikes/safari-google-cast/extension/images`: color extension icons and

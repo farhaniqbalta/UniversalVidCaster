@@ -2,7 +2,7 @@
 
 Updated 2026-10-23. Consolidated results replace the earlier incremental status
 entries. Physical passes below are user reports, not independently collected
-receiver telemetry. See [setup](../spikes/ipad-cast/README.md),
+receiver telemetry. See [setup](../apps/ipad/README.md),
 [handoff](IPAD_SAFARI_HANDOFF.md), and [architecture](NATIVE_APP_ARCHITECTURE.md).
 
 ## Tested setup

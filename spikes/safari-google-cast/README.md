@@ -41,7 +41,7 @@ desktop-first work order: Safari diagnostics first, iPad native Cast test app
 second. Mac/Python bridge integration is paused. Earlier results remain valid
 within their tested platform. End-to-end casting while staying in Safari is
 still unproven. Part 1 diagnostics and Part 2 native app software are now implemented. Physical
-iPad/site validation remains pending. See [the native app guide](../ipad-cast/README.md).
+iPad/site validation remains pending. See [the native app guide](../../apps/ipad/README.md).
 
 
 This contains macOS and iOS Safari Web Extension test targets with Apple's required packaging hosts.
