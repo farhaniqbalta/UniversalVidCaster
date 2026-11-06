@@ -10,7 +10,8 @@ receiver telemetry. See [setup](../apps/ipad/README.md),
 - M1 iPad Pro, 11-inch; user-reported iPadOS 27.0.1.
 - Existing Google Cast TV: SWTV-22AE-FHD; no additional TV app.
 - Native SwiftUI app targeting iPadOS 17+, official Google Cast SDK 4.8.6.
-- Foreground, screen-awake native hosting is accepted by the user.
+- The user reported normal several-hour movie playback with the iPad app in the
+  background after starting an iPad-local session.
 
 ## Physical evidence
 
@@ -21,6 +22,7 @@ receiver telemetry. See [setup](../apps/ipad/README.md),
 | Website HLS with Mac playlist host | Video, audio, and seek confirmed |
 | Switch to Safari/return and brief lock/unlock | Continuity/control recovery confirmed with Mac host running; does not establish iPad background hosting |
 | iPad-local HLS preparation | Confirmed working |
+| iPad app backgrounded during a movie | User reported normal playback for several hours; no playlist-request or server-uptime telemetry was collected |
 | Redesigned UI and architecture refactor | User confirmed the supplied functional smoke checks worked, including seeking, replacement, and End casting; no per-action telemetry |
 | iPad Safari transfer -> native Paste -> iPad preparation -> TV | Video, audio, and subtitles confirmed after instruction to stop the Mac bridge |
 | Subtitle association | Initial stale-video subtitle issue reported; filtering/layout fixes followed by user confirmation that subtitles work after website captions off/on |
@@ -48,13 +50,15 @@ new test run performed by this documentation cleanup.
 
 ## Remaining validation
 
-- Precisely timed iPad-hosted endurance, 30-minute host expiry, and upstream token expiry.
+- Precisely timed playlist-host reachability, 30-minute host expiry, and upstream token expiry.
 - Recovery after actual Wi-Fi/session loss and unreachable media.
 - Local Network permission denial/recovery and partial teardown failures.
 - Detailed independent receiver telemetry and subtitle synchronization measurements.
 - Narrow/resizable Safari windows, iPhone layouts, VoiceOver, larger text, keyboard,
   and full redesigned-extension regression coverage.
 
-Host lifetime and token lifetime are separate. Keep the app foregrounded while
-hosting; Mac-hosted app-switch tests do not prove suspended iPad hosting works.
-Normal navigation/return is not a network-loss recovery test.
+Host lifetime and token lifetime are separate. The several-hour result shows TV
+playback continuing with the app backgrounded; it does not prove the iPad
+continued serving playlist requests throughout the movie. The earlier
+Mac-hosted app-switch check is separate. Normal navigation/return is not a
+network-loss recovery test.

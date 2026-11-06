@@ -72,8 +72,10 @@ when changing its HTML/CSS/TypeScript.
 4. Choose **Direct** for receiver-accessible media or **Prepare on iPad** for the
    observed signed HLS master. Cast explicitly. iPad preparation sets HLS/fMP4/VOD
    automatically. An arbitrary webpage URL is not a media input.
-5. Keep the app foregrounded and screen awake while hosting. Setup and Now Playing
-   are side by side in wide windows; use the mini-player in compact layouts.
+5. After playback starts, the app can be backgrounded; the user reported a
+   several-hour movie playing normally this way. Return to the app for controls.
+   Setup and Now Playing are side by side in wide windows; use the mini-player
+   in compact layouts.
 
 For a baseline test, use the flower MP4 preset in **Diagnostics** (•••). Advanced
 contains direct-mode MIME/format settings. Editing a link reveals its full value;
@@ -120,10 +122,14 @@ proxying, token renewal, transcoding, or mirroring.
 
 The local listener uses Wi-Fi IPv4 and a dynamic port, random prepared paths,
 GET/HEAD/OPTIONS with CORS, bounded connections/requests, and URL-free logs.
-Hosting expires 30 minutes after preparation; upstream authorization can expire
-earlier. Auto-lock is disabled while preparing/hosting and restored on cleanup
-or expiry. Leaving or locking the app can suspend serving. Get a fresh original
-link and prepare again when needed; background continuity is not promised.
+Hosting is configured to expire 30 minutes after preparation; upstream
+authorization can expire earlier. Auto-lock is disabled while preparing/hosting
+and restored on cleanup or expiry. A user-reported several-hour movie continued
+normally with the app in the background. This confirms playback on that setup,
+but does not establish that the local playlist server remained reachable after
+suspension or expiry: the TV fetches media directly from the source. If playback
+needs a playlist that is no longer available, return to the app, obtain a fresh
+original link, and prepare again.
 
 ## Verification
 

@@ -8,8 +8,10 @@ are not the current product plan.
 
 | Document | Purpose |
 | --- | --- |
-| [Native iPad setup](../spikes/ipad-cast/README.md) | Build, install, use, and test the app |
-| [Safari handoff](IPAD_SAFARI_HANDOFF.md) | Extension installation, explicit copy/Paste flow, privacy contract |
+| [Architecture decisions: executive summary](ARCHITECTURE_DECISIONS_EXECUTIVE_SUMMARY.md) | Current stack, rationale, tradeoffs, and decision history |
+| [Native iPad setup](../apps/ipad/README.md) | Build, install, use, and test the app |
+| [Mac Safari container](../apps/mac/README.md) | Build and install the shared Safari extension on Mac |
+| [Safari handoff](IPAD_SAFARI_HANDOFF.md) | Extension installation, Open in app and copy/Paste flows, privacy contract |
 | [Native results](IPAD_NATIVE_CAST_RESULTS.md) | Consolidated user-confirmed results and remaining gates |
 | [Diagnostic results](IPAD_DIAGNOSTIC_RESULTS.md) | Inspection-specific evidence and untested cases |
 | [Speed and volume](CAST_SPEED_VOLUME.md) | Presets, media-volume/mute behavior, and physical checks |
@@ -18,11 +20,13 @@ are not the current product plan.
 | [Extension UX](SAFARI_EXTENSION_UX.md) | Popup design, width fix, and UI verification |
 | [Design integration](CastDesign/INTEGRATION_NOTES.md) | Adopted native design and implementation differences |
 
-Current flow: Safari inspection -> explicit private clipboard transfer -> native
-Paste/review -> select TV -> Direct or Prepare on iPad -> playback controls.
-Keep the native app foregrounded while hosting. Subtitles are implemented and
-user-confirmed; acquisition may require the website caption off/on workaround.
-Detailed endurance, token-expiry/network recovery, and accessibility remain open.
+Current flow: Safari inspection -> explicit Open in app or private clipboard
+transfer -> native review -> select TV -> Direct or Prepare on iPad -> playback controls.
+The user reported normal several-hour movie playback with the iPad app
+backgrounded. Playlist-host reachability after suspension or expiry remains
+unmeasured. Subtitles are implemented and user-confirmed; acquisition may
+require the website caption off/on workaround. Token-expiry/network recovery
+and accessibility remain open.
 
 ## Supporting tools and technical references
 
@@ -46,7 +50,7 @@ following installation instructions or treating a task as still pending.
 - [Designer handover](NATIVE_IPAD_DESIGNER_HANDOVER.md), [original design specification](CastDesign/universal-vidcaster-ipad-design-spec.md)
 
 `CastDesign/*.swift` are designer reference material, not the app's production
-backend. Implementation lives under `spikes/ipad-cast/Sources`.
+backend. Implementation lives under `apps/ipad/Sources`.
 
 ## Documentation maintenance
 

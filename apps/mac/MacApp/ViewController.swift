@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  UniversalVidCaster Safari Probe
+//  UniversalVidCasterMac
 //
 //  Created by Han on 19/10/26.
 //
@@ -9,7 +9,7 @@ import Cocoa
 import SafariServices
 import WebKit
 
-let extensionBundleIdentifier = "dev.universalvidcaster.safariprobe.Extension"
+let extensionBundleIdentifier = "dev.universalvidcaster.mac.SafariExtension"
 
 class ViewController: NSViewController, WKNavigationDelegate, WKScriptMessageHandler {
 

@@ -1,5 +1,17 @@
 # Safari feasibility probe
 
+## Reusing the iPad Safari extension on Mac
+
+The iPad and Mac Safari targets package the same web extension source from
+`extension/`. After changing it, run `npm run build:safari-probe`, then build
+and run the [Mac containing app](../../apps/mac/README.md). Enable the extension
+in Mac Safari. The iPad app's Xcode build installs only the iPad extension.
+
+The current popup's **Open in Universal VidCaster** action uses the iPad app's
+`universalvidcaster://` handoff. The Mac containing app does not register that URL scheme
+or import transfers, so this action needs a Mac app handler before it works on
+Mac. Inspection, diagnostics, and copying the transfer use the shared web code.
+
 ## Target-site investigation recorded
 
 See [the sanitized diagnostic findings](../../docs/SITE_MEDIA_DIAGNOSTIC_FINDINGS.md).
@@ -66,13 +78,15 @@ platform check. Both targets share the same generated JavaScript resources.
 Neither target implements casting, and the iOS SDK probe is not macOS SDK evidence.
 
 1. From the repository root, run `npm run build:safari-probe`.
-2. Open `xcode-macos/UniversalVidCaster Safari Probe/UniversalVidCaster Safari Probe.xcodeproj`.
-3. Select **UniversalVidCaster Safari Probe → My Mac**, then Build and Run. The
-   generated host exists only to package/register the Safari extension.
+2. Open `apps/mac/UniversalVidCasterMac.xcodeproj`.
+3. Select **UniversalVidCasterMac → My Mac**, then Build and Run. The
+   containing app packages and registers the Safari extension.
 4. For unsigned development, enable Safari's web developer features in Settings
    → Advanced, then **Allow unsigned extensions** in its Developer settings (or
    Develop menu, depending on Safari version). This setting may reset after restart.
-5. Enable the probe under Safari Settings → Extensions.
+5. Enable **Universal VidCaster Safari** under Safari Settings → Extensions.
+   The older Safari Probe is no longer needed; see the
+   [Mac setup guide](../../apps/mac/README.md) to disable it.
 6. Open `http://localhost:5173/` in Safari with the existing harness running.
 7. Open the extension popup, allow access to this page, and select **Inspect this
    page**. Expect the flower MP4 candidate with a MIME hint.
@@ -87,8 +101,8 @@ Unsigned command-line build from the repository root:
 
 ```sh
 DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild \
-  -project 'spikes/safari-google-cast/xcode-macos/UniversalVidCaster Safari Probe/UniversalVidCaster Safari Probe.xcodeproj' \
-  -scheme 'UniversalVidCaster Safari Probe' -sdk macosx \
+  -project apps/mac/UniversalVidCasterMac.xcodeproj \
+  -scheme UniversalVidCasterMac -sdk macosx \
   -destination 'platform=macOS' -derivedDataPath /tmp/uvc-safari-macos-build \
   CODE_SIGNING_ALLOWED=NO build
 ```

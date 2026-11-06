@@ -55,7 +55,8 @@ Use the embedded **UniversalVidCasterSafariExtension** target in the native iPad
 [current installation guide](IPAD_SAFARI_HANDOFF.md#installupdate), including
 resource generation and signing both targets. The standalone Probe project is
 retained for isolated packaging experiments, not the primary installation path.
-Desktop Safari can use the macOS probe project with the same shared resources.
+Desktop Safari uses the [Mac containing app](../apps/mac/README.md) with the
+same shared extension resources.
 
 ## Test on your actual website
 

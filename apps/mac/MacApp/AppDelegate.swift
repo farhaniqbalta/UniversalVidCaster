@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  UniversalVidCaster Safari Probe
+//  UniversalVidCasterMac
 //
 //  Created by Han on 19/10/26.
 //
