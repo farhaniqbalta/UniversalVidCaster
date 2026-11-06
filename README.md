@@ -13,15 +13,16 @@ Public receiver-accessible media can be loaded directly.
 3. Review [validation results](docs/IPAD_NATIVE_CAST_RESULTS.md) and the
    [documentation index](docs/README.md) for current capabilities and limitations.
 
-The user confirmed iPad Safari transfer, Mac-free foreground HLS preparation,
+The user confirmed iPad Safari transfer, Mac-free iPad HLS preparation,
 and TV video/audio/subtitles. Native playback controls and the redesigned app
 also passed user-reported checks. Now Playing includes one-tap playback-speed
 presets (0.5×–2×), media volume, and mute/unmute; the user confirmed these work
 on the tested TV. See [speed and volume controls](docs/CAST_SPEED_VOLUME.md). These are observations on the tested setup,
 not a universal website/device compatibility guarantee.
 
-Keep the native app open and the screen awake while it hosts playlists. The TV
-fetches actual media directly from source servers. No Mac playlist host, cloud
+The user also reported normal movie playback for several hours after leaving the
+iPad app in the background. The TV fetches actual media directly from source
+servers. No Mac playlist host, cloud
 service, or additional TV app is needed for this path. Safari capture may require
 starting a subtitle watch and toggling captions off/on in the website player.
 Automatic playback on import, token renewal, live/encrypted HLS preparation, transcoding,
@@ -76,6 +77,8 @@ remaining endurance, token-expiry, network-loss, and accessibility checks.
 ## Repository layout
 
 - `apps/ipad`: native iPad app, embedded Safari extension target, and native tests.
+- `apps/mac`: macOS containing app for the shared Safari extension; see its
+  [build guide](apps/mac/README.md).
 - `spikes/safari-google-cast`: shared Safari inspection/copy UI and packaging probes.
 - `packages/core`, `packages/cast-web`, `packages/detector`: TypeScript validation,
   controller, Web Sender adapter, and DOM detection.

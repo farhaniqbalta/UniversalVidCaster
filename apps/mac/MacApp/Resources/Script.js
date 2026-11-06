@@ -1,8 +1,8 @@
 function show(enabled, useSettingsInsteadOfPreferences) {
     if (useSettingsInsteadOfPreferences) {
-        document.getElementsByClassName('state-on')[0].innerText = "UniversalVidCaster Safari Probe’s extension is currently on. You can turn it off in the Extensions section of Safari Settings.";
-        document.getElementsByClassName('state-off')[0].innerText = "UniversalVidCaster Safari Probe’s extension is currently off. You can turn it on in the Extensions section of Safari Settings.";
-        document.getElementsByClassName('state-unknown')[0].innerText = "You can turn on UniversalVidCaster Safari Probe’s extension in the Extensions section of Safari Settings.";
+        document.getElementsByClassName('state-on')[0].innerText = "Universal VidCaster Safari is enabled. Open a video page in Safari and select the extension in the toolbar.";
+        document.getElementsByClassName('state-off')[0].innerText = "Universal VidCaster Safari is disabled. Enable it in Safari Settings → Extensions.";
+        document.getElementsByClassName('state-unknown')[0].innerText = "Enable Universal VidCaster Safari in Safari Settings → Extensions.";
         document.getElementsByClassName('open-preferences')[0].innerText = "Quit and Open Safari Settings…";
     }
 

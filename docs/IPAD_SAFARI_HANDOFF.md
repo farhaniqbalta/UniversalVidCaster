@@ -77,7 +77,7 @@ is recorded above, separately from these automated checks.
 ## Install/update
 
 1. Run `npm run build:safari-probe` from the repo root. This generates the shared
-   extension resources used by the Mac probe and iPad app; generated files stay ignored.
+   extension resources used by the Mac containing app and iPad app; generated files stay ignored.
 2. Open `apps/ipad/UniversalVidCaster.xcodeproj`. The shared
    **UniversalVidCasterApp** scheme builds and embeds the
    **UniversalVidCasterSafariExtension** target.
@@ -153,8 +153,9 @@ the clipboard contents removes that copy. No passive clipboard reading is added.
 Inspection still has main-document/resource-observation limits and provider-specific
 subtitle association. It does not discover every site's media or prove that a
 particular subtitle matches dialogue. No URL fetch, token renewal, cookie transfer,
-or playback command occurs on import. Native foreground hosting remains required
-for Prepare on iPad mode.
+or playback command occurs on import. After Prepare on iPad starts playback, the
+user has reported normal several-hour movie playback with the app backgrounded;
+playlist-host reachability during that period was not measured.
 
 ## Verification and remaining gates
 
@@ -163,8 +164,9 @@ Physical result (2026-10-23): the user confirmed Paste works, then confirmed
 imported form with Mac bridge stopped. Record this as a user-reported pass for
 the explicit iPad Safari -> clipboard -> native app -> TV flow. No new seek,
 subtitle-timing precision, endurance, token-expiry, or network-loss measurements
-were supplied in this final confirmation. Foreground native operation remains
-the accepted requirement; automatic app launch is not implemented.
+were supplied in this final confirmation. A later user report confirms
+several-hour movie playback with the iPad app backgrounded. The Open in app
+action was subsequently implemented; import still does not start playback.
 
 - 83 web tests, TypeScript checks, and extension resource build pass.
 - 29 native tests pass, including independent subtitle authorization, rejected
