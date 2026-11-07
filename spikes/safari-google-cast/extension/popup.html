@@ -8,42 +8,45 @@
 <body>
   <header class="app-header">
     <div class="app-mark" aria-hidden="true">VC</div>
-    <div><h1>Universal VidCaster</h1><p class="eyebrow">SAFARI → IPAD</p></div>
+    <div><h1>Universal VidCaster</h1><p class="eyebrow">Send a website video to your TV</p></div>
   </header>
   <main>
     <section class="scan-card" aria-labelledby="scan-heading">
-      <div class="section-heading"><h2 id="scan-heading">Find your video</h2><button id="inspect" type="button" class="secondary">Find video</button></div>
-      <p id="status" role="status" aria-live="polite" data-state="idle">Play a video on this page, then choose Find video.</p>
+      <div class="section-heading"><h2 id="scan-heading">Find video</h2><button id="inspect" type="button" class="secondary">Find video</button></div>
+      <p id="status" role="status" aria-live="polite" data-state="idle">Play a video in this Safari tab, then tap Find video.</p>
       <p class="hint">Only this permitted page is inspected.</p>
     </section>
     <section id="handoff-section" class="card" aria-labelledby="handoff-heading">
-      <div class="section-heading"><h2 id="handoff-heading">Ready for your TV</h2><span class="badge">Via iPad app</span></div>
-      <p class="section-intro">Choose what to transfer. You’ll review and cast in the app.</p>
-      <label for="handoff-video">Video</label>
-      <select id="handoff-video" aria-describedby="video-help" disabled><option value="">Find a video first</option></select>
-      <p id="video-help" class="field-help">Media links are copied with their original access information.</p>
-      <label for="handoff-method">Playback method</label>
-      <select id="handoff-method" aria-describedby="method-help"><option value="direct">Direct media</option><option value="prepare-on-ipad">Prepare on iPad</option></select>
-      <p id="method-help" class="field-help">For ordinary MP4 or other direct media links.</p>
+      <div class="section-heading"><h2 id="handoff-heading">Video</h2></div>
+      <p class="section-intro">Choose a video and optional subtitles.</p>
+      <p id="video-placeholder">Your video will appear here once found.</p>
+      <p id="video-summary" class="video-summary" hidden></p>
+      <div id="video-choice" hidden><label for="handoff-video">Choose a video</label>
+      <select id="handoff-video" disabled><option value="">Find a video first</option></select></div>
+      <div id="subtitle-choice" hidden>
       <div class="field-heading"><label for="handoff-subtitle">Subtitles</label><span class="optional">Optional</span></div>
       <select id="handoff-subtitle" disabled><option value="">No subtitle</option></select>
-      <div id="language-field" hidden>
-        <label for="handoff-language">Subtitle language</label>
-        <input id="handoff-language" value="en" placeholder="en or id" autocapitalize="none" spellcheck="false" aria-describedby="language-help">
-        <p id="language-help" class="field-help">en = English · id = Indonesian. Other language tags work too.</p>
       </div>
+      <p id="subtitle-empty" class="field-help" hidden>No subtitles found. If needed, see Advanced options.</p>
+      <p id="playback-summary">Playback: Prepare on iPad</p>
       <p id="selection-summary" class="selection-summary">No video selected yet.</p>
     </section>
-    <details class="card help-card" id="subtitle-help">
-      <summary>Can’t find subtitles?</summary>
+    <details class="card help-card" id="advanced-options">
+      <summary>Advanced options</summary>
+      <label for="handoff-method">Playback method</label>
+      <select id="handoff-method" aria-describedby="method-help"><option value="prepare-on-ipad">Prepare on iPad</option><option value="direct">Direct media</option></select>
+      <p id="method-help" class="field-help" role="status"></p>
+    <div id="subtitle-help">
+      <h3>Can’t find subtitles?</h3>
       <p>Find video also checks available subtitles. Only if none are found, capture a new request:</p>
-      <ol><li>Start watching below, then close this panel.</li><li>In the website player, switch subtitles off, then on.</li><li>Reopen VidCaster and choose Find video again.</li></ol>
+      <ol><li>Start watching below, then close this popup.</li><li>In the website player, switch subtitles off, then on.</li><li>Reopen VidCaster and choose Refresh.</li></ol>
       <div class="button-row"><button id="watch-subtitles" type="button" class="secondary">Watch new subtitle requests</button><button id="stop-subtitle-watch" type="button" class="quiet">Stop watching</button></div>
       <p id="subtitle-watch-status" role="status" aria-live="polite"></p>
       <p class="hint">Watch lasts up to 5 minutes. A page reload ends it. Only subtitles associated with this video are offered.</p>
+    </div>
     </details>
     <details id="diagnostics" class="diagnostics">
-      <summary>Diagnostics &amp; individual links</summary>
+      <summary>Troubleshooting &amp; diagnostics</summary>
       <div class="diagnostics-content">
         <p class="hint">For troubleshooting. Playback compatibility is not verified by inspection.</p>
         <h2>Video links</h2><ul id="candidates"></ul>
@@ -68,9 +71,10 @@
   </main>
   <footer class="action-bar">
     <button id="open-app" type="button" class="primary" disabled>Open in Universal VidCaster</button>
-    <button id="copy-handoff" type="button" class="quiet" disabled>Copy transfer for iPad</button>
-    <p id="handoff-status" role="status" aria-live="polite">Review your selection, then open the app. Copy transfer is available as a fallback.</p>
-    <p class="privacy-note">Includes private media links. Nothing starts playing until you cast.</p>
+    <button id="copy-handoff" type="button" class="quiet" disabled>Copy transfer instead</button>
+    <p id="handoff-status" role="status" aria-live="polite">Choose a video before continuing.</p>
+    <p class="privacy-note">You’ll choose your TV and start playback in the app.</p>
+    <p class="privacy-note">Transfer includes private video links. Don’t share it.</p>
   </footer>
   <script src="popup.js"></script>
 </body>

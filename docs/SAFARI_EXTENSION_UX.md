@@ -1,7 +1,30 @@
 # Safari extension UX research and redesign
 
-Updated 2026-10-23. Shared macOS/iPad extension popup, version 0.0.5.
-The established iPad copy/import/cast flow is preserved.
+## UX revision — 2026-11-07
+
+The popup places video and optional subtitle selection first. One video is shown
+as a selected summary; multiple candidates require an explicit selection. Playback
+method and subtitle watch controls are under Advanced options; troubleshooting
+remains separate. Prepare on iPad is the default. If a link fails its existing
+preparation validation, Advanced opens with guidance to choose Direct media.
+The native app still reviews the transfer and starts casting only on
+the user's action. Physical iPad validation remains pending.
+
+The popup clears previous selections and private fallback values when scanning
+again. Subtitle selection requires no language input: valid detected tags are
+retained, and an unavailable or invalid language uses `und` (undetermined).
+Unsupported preparation choices block transfer with an explanation. Original links remain private until an explicit
+copy or the manual clipboard fallback; reports remain redacted.
+
+Validation on 2026-11-07: 93 web tests, TypeScript checks, the extension
+resource build, and the web harness build passed. A real Safari layout and
+device playback have not been checked for this revision. On iPad, verify the
+800px popover and constrained windows, selection and subtitle watch/stop,
+default preparation and Direct fallback, app opening and clipboard fallback,
+permissions, light/dark modes, larger text, keyboard, and VoiceOver.
+
+The sections below record the earlier 2026-10-23 design and validation history.
+The revision above supersedes their descriptions of controls and defaults.
 
 ## Research and resulting decisions
 

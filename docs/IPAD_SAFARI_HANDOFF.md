@@ -95,18 +95,20 @@ is recorded above, separately from these automated checks.
 
 1. In **iPad Safari**, open/start the target video. Open the extension and select
    **Find video** (or **Refresh** after inspection).
-2. If captions are wanted but missing, use **Watch new subtitle requests**, close
+2. If captions are wanted but missing, open **Advanced options**, use **Watch new subtitle requests**, close
    the popup, toggle subtitles off/on in the player, then reopen and inspect.
-3. In the transfer card, choose the video, playback method, and optional
-   subtitle. Confirm its language (`en` or `id`, or another supported tag).
-   Use **Prepare on iPad** for the observed signed HLS master URLs; use Direct
-   for public MP4. The method is chosen explicitly, not inferred from `.json`.
-4. Select **Copy transfer for iPad**. Original signed URLs are copied
+3. Choose the video and optional subtitle. No language entry is required: the
+   detected language is used when available; otherwise the transfer uses `und`.
+   **Prepare on iPad** is the default. If the link does not meet its requirements,
+   choose **Direct media** under **Advanced options**. The selected method is
+   shown in the main view.
+4. Select **Open in Universal VidCaster**, or use **Copy transfer instead**.
+   Original signed URLs are included in the transfer. When copying, they are copied
    together. A clipboard failure exposes a selected manual-copy fallback; hide
    and clear it before sharing screenshots. This payload is private, unlike the
    separately redacted diagnostic report.
-5. Open **Universal VidCaster** manually. In **Paste Safari transfer**, tap the
-   system Paste control. Review the filled video, method, subtitle, and language.
+5. If copying, open **Universal VidCaster** and tap its **Paste Safari transfer**
+   control. Review the filled video, method, subtitle, and language in the app.
 6. Connect to the TV and cast normally. The import does not prepare, play, stop,
    disconnect, or replace a currently-playing video. Existing confirmation and
    validation apply when the user explicitly casts/replaces it.
