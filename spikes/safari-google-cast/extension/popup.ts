@@ -20,12 +20,18 @@ let inspectionGeneration = 0;
 let handoffSnapshot: DiagnosticSnapshot | undefined;
 const handoffVideo = document.getElementById('handoff-video') as HTMLSelectElement;
 const handoffSubtitle = document.getElementById('handoff-subtitle') as HTMLSelectElement;
-for (const id of ['handoff-video', 'handoff-subtitle', 'handoff-method', 'handoff-language']) {
-  document.getElementById(id)!.addEventListener(id === 'handoff-language' ? 'input' : 'change', () => {
+function resetMethod() {
+  const method = document.getElementById('handoff-method') as HTMLSelectElement;
+  method.value = 'prepare-on-ipad';
+}
+for (const id of ['handoff-video', 'handoff-subtitle', 'handoff-method']) {
+  document.getElementById(id)!.addEventListener('change', () => {
+    if (id === 'handoff-video') { handoffSubtitle.value = ''; resetMethod(); }
+    clearOriginal();
     updateTransferView(handoffSnapshot);
     const label = document.getElementById('handoff-status')!;
-    label.dataset.state = 'idle'; label.textContent = 'Review your selection, then open the app. Copy transfer is available as a fallback.';
-    document.getElementById('copy-handoff')!.textContent = 'Copy transfer for iPad';
+    label.dataset.state = 'idle'; label.textContent = 'You’ll choose your TV and start playback in the app.';
+    document.getElementById('copy-handoff')!.textContent = 'Copy transfer instead';
   });
 }
 updateTransferView();
@@ -36,7 +42,7 @@ function selectedTransfer(): string {
     const subtitle = handoffSubtitle.value === '' ? undefined : snapshot.subtitles?.[Number(handoffSubtitle.value)];
     return createHandoff({ url: snapshot.originalCandidateUrls[index], mimeType: snapshot.report.candidates[index].mimeType },
       (document.getElementById('handoff-method') as HTMLSelectElement).value as HandoffMethod,
-      subtitle ? { url: subtitle.url, language: (document.getElementById('handoff-language') as HTMLInputElement).value.trim() } : undefined);
+      subtitle ? { url: subtitle.url, language: subtitle.language && /^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/.test(subtitle.language) ? subtitle.language : 'und' } : undefined);
 }
 document.getElementById('open-app')!.onclick = () => {
   const label = document.getElementById('handoff-status')!;
@@ -46,7 +52,7 @@ document.getElementById('open-app')!.onclick = () => {
     // Synchronous navigation stays inside the user gesture. Never put the private
     // link in an anchor, webpage, report, persistent storage, or a diagnostic log.
     label.dataset.state = 'idle';
-    label.textContent = 'Opening requested. Review in the app. If it stays here, use Copy transfer, then Paste Safari transfer in the app.';
+    label.textContent = 'Opening requested. If nothing happens, copy the transfer instead.';
     window.location.assign(link);
   } catch {
     label.dataset.state = 'error';
@@ -72,7 +78,7 @@ document.getElementById('copy-handoff')!.onclick = async () => {
       label.dataset.state = 'error';
       label.textContent = 'Clipboard unavailable. Transfer selected above; copy manually, then hide and clear it.';
     }
-  } catch { label.dataset.state = 'error'; label.textContent = 'Check your selection. Prepare on iPad needs an original HTTPS master with t and pm.'; }
+  } catch { label.dataset.state = 'error'; label.textContent = 'Check your selection and try again.'; }
 };
 function clearOriginal() {
   originalPanel.hidden = true; originalField.value = ''; originalStatus.textContent = '';
@@ -117,15 +123,15 @@ document.getElementById('inspect')!.onclick = async () => {
   handoffVideo.replaceChildren(); handoffSubtitle.replaceChildren(new Option('No subtitle', ''));
   (document.getElementById('copy-handoff') as HTMLButtonElement).disabled = true;
   (document.getElementById('open-app') as HTMLButtonElement).disabled = true;
-  document.getElementById('handoff-status')!.textContent = 'Review your selection, then open the app. Copy transfer is available as a fallback.';
+  document.getElementById('handoff-status')!.textContent = 'Choose a video before continuing.';
   document.getElementById('handoff-status')!.dataset.state = 'idle';
-  document.getElementById('copy-handoff')!.textContent = 'Copy transfer for iPad';
+  document.getElementById('copy-handoff')!.textContent = 'Copy transfer instead';
   updateTransferView();
   preview.value = ''; copy.disabled = true; copyStatus.textContent = '';
   try {
     list('candidates', []); list('limitations', []); list('videos', []); list('subtitles', []);
     document.getElementById('subtitle-diagnostics')!.textContent = '';
-    status.textContent = 'Inspecting permitted page…';
+    status.textContent = 'Looking for videos on this page…';
     const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
     if (tab?.id === undefined) throw new Error('No active tab is accessible.');
     const target = { tabId: tab.id };
@@ -175,7 +181,9 @@ document.getElementById('inspect')!.onclick = async () => {
     const safeSubtitles = subtitles.map(subtitle => ({ ...subtitle, url: redactDiagnosticUrl(subtitle.url) }));
     const subtitleList = document.getElementById('subtitles')!;
     safeSubtitles.forEach((subtitle, index) => {
-      handoffSubtitle.add(new Option(`Subtitle ${index + 1} · ${subtitle.language ?? 'language unknown'} · ${sourceHost(subtitle.url)}`, String(index)));
+      const languageNames: Record<string, string> = { en: 'English', id: 'Indonesian' };
+      const language = subtitle.language ? (languageNames[subtitle.language.toLowerCase()] ?? subtitle.language) : `Subtitle ${index + 1}`;
+      handoffSubtitle.add(new Option(language, String(index)));
       const row = document.createElement('li');
       const label = document.createElement('div');
       label.textContent = `${subtitle.url} · ${subtitle.language ?? 'language unknown'} · ${subtitle.association}`;
@@ -185,10 +193,10 @@ document.getElementById('inspect')!.onclick = async () => {
     });
     // One current associated caption with a known language needs no extra choice.
     // Multiple results and unknown languages remain explicit selections.
-    if (subtitles.length === 1 && subtitles[0].language && /^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/.test(subtitles[0].language)) {
+    if (result.candidates.length === 1 && subtitles.length === 1 && subtitles[0].language && /^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/.test(subtitles[0].language)) {
       handoffSubtitle.value = '0';
-      (document.getElementById('handoff-language') as HTMLInputElement).value = subtitles[0].language;
     }
+    resetMethod();
     updateTransferView(snapshot.result);
     const diagnostics = snapshot.result.subtitleDiagnostics;
     if (diagnostics) {
@@ -206,9 +214,9 @@ document.getElementById('inspect')!.onclick = async () => {
     preview.value = JSON.stringify({ ...result, subtitleObservations: safeSubtitles, subtitleDiagnostics: safeDiagnostics }, null, 2);
     copy.disabled = false;
     status.dataset.state = result.candidates.length ? 'ready' : 'empty';
-    status.textContent = result.candidates.length
-      ? `${result.candidates.length} video ${result.candidates.length === 1 ? 'link' : 'links'} found · ${subtitles.length} ${subtitles.length === 1 ? 'subtitle' : 'subtitles'} available. Review your selection below.`
-      : 'No transferable video link found. Start the video and try again. Embedded or protected players may not expose one.';
+    status.textContent = result.candidates.length === 1 ? '1 video found' : result.candidates.length > 1
+      ? `${result.candidates.length} videos found. Choose one.`
+      : 'No video found. Start playback on this page and try Refresh.';
   } catch { status.dataset.state = 'error'; status.textContent = 'Couldn’t inspect this page. Allow website access in Safari, start the video, and try again.'; }
   finally {
     inspect.disabled = false; inspect.textContent = 'Refresh';

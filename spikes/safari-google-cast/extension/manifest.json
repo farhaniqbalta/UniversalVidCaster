@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Universal VidCaster Diagnostics",
+  "name": "Universal VidCaster",
   "version": "0.0.6",
-  "description": "Inspect permitted page video information and export a redacted diagnostic report. Casting is not implemented.",
+  "description": "Find videos on the current Safari page and transfer the selection to the companion app for casting.",
   "permissions": [
     "activeTab",
     "scripting",
