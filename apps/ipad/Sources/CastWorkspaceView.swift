@@ -4,8 +4,9 @@ struct CastWorkspaceView: View {
     @ObservedObject var session: WorkspaceSession
     let devicePicker: AnyView
     @Environment(\.dynamicTypeSize) var typeSize
-    @State var editingVideo = true
-    @State var editingSubtitle = true
+    @State var editingVideo = false
+    @State var editingSubtitle = false
+    @State var showMediaOptions = false
     @State var languageChoice = "en"
     @State var showPlayer = false
     @State var showDiagnostics = false
@@ -31,7 +32,7 @@ struct CastWorkspaceView: View {
     var sessionExists: Bool { session.sessionExists }
     var canSeek: Bool { session.canSeek }
     var playerTitle: String { session.playerTitle }
-    var playbackLabel: String { session.playbackLabel }
+    var playbackLabel: String { cast.connected ? session.playbackLabel : "Unknown" }
 
     var body: some View {
         NavigationStack {
@@ -45,18 +46,27 @@ struct CastWorkspaceView: View {
                         }.padding(.horizontal, 20)
                     } else {
                         setup.safeAreaInset(edge: .bottom) {
-                            if sessionExists {
-                                Button { showPlayer = true } label: {
-                                    HStack {
-                                        Image(systemName: "tv")
-                                        VStack(alignment: .leading) {
-                                            Text(playerTitle).lineLimit(1)
-                                            Text("\(cast.device) · \(playbackLabel)").font(.caption)
-                                        }
-                                        Spacer(); Image(systemName: "chevron.up")
-                                    }.padding().frame(maxWidth: .infinity)
-                                }.buttonStyle(.plain).background(.regularMaterial)
-                                .accessibilityLabel("Open Now Playing. \(playbackLabel)")
+                            if cast.hasMedia {
+                                HStack(spacing: 8) {
+                                    Button { showPlayer = true } label: {
+                                        HStack {
+                                            Image(systemName: "tv")
+                                            VStack(alignment: .leading) {
+                                                Text(playerTitle).lineLimit(1)
+                                                Text("\(cast.device) · \(playbackLabel)").font(.caption)
+                                            }
+                                            Spacer(); Image(systemName: "chevron.up")
+                                        }.frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                                    }.buttonStyle(.plain)
+                                    .accessibilityLabel("Open Now Playing. \(playbackLabel)")
+                                    if session.canAdjustMedia && ["PLAYING", "PAUSED"].contains(cast.playback) {
+                                        Button { session.control(cast.playback == "PLAYING" ? "pause" : "play") } label: {
+                                            Image(systemName: cast.playback == "PLAYING" ? "pause.fill" : "play.fill")
+                                                .frame(width: 44, height: 44)
+                                        }.buttonStyle(.plain)
+                                        .accessibilityLabel(cast.playback == "PLAYING" ? "Pause" : "Play")
+                                    }
+                                }.padding().background(.regularMaterial)
                             }
                         }
                     }
@@ -92,6 +102,11 @@ struct CastWorkspaceView: View {
                 Button("Stop sharing", role: .destructive) { session.clearHosting() }
                 Button("Keep sharing", role: .cancel) { }
             } message: { Text("This clears the prepared playlists. It does not send Stop to the TV, but playback may fail when the TV needs another playlist.") }
+            .onAppear { syncLanguageChoice() }
+            .onChange(of: session.successfulImportRevision) { _, _ in
+                showMediaOptions = false; editingVideo = false; editingSubtitle = false
+                syncLanguageChoice()
+            }
             .onChange(of: cast.playback) { _, state in
                 if state == "PLAYING" || state == "PAUSED" || state == "BUFFERING" {
                     UIAccessibility.post(notification: .announcement, argument: "TV playback \(state.lowercased())")
@@ -106,4 +121,5 @@ struct CastWorkspaceView: View {
         Task { await session.load() }
     }
     func endCasting() { Task { await session.endCasting() } }
+    func syncLanguageChoice() { languageChoice = ["en", "id"].contains(draft.language) ? draft.language : "other" }
 }

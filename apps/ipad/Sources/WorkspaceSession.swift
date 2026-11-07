@@ -68,6 +68,8 @@ struct WorkspaceHostState {
     @Published private(set) var submittedSubtitleLanguage: String?
     @Published private(set) var loadSubmitted = false
     @Published private(set) var endResult: String?
+    // Presentation observes successful imports without observing private URLs.
+    @Published private(set) var successfulImportRevision: UInt = 0
     private let castClient: any WorkspaceCastClient
     private let hostClient: any WorkspaceHostClient
     private var subscriptions = Set<AnyCancellable>()
@@ -186,7 +188,7 @@ struct WorkspaceHostState {
         refresh(); guard !working else { return false }
         do {
             let imported = try SafariHandoff.draft(from: text)
-            draft = imported; error = nil
+            draft = imported; error = nil; successfulImportRevision &+= 1
             return true // Only input changes. Never load, clear, or disconnect.
         } catch { self.error = (error as? InputError)?.message ?? "Could not import Safari transfer."; return false }
     }

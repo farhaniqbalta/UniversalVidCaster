@@ -1,5 +1,23 @@
 # Native app architecture and future design swaps
 
+## Native UX and receiver launch update — 2026-11-07
+
+Setup presents the destination before the media summary. Successful imports
+increment `successfulImportRevision`, allowing the view to collapse private
+editors without observing URL changes or reacting to failed imports. The
+import contract and transport actions retain their existing ownership.
+
+Now Playing exposes ±5 and ±15-second skips through `WorkspaceSession.skip`,
+alongside speed and media volume/mute. Compact layouts show a media-based
+mini-player with separately gated Play/Pause and sheet-opening buttons.
+
+The composition root now requests `GCKLaunchOptions(relaunchIfRunning: true)`
+for new Cast connections, to recover a receiver behind the TV launcher. This
+can interrupt media already using the Default Media Receiver. Existing-session
+loads and SDK automatic resumption do not explicitly relaunch the receiver.
+The option compiles with the pinned SDK; foreground recovery and uninterrupted
+automatic resumption still need physical TV regression checks.
+
 Updated 2026-10-23. The user confirmed the redesigned UI checks worked and asked
 that later designs be easy to replace. Session behavior now lives outside the
 screens, behind injectable service contracts.
