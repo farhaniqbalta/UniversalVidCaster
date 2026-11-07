@@ -6,9 +6,9 @@ import Combine
 @MainActor private final class PreviewCast: ObservableObject, WorkspaceCastClient {
     @Published var workspaceState: WorkspaceCastState
     var workspaceChanges: AnyPublisher<Void, Never> { objectWillChange.map { _ in () }.eraseToAnyPublisher() }
-    init(playing: Bool) {
-        workspaceState = WorkspaceCastState(connected: true, device: "Living Room TV", playback: playing ? "PLAYING" : "IDLE",
-                                            position: playing ? 78 : 0, duration: 1440, canSeek: playing, hasMedia: playing,
+    init(playing: Bool, connected: Bool = true, paused: Bool = false, seekable: Bool = true) {
+        workspaceState = WorkspaceCastState(connected: connected, device: connected ? "Living Room TV" : "No device connected", playback: playing ? (paused ? "PAUSED" : "PLAYING") : "IDLE",
+                                            position: playing ? 78 : 0, duration: 1440, canSeek: playing && seekable, hasMedia: playing,
                                             lastStatusAt: Date(), message: "Design preview · no real TV connected.", mediaTitle: playing ? "Sample episode" : "")
         workspaceState.volume = 0.5
         workspaceState.canChangeRate = playing; workspaceState.canChangeVolume = playing; workspaceState.canMute = playing
@@ -47,9 +47,9 @@ import Combine
     func phaseChanged(active: Bool) { }
 }
 
-@MainActor private func designPreview(playing: Bool) -> WorkspaceSession {
-    let session = WorkspaceSession(cast: PreviewCast(playing: playing), host: PreviewHost(playing: playing))
-    if playing {
+@MainActor private func designPreview(playing: Bool = false, connected: Bool = true, imported: Bool = false, paused: Bool = false, seekable: Bool = true) -> WorkspaceSession {
+    let session = WorkspaceSession(cast: PreviewCast(playing: playing, connected: connected, paused: paused, seekable: seekable), host: PreviewHost(playing: playing))
+    if playing || imported {
         session.draft.prepareOnIPad = true
         session.draft.url = "https://media.example.test/master.json?t=EXAMPLE&pm=browser"
     }
@@ -57,9 +57,22 @@ import Combine
 }
 
 #Preview("Setup · no SDK or network") {
-    CastWorkspaceView(session: designPreview(playing: false), devicePicker: AnyView(Image(systemName: "tv")))
+    CastWorkspaceView(session: designPreview(connected: false), devicePicker: AnyView(Image(systemName: "tv")))
+}
+#Preview("Imported · disconnected") {
+    CastWorkspaceView(session: designPreview(connected: false, imported: true), devicePicker: AnyView(Image(systemName: "tv")))
+}
+#Preview("Imported · connected") {
+    CastWorkspaceView(session: designPreview(imported: true), devicePicker: AnyView(Image(systemName: "tv")))
 }
 #Preview("Playing · landscape", traits: .landscapeLeft) {
     CastWorkspaceView(session: designPreview(playing: true), devicePicker: AnyView(Image(systemName: "tv")))
+}
+#Preview("Paused · compact") {
+    CastWorkspaceView(session: designPreview(playing: true, paused: true), devicePicker: AnyView(Image(systemName: "tv")))
+        .frame(width: 390, height: 800)
+}
+#Preview("Playing · seeking unavailable") {
+    CastWorkspaceView(session: designPreview(playing: true, seekable: false), devicePicker: AnyView(Image(systemName: "tv")))
 }
 #endif

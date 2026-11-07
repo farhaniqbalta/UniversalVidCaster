@@ -50,6 +50,22 @@ import Combine
 }
 
 final class WorkspaceSessionTests: XCTestCase {
+    @MainActor func testRepeatedSafariImportSignalsOnlySuccessfulDraftUpdatesWhileDisconnected() {
+        let cast = FakeCastClient(); cast.workspaceState.connected = false
+        let host = FakeHostClient()
+        let session = WorkspaceSession(cast: cast, host: host)
+        let raw = #"{"type":"universal-vidcaster.handoff","version":1,"video":{"url":"https://media.test/master.json?t=secret&pm=browser","method":"prepare-on-ipad","startSeconds":0},"subtitle":{"url":"https://media.test/captions.vtt?token=secret","language":"und"}}"#
+        XCTAssertTrue(session.importSafariTransfer(raw))
+        XCTAssertTrue(session.importSafariTransfer(raw))
+        XCTAssertEqual(session.successfulImportRevision, 2)
+        XCTAssertTrue(session.draft.prepareOnIPad)
+        XCTAssertEqual(session.draft.language, "und")
+        XCTAssertFalse(session.importSafariTransfer("invalid"))
+        XCTAssertEqual(session.successfulImportRevision, 2)
+        XCTAssertTrue(cast.loads.isEmpty); XCTAssertTrue(cast.actions.isEmpty)
+        XCTAssertTrue(host.prepared.isEmpty); XCTAssertFalse(host.cleared)
+    }
+
     @MainActor func testMediaVolumeRequiresMediaAndKeepsReceiverValues() {
         let cast = FakeCastClient()
         cast.workspaceState.canChangeVolume = true; cast.workspaceState.canMute = true
@@ -75,14 +91,17 @@ final class WorkspaceSessionTests: XCTestCase {
         let raw = #"{"type":"universal-vidcaster.handoff","version":1,"video":{"url":"https://media.test/a.mp4","method":"direct","startSeconds":0}}"#
         var parts = URLComponents(); parts.scheme = "universalvidcaster"; parts.host = "import"; parts.fragment = raw
         XCTAssertTrue(session.importSafariURL(parts.url!))
+        XCTAssertEqual(session.successfulImportRevision, 1)
         XCTAssertEqual(session.draft.url, "https://media.test/a.mp4")
         XCTAssertFalse(session.draft.includeSubtitle)
         XCTAssertTrue(cast.loads.isEmpty); XCTAssertTrue(cast.actions.isEmpty)
         XCTAssertTrue(session.host.hosting); XCTAssertTrue(session.cast.hasMedia)
         XCTAssertFalse(session.importSafariURL(URL(string: "universalvidcaster://import#invalid")!))
+        XCTAssertEqual(session.successfulImportRevision, 1)
         XCTAssertEqual(session.draft.url, "https://media.test/a.mp4")
         cast.workspaceState.busy = true
         XCTAssertFalse(session.importSafariURL(parts.url!))
+        XCTAssertEqual(session.successfulImportRevision, 1)
         XCTAssertTrue(cast.loads.isEmpty)
     }
 
@@ -130,11 +149,13 @@ final class WorkspaceSessionTests: XCTestCase {
         let session = WorkspaceSession(cast: cast, host: host)
         session.draft.includeSubtitle = true; session.draft.subtitleURL = "https://old.test/a.vtt"
         XCTAssertTrue(session.importSafariTransfer(#"{"type":"universal-vidcaster.handoff","version":1,"video":{"url":"https://media.test/a.mp4","method":"direct","startSeconds":0}}"#))
+        XCTAssertEqual(session.successfulImportRevision, 1)
         XCTAssertFalse(session.draft.includeSubtitle)
         XCTAssertEqual(session.cast.playback, "PLAYING")
         XCTAssertTrue(cast.loads.isEmpty); XCTAssertFalse(host.cleared)
         let draft = session.draft.url
         XCTAssertFalse(session.importSafariTransfer("private-invalid-input"))
+        XCTAssertEqual(session.successfulImportRevision, 1)
         XCTAssertEqual(session.draft.url, draft)
         XCTAssertFalse(session.error?.contains("private-invalid-input") == true)
     }
@@ -216,6 +237,24 @@ final class WorkspaceSessionTests: XCTestCase {
         XCTAssertEqual(cast.seeks, [100, 0])
         XCTAssertFalse(cast.actions.contains("play"))
         XCTAssertEqual(session.playbackLabel, "Unknown")
+    }
+
+    @MainActor func testSkipIntervalsClampAndRespectReceiverCapabilities() {
+        let cast = FakeCastClient(); let host = FakeHostClient()
+        cast.workspaceState.hasMedia = true; cast.workspaceState.canSeek = true
+        cast.workspaceState.position = 60; cast.workspaceState.duration = 120
+        let session = WorkspaceSession(cast: cast, host: host)
+        session.skip(-15); session.skip(-5); session.skip(5); session.skip(15)
+        XCTAssertEqual(cast.seeks, [45, 55, 65, 75])
+
+        cast.workspaceState.position = 3; session.setActive(true); session.skip(-5)
+        cast.workspaceState.position = 118; session.setActive(true); session.skip(15)
+        XCTAssertEqual(cast.seeks, [45, 55, 65, 75, 0, 120])
+        cast.workspaceState.canSeek = false; session.skip(-5)
+        cast.workspaceState.canSeek = true; cast.workspaceState.busy = true; session.skip(5)
+        cast.workspaceState.busy = false; cast.workspaceState.connected = false; session.skip(15)
+        cast.workspaceState.connected = true; session.setActive(false); session.skip(-15)
+        XCTAssertEqual(cast.seeks, [45, 55, 65, 75, 0, 120])
     }
 
     @MainActor func testServiceUpdatesReachPresentationWithoutScreenOwnership() async {

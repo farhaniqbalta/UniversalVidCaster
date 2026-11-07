@@ -5,6 +5,10 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         let criteria = GCKDiscoveryCriteria(applicationID: kGCKDefaultMediaReceiverApplicationID)
         let options = GCKCastOptions(discoveryCriteria: criteria)
+        // A new explicit connection should launch the receiver again rather
+        // than reuse its potentially hidden TV window. Automatic session
+        // resumption remains owned by the SDK; media loads do not restart it.
+        options.launchOptions = GCKLaunchOptions(relaunchIfRunning: true)
         options.startDiscoveryAfterFirstTapOnCastButton = true
         // User-confirmed on the tested iPad (2026-10-25). Google still documents
         // iOS limitations, so other OS/device combinations need verification.

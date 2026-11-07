@@ -103,24 +103,30 @@ extension CastWorkspaceView {
 
     var tvPill: some View { StatusPill(text: cast.connected ? "TV · Connected" : "TV · Not connected", symbol: "tv", tone: cast.connected ? .ok : .unknown) }
     var hostPill: some View { StatusPill(text: host.busy ? "iPad · Preparing" : host.hosting ? (session.isActive ? "iPad · Sharing" : "iPad · Availability unknown") : host.expired ? "iPad · Expired" : "iPad · Not sharing", symbol: "wifi", tone: host.busy ? .progress : host.hosting && session.isActive ? .ok : .unknown) }
-    var playbackPill: some View { StatusPill(text: "Playback · \(playbackLabel)", symbol: cast.playback == "PLAYING" ? "play.fill" : "questionmark.circle", tone: playbackLabel == "Playing" ? .ok : .unknown) }
+    var playbackPill: some View { StatusPill(text: "Playback · \(playbackLabel)", symbol: playbackLabel == "Playing" ? "play.fill" : "questionmark.circle", tone: playbackLabel == "Playing" ? .ok : .unknown) }
 
     var transportRow: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(spacing: 12) { backButton; playButton; forwardButton; stopButton }
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 8) { backButton; playButton; forwardButton }
-                stopButton
+        VStack(alignment: .leading, spacing: 12) {
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 8) { backButton; backFiveButton; playButton; forwardFiveButton; forwardButton }
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack(spacing: 8) { backButton; backFiveButton }
+                    playButton
+                    HStack(spacing: 8) { forwardFiveButton; forwardButton }
+                }
             }
+            stopButton
         }.buttonStyle(.bordered)
     }
     var backButton: some View { Button { session.skip(-15) } label: { Image(systemName: "gobackward.15").frame(minWidth: 44, minHeight: 52) }.disabled(!canSeek).accessibilityLabel("Back 15 seconds") }
+    var backFiveButton: some View { Button { session.skip(-5) } label: { Text("−5 s").frame(minWidth: 44, minHeight: 52) }.disabled(!canSeek).accessibilityLabel("Back 5 seconds") }
+    var forwardFiveButton: some View { Button { session.skip(5) } label: { Text("+5 s").frame(minWidth: 44, minHeight: 52) }.disabled(!canSeek).accessibilityLabel("Forward 5 seconds") }
     var forwardButton: some View { Button { session.skip(15) } label: { Image(systemName: "goforward.15").frame(minWidth: 44, minHeight: 52) }.disabled(!canSeek).accessibilityLabel("Forward 15 seconds") }
-    var stopButton: some View { Button { session.control("stop") } label: { Image(systemName: "stop.fill").frame(minWidth: 44, minHeight: 52) }.disabled(!cast.hasMedia || working).accessibilityLabel("Stop TV playback, keep sharing") }
+    var stopButton: some View { Button { session.control("stop") } label: { Image(systemName: "stop.fill").frame(minWidth: 44, minHeight: 52) }.disabled(!session.canAdjustMedia).accessibilityLabel("Stop TV playback, keep sharing") }
     var playButton: some View {
         Button { session.control(cast.playback == "PLAYING" ? "pause" : "play") } label: {
             Label(cast.playback == "PLAYING" ? "Pause" : "Play", systemImage: cast.playback == "PLAYING" ? "pause.fill" : "play.fill").frame(minHeight: 52)
-        }.disabled(!cast.hasMedia || working || !["PLAYING", "PAUSED"].contains(cast.playback))
+        }.disabled(!session.canAdjustMedia || !["PLAYING", "PAUSED"].contains(cast.playback))
     }
 
 }

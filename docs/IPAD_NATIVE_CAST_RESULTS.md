@@ -1,5 +1,26 @@
 # Native iPad Cast validation
 
+## Native UX revision — 2026-11-07
+
+The user reported that the updated UX is good, then reported Cast playback
+behind the TV home screen. This is visual feedback, not a full physical pass
+for the acceptance script below.
+
+TV investigation: ADB showed the Cast media session PLAYING while
+`com.gathin.tvhome` occupied the foreground and the Cast activity was stopped.
+Crunchyroll issued a fresh receiver launch and brought the Cast activity forward.
+New UVC connections now request `relaunchIfRunning`; this change has not yet
+been physically tested. Existing connected media loads do not relaunch the
+receiver, and automatic session resumption remains SDK-controlled.
+
+The destination-first setup, private media summary, import presentation signal,
+compact player, and ±5/±15-second controls passed the 36-test native suite and
+an unsigned iPad build. These checks do not prove SwiftUI interactions or TV
+playback. Physical verification of this revision remains pending: test the Cast
+picker, Safari URL and Paste imports, replacement confirmation, all skip and
+playback controls, speed/volume/mute, HLS and subtitles, session teardown,
+compact and wide layouts, larger text, VoiceOver, and network recovery.
+
 Updated 2026-10-23. Consolidated results replace the earlier incremental status
 entries. Physical passes below are user reports, not independently collected
 receiver telemetry. See [setup](../apps/ipad/README.md),

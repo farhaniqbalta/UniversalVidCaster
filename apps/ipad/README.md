@@ -61,11 +61,14 @@ when changing its HTML/CSS/TypeScript.
 
 ## Use
 
-1. In Safari, start the video, open the extension, and choose **Find video**.
+1. Choose your TV in the app's **Destination** card, or start with Safari and
+   choose a TV after importing. In Safari, start the video, open the extension, and choose **Find video**.
    Select video, method, and optional matching subtitle; choose **Open in
    Universal VidCaster**. If Safari cannot open the app, use **Copy transfer for
    iPad** instead.
-2. Review the imported setup in the native app. For the copy fallback, use
+2. Review the imported media summary in the native app. It shows the source host,
+   playback method, and subtitle status; use **Edit video** or **Media options**
+   to change inputs. For the copy fallback, use
    **Paste Safari transfer** with the system Paste control. Import does not
    start playback.
 3. Use the official Cast button to select an existing Cast TV on the same network.
@@ -77,11 +80,18 @@ when changing its HTML/CSS/TypeScript.
    Setup and Now Playing are side by side in wide windows; use the mini-player
    in compact layouts.
 
-For a baseline test, use the flower MP4 preset in **Diagnostics** (•••). Advanced
-contains direct-mode MIME/format settings. Editing a link reveals its full value;
+For a baseline test, use the flower MP4 preset in **Diagnostics** (•••). Media
+options → Advanced contains direct-mode MIME/format settings. Editing a link reveals its full value;
 its collapsed summary displays only the host. Never use a redacted report URL.
 
 ## Subtitles and controls
+
+New Cast connections request a receiver relaunch to recover a receiver left
+behind the TV home screen. This can interrupt media already using the Default
+Media Receiver. Automatic reconnection and video replacement within an existing
+connection retain their normal behavior. If the TV receiver remains hidden while
+already connected, disconnect with the Cast picker and select the TV again before
+casting. Foreground behavior still requires verification on the actual TV.
 
 Optional external WebVTT subtitles use a complete original URL and language tag
 such as `en` or `id`. They retain their own authorization and load with the video.
@@ -93,7 +103,7 @@ If Safari finds no matching subtitle, use its subtitle watch, close the popup,
 toggle website captions off/on, then reopen and Refresh. Association is
 provider-specific and does not prove exact timing or universal discovery.
 
-Player controls include Play/Pause, Stop, a seek slider, and +/-15 seconds where
+Player controls include Play/Pause, Stop, a seek slider, and ±5 and ±15 seconds where
 supported. Immediately below transport controls, one-tap presets select 0.5×,
 0.75×, 1×, 1.25×, 1.5×, or 2× playback. The media-volume slider sends changes on
 release; mute/unmute affects the current media stream. These are receiver-confirmed
