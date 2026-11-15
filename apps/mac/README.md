@@ -54,5 +54,26 @@ iPad extension.
 
 The Safari extension can inspect pages, find candidate video and subtitles,
 and copy a transfer. Its **Open in Universal VidCaster** action uses the iPad
-app's `universalvidcaster://` handler; this Mac app does not import that link
-or cast to a TV. Mac playback and casting require a separate native sender flow.
+app's `universalvidcaster://` handler. This Mac host app does not import that
+link or cast to a TV.
+
+## Cast from a Mac with the iPad app
+
+On an Apple silicon Mac, the iPad app (`apps/ipad`) runs natively and registers
+`universalvidcaster://`. With it installed, **Open in Universal VidCaster** in
+Mac Safari launches it, and it imports the video and handles TV selection,
+casting, and playback controls exactly as on iPad.
+
+1. Open `apps/ipad/UniversalVidCaster.xcodeproj`, choose the
+   **UniversalVidCasterApp** scheme with **My Mac (Designed for iPad)** as the
+   destination, and Run. The **UniversalVidCasterMac** scheme does not build it.
+2. The first launch of a Personal Team build shows "This app is for personal
+   testing only". Open **System Settings → Privacy & Security**, allow
+   **UniversalVidCasterApp** under Security, then open the app again.
+3. Keep the Mac extension enabled (see above) and use **Open in Universal
+   VidCaster** from the popup.
+
+If Safari reports that the address is invalid, the iPad app is not installed or
+not yet allowed on this Mac; repeat steps 1–2. Personal Team profiles expire
+after seven days, so rebuild weekly and allow the app again if macOS asks.
+Without the iPad app, use **Copy transfer instead** and paste on an iPad.
