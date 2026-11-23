@@ -68,6 +68,14 @@ extension CastWorkspaceView {
                             }
                             Text(draft.prepareOnIPad ? "Your iPad prepares and shares playlists. Website access and sharing may expire." : "Your TV loads the media directly. Best for ordinary MP4 links.")
                                 .font(.footnote).foregroundStyle(VC.Palette.textSecondary)
+                            if draft.prepareOnIPad {
+                                Picker("TV quality", selection: $session.draft.maxHeight) {
+                                    Text("Auto").tag(Int?.none); Text("Up to 1080p").tag(Int?.some(1080))
+                                    Text("Up to 720p").tag(Int?.some(720)); Text("Up to 480p").tag(Int?.some(480))
+                                }
+                                Text(draft.maxHeight == nil ? "Auto lets the TV choose. Changes apply on the next load." : "The TV won’t go above this quality. Changes apply on the next load.")
+                                    .font(.footnote).foregroundStyle(VC.Palette.textSecondary)
+                            }
                             labeled("Title (optional)") { TextField("Your video", text: $session.draft.title).vcField() }
                             labeled("Start at (seconds or mm:ss)") {
                                 TextField("0:00", text: $session.draft.start).keyboardType(.numbersAndPunctuation).focused($focused).vcField()
@@ -84,7 +92,7 @@ extension CastWorkspaceView {
                                             TextField("Language code, e.g. en-US", text: $session.draft.language).textInputAutocapitalization(.never).autocorrectionDisabled().vcField()
                                         }
                                         Text("Use a subtitle for this exact video, including its own access token. Changes apply on the next load.").font(.footnote)
-                                        Text("If Safari finds none, use Watch new subtitle requests and toggle captions off/on in the website player.").font(.footnote).foregroundStyle(VC.Palette.textSecondary)
+                                        Text("If Safari finds none, switch captions off/on in the website player, then tap Refresh in the extension.").font(.footnote).foregroundStyle(VC.Palette.textSecondary)
                                     }
                                 }.padding(.top, 12)
                             }

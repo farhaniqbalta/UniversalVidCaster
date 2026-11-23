@@ -1,12 +1,13 @@
 import { collectPageDiagnostics, redactReport, redactDiagnosticUrl } from '@uvc/detector';
 import type { DiagnosticSnapshot } from './snapshot';
-import { collectSubtitles, subtitleDiagnostics } from './subtitles';
+import { collectSubtitles, ensureSubtitleWatch, subtitleDiagnostics } from './subtitles';
 
 // The report is redacted. Exact HTTP(S) candidates travel separately, in memory
 // only, for the user's explicit Copy original URL action.
 const raw = collectPageDiagnostics(document);
-const watched = (globalThis as typeof globalThis & { __uvcSubtitleWatch?: { entries: { name: string; startTime: number }[] } }).__uvcSubtitleWatch;
-const resources = [...performance.getEntriesByType('resource'), ...(watched?.entries ?? [])];
+// Finding a video also starts watching this tab, so later caption toggles are seen on Refresh.
+const watched = ensureSubtitleWatch(globalThis as typeof globalThis & Parameters<typeof ensureSubtitleWatch>[0]);
+const resources = [...performance.getEntriesByType('resource'), ...watched.vtt, ...watched.media];
 const subtitles = collectSubtitles(document, raw.candidates.map(candidate => candidate.url), resources);
 const diagnostics = subtitleDiagnostics(document, raw.candidates.map(candidate => candidate.url), resources, subtitles);
 const snapshot: DiagnosticSnapshot = {

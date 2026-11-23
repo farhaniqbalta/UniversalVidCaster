@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { collectSubtitles, subtitleDiagnostics } from './subtitles';
 
 const media = (id: string) => `https://media.test/v/z6/${id}/config.json?t=secret&pm=browser`;
@@ -65,4 +65,27 @@ it('reports missing requests separately from observed-but-unmatched requests', (
   const unmatched = subtitleDiagnostics(doc, [media('two')], [{ name: caption('one') }], []);
   expect(unmatched.observedVttUrls).toEqual([caption('one')]);
   expect(unmatched.matchedSubtitleCount).toBe(0);
+});
+
+describe('ensureSubtitleWatch', () => {
+  it('keeps subtitle requests through long playback and installs one observer', async () => {
+    const { ensureSubtitleWatch } = await import('./subtitles');
+    const observers: { callback: (list: { getEntries(): { name: string; startTime: number }[] }) => void; options?: object }[] = [];
+    vi.stubGlobal('PerformanceObserver', class {
+      constructor(public callback: (list: { getEntries(): { name: string; startTime: number }[] }) => void) { observers.push(this as never); }
+      observe(options: object) { observers.at(-1)!.options = options; }
+      disconnect() {}
+    });
+    const scope = {};
+    const watch = ensureSubtitleWatch(scope);
+    expect(ensureSubtitleWatch(scope)).toBe(watch);
+    expect(observers).toHaveLength(1);
+    expect(observers[0].options).toEqual({ type: 'resource', buffered: true });
+    const segments = Array.from({ length: 600 }, (_, index) => ({ name: `https://cdn.test/v/abc/p/seg${index}.m4s`, startTime: index + 2 }));
+    observers[0].callback({ getEntries: () => [{ name: 'https://cdn.test/v/abc/subs/en.vtt', startTime: 1 }, ...segments, { name: 'not a url', startTime: 0 }] });
+    expect(watch.vtt.map(entry => entry.name)).toEqual(['https://cdn.test/v/abc/subs/en.vtt']);
+    expect(watch.media).toHaveLength(50);
+    expect(watch.media.at(-1)!.name).toContain('seg599');
+    vi.unstubAllGlobals();
+  });
 });

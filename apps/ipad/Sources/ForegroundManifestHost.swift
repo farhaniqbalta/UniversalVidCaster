@@ -11,7 +11,7 @@ final class ForegroundManifestHost: ObservableObject {
     private var server: LocalManifestServer?
     private var expiryTask: Task<Void, Never>?
 
-    func prepare(_ original: String) async throws -> URL {
+    func prepare(_ original: String, maxHeight: Int? = nil) async throws -> URL {
         guard !busy else { throw InputError("Playlist preparation is already running.") }
         busy = true
         UIApplication.shared.isIdleTimerDisabled = true
@@ -24,7 +24,7 @@ final class ForegroundManifestHost: ObservableObject {
         defer { fetcher.close() }
         do {
             let origin = try await candidate.start(address: address)
-            let prepared = try await ManifestPreparation(fetch: fetcher.fetch).prepare(master: input.url, origin: origin)
+            let prepared = try await ManifestPreparation(fetch: fetcher.fetch).prepare(master: input.url, origin: origin, maxHeight: maxHeight)
             try Task.checkCancellation()
             await candidate.publish(prepared.pages)
             clear()

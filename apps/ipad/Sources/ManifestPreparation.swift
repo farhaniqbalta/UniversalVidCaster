@@ -10,7 +10,28 @@ final class ManifestPreparation {
     private let fetch: Fetch
     init(fetch: @escaping Fetch) { self.fetch = fetch }
 
-    func prepare(master: URL, origin: URL) async throws -> PreparedManifests {
+    /// Removes master variants taller than `maxHeight`. Keeps variants without RESOLUTION, and the lowest one if none fit.
+    static func capVariants(_ lines: [String], maxHeight: Int) -> [String] {
+        let resolution = try! NSRegularExpression(pattern: "RESOLUTION=\\d+x(\\d+)")
+        func height(_ line: String) -> Int {
+            guard let match = resolution.firstMatch(in: line, range: NSRange(line.startIndex..., in: line)),
+                  let range = Range(match.range(at: 1), in: line) else { return 0 }
+            return Int(line[range]) ?? 0
+        }
+        var variants: [(tag: Int, uri: Int, height: Int)] = []
+        for (index, line) in lines.enumerated() where line.trimmingCharacters(in: .whitespaces).hasPrefix("#EXT-X-STREAM-INF:") {
+            guard let uri = lines[(index + 1)...].firstIndex(where: {
+                let trimmed = $0.trimmingCharacters(in: .whitespacesAndNewlines); return !trimmed.isEmpty && !trimmed.hasPrefix("#")
+            }) else { continue }
+            variants.append((index, uri, height(line)))
+        }
+        var drop = variants.filter { $0.height > maxHeight }
+        if drop.count == variants.count, let lowest = variants.min(by: { $0.height < $1.height }) { drop.removeAll { $0.tag == lowest.tag } }
+        let removed = Set(drop.flatMap { [$0.tag, $0.uri] })
+        return lines.enumerated().filter { !removed.contains($0.offset) }.map(\.element)
+    }
+
+    func prepare(master: URL, origin: URL, maxHeight: Int? = nil) async throws -> PreparedManifests {
         let auth = URLComponents(url: master, resolvingAgainstBaseURL: false)?.queryItems ?? []
         guard let token = auth.first(where: { $0.name == "t" })?.value, !token.isEmpty,
               let mode = auth.first(where: { $0.name == "pm" })?.value, !mode.isEmpty else {
@@ -51,7 +72,7 @@ final class ManifestPreparation {
             let text = try await fetch(url)
             total += text.utf8.count
             guard text.utf8.count <= 1_048_576, total <= 8_388_608 else { throw InputError("Playlist memory limit exceeded.") }
-            let lines = text.components(separatedBy: .newlines)
+            var lines = text.components(separatedBy: .newlines)
             guard text.trimmingCharacters(in: .whitespacesAndNewlines).hasPrefix("#EXTM3U"), !text.contains("{$") else {
                 throw InputError("Expected HLS without variable substitution.")
             }
@@ -59,6 +80,7 @@ final class ManifestPreparation {
             if !masterPlaylist && !lines.contains(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == "#EXT-X-ENDLIST" }) {
                 throw InputError("Only finite VOD playlists are supported. Live playlists are not supported.")
             }
+            if depth == 0, masterPlaylist, let maxHeight { lines = Self.capVariants(lines, maxHeight: maxHeight) }
             let pattern = try NSRegularExpression(pattern: "URI=\"([^\"]*)\"")
             var output: [String] = []
             for line in lines {
