@@ -69,10 +69,11 @@ extension CastWorkspaceView {
                             Text(draft.prepareOnIPad ? "Your iPad prepares and shares playlists. Website access and sharing may expire." : "Your TV loads the media directly. Best for ordinary MP4 links.")
                                 .font(.footnote).foregroundStyle(VC.Palette.textSecondary)
                             if draft.prepareOnIPad {
+                                Text("TV quality").font(.subheadline.bold())
                                 Picker("TV quality", selection: $session.draft.maxHeight) {
-                                    Text("Auto").tag(Int?.none); Text("Up to 1080p").tag(Int?.some(1080))
-                                    Text("Up to 720p").tag(Int?.some(720)); Text("Up to 480p").tag(Int?.some(480))
-                                }
+                                    Text("Auto").tag(Int?.none); Text("≤ 1080p").tag(Int?.some(1080))
+                                    Text("≤ 720p").tag(Int?.some(720)); Text("≤ 480p").tag(Int?.some(480))
+                                }.pickerStyle(.segmented)
                                 Text(draft.maxHeight == nil ? "Auto lets the TV choose. Changes apply on the next load." : "The TV won’t go above this quality. Changes apply on the next load.")
                                     .font(.footnote).foregroundStyle(VC.Palette.textSecondary)
                             }
