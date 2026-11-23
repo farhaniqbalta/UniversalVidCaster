@@ -49,7 +49,7 @@ struct WorkspaceHostState {
 @MainActor protocol WorkspaceHostClient: AnyObject {
     var workspaceState: WorkspaceHostState { get }
     var workspaceChanges: AnyPublisher<Void, Never> { get }
-    func prepare(_ original: String) async throws -> URL
+    func prepare(_ original: String, maxHeight: Int?) async throws -> URL
     func clear()
     func phaseChanged(active: Bool)
 }
@@ -108,7 +108,7 @@ struct WorkspaceHostState {
         preparing = true; endResult = nil
         defer { preparing = false; refresh() }
         do {
-            let target = snapshot.prepareOnIPad ? try await hostClient.prepare(input.url.absoluteString) : input.url
+            let target = snapshot.prepareOnIPad ? try await hostClient.prepare(input.url.absoluteString, maxHeight: snapshot.maxHeight) : input.url
             refresh()
             guard isActive, cast.connected, !cast.busy else { throw InputError("Return to the app and reconnect to your TV before loading.") }
             submittedTitle = snapshot.title.isEmpty ? "Untitled video" : snapshot.title
@@ -187,7 +187,8 @@ struct WorkspaceHostState {
     @discardableResult func importSafariTransfer(_ text: String) -> Bool {
         refresh(); guard !working else { return false }
         do {
-            let imported = try SafariHandoff.draft(from: text)
+            var imported = try SafariHandoff.draft(from: text)
+            imported.maxHeight = draft.maxHeight // quality is a user preference, not part of the transfer
             draft = imported; error = nil; successfulImportRevision &+= 1
             return true // Only input changes. Never load, clear, or disconnect.
         } catch { self.error = (error as? InputError)?.message ?? "Could not import Safari transfer."; return false }

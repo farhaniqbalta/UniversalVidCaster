@@ -158,7 +158,7 @@ it('starts focused on transfer with diagnostics collapsed and no inspection or c
   expect(executeScript).not.toHaveBeenCalled();
   expect((document.getElementById('advanced-options') as HTMLDetailsElement).open).toBe(false);
   expect(document.getElementById('advanced-options')!.contains(document.getElementById('handoff-method'))).toBe(true);
-  expect(document.getElementById('advanced-options')!.contains(document.getElementById('watch-subtitles'))).toBe(true);
+  expect(document.getElementById('watch-subtitles')).toBeNull();
   expect(document.getElementById('advanced-options')!.contains(document.getElementById('stop-subtitle-watch'))).toBe(true);
   expect((document.getElementById('diagnostics') as HTMLDetailsElement).open).toBe(false);
   expect((document.getElementById('copy-handoff') as HTMLButtonElement).disabled).toBe(true);
@@ -167,7 +167,7 @@ it('starts focused on transfer with diagnostics collapsed and no inspection or c
   expect((document.getElementById('handoff-method') as HTMLSelectElement).value).toBe('prepare-on-ipad');
 });
 
-it('requires a video choice and copies the exact selected candidate without an unproven subtitle', async () => {
+it('requires a video choice and keeps the found subtitle selected for the chosen video', async () => {
   const writeText = vi.fn().mockResolvedValue(undefined);
   Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
   const { executeScript } = await mount();
@@ -182,13 +182,13 @@ it('requires a video choice and copies the exact selected candidate without an u
   await vi.waitFor(() => expect(document.getElementById('status')!.textContent).toContain('2 videos'));
   const video = document.getElementById('handoff-video') as HTMLSelectElement;
   expect(video.value).toBe('');
-  expect((document.getElementById('handoff-subtitle') as HTMLSelectElement).value).toBe('');
+  expect((document.getElementById('handoff-subtitle') as HTMLSelectElement).value).toBe('0');
   expect((document.getElementById('copy-handoff') as HTMLButtonElement).disabled).toBe(true);
   video.value = '1'; video.dispatchEvent(new Event('change'));
   await chooseDirect();
   (document.getElementById('copy-handoff') as HTMLButtonElement).click();
-  expect(JSON.parse(writeText.mock.calls[0][0])).toMatchObject({ video: { url: 'https://media.test/two.mp4?token=two', method: 'direct' } });
-  expect(JSON.parse(writeText.mock.calls[0][0])).not.toHaveProperty('subtitle');
+  expect(JSON.parse(writeText.mock.calls[0][0])).toMatchObject({ video: { url: 'https://media.test/two.mp4?token=two', method: 'direct' },
+    subtitle: { url: 'https://media.test/sub.vtt?token=secret', language: 'en' } });
   expect(document.body.innerHTML).not.toContain('token=two');
 });
 
@@ -264,7 +264,7 @@ it('requests the app link synchronously with the selected private transfer', asy
   expect(document.body.innerHTML).not.toContain('private-value');
 });
 
-it('requires a subtitle choice for ambiguous or unknown-language results and clears old selections', async () => {
+it('picks a found subtitle automatically, preferring a known language, and clears old selections', async () => {
   const writeText = vi.fn().mockResolvedValue(undefined);
   Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
   const { executeScript } = await mount();
@@ -279,46 +279,25 @@ it('requires a subtitle choice for ambiguous or unknown-language results and cle
     } }]);
     (document.getElementById('inspect') as HTMLButtonElement).click();
     await chooseDirect();
-    expect((document.getElementById('handoff-subtitle') as HTMLSelectElement).value).toBe('');
-    if (subtitles.length === 1 && !subtitles[0].language) {
-      const select = document.getElementById('handoff-subtitle') as HTMLSelectElement;
-      select.value = '0'; select.dispatchEvent(new Event('change'));
-      (document.getElementById('copy-handoff') as HTMLButtonElement).click();
-      expect(JSON.parse(writeText.mock.calls.at(-1)![0]).subtitle.language).toBe('und');
-    }
+    expect((document.getElementById('handoff-subtitle') as HTMLSelectElement).value).toBe(subtitles.length ? '0' : '');
+    (document.getElementById('copy-handoff') as HTMLButtonElement).click();
+    const sent = JSON.parse(writeText.mock.calls.at(-1)![0]);
+    if (!subtitles.length) expect(sent).not.toHaveProperty('subtitle');
+    else expect(sent.subtitle.language).toBe(subtitles[0].language ?? 'und');
   }
 });
 
-it('starts and stops subtitle watching only on explicit clicks', async () => {
+it('stops the tab watcher on request and clears it', async () => {
   const { executeScript } = await mount();
-  expect(executeScript).not.toHaveBeenCalled();
   executeScript.mockReset().mockResolvedValue([]);
-  (document.getElementById('watch-subtitles') as HTMLButtonElement).click();
-  await vi.waitFor(() => expect(document.getElementById('subtitle-watch-status')!.textContent).toContain('5 minutes'));
-  expect(executeScript).toHaveBeenCalledTimes(1);
-  expect(executeScript.mock.calls[0][0].func).toBeInstanceOf(Function);
   (document.getElementById('stop-subtitle-watch') as HTMLButtonElement).click();
   await vi.waitFor(() => expect(document.getElementById('subtitle-watch-status')!.textContent).toContain('stopped'));
-  expect(executeScript).toHaveBeenCalledTimes(2);
-});
-
-it('uses a five minute subtitle observer and disconnects it on stop', async () => {
-  const { executeScript } = await mount();
-  executeScript.mockReset().mockResolvedValue([]);
-  (document.getElementById('watch-subtitles') as HTMLButtonElement).click();
-  await vi.waitFor(() => expect(executeScript).toHaveBeenCalledTimes(1));
-  (document.getElementById('stop-subtitle-watch') as HTMLButtonElement).click();
-  await vi.waitFor(() => expect(executeScript).toHaveBeenCalledTimes(2));
-  const observe = vi.fn(); const disconnect = vi.fn();
-  const timer = vi.fn().mockReturnValue(17); const clear = vi.fn();
-  vi.stubGlobal('PerformanceObserver', class { observe = observe; disconnect = disconnect; });
-  vi.stubGlobal('setTimeout', timer); vi.stubGlobal('clearTimeout', clear);
+  const disconnect = vi.fn();
+  const scope = globalThis as typeof globalThis & { __uvcSubtitleWatch?: unknown };
+  scope.__uvcSubtitleWatch = { observer: { disconnect } };
   executeScript.mock.calls[0][0].func();
-  expect(observe).toHaveBeenCalledWith({ type: 'resource', buffered: false });
-  expect(timer).toHaveBeenCalledWith(expect.any(Function), 5 * 60 * 1000);
-  executeScript.mock.calls[1][0].func();
   expect(disconnect).toHaveBeenCalled();
-  expect(clear).toHaveBeenCalledWith(17);
+  expect(scope.__uvcSubtitleWatch).toBeUndefined();
 });
 
 it('clears the private transfer after a clipboard failure and dismissal', async () => {

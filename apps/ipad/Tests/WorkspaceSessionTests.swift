@@ -38,8 +38,9 @@ import Combine
     var suspend = false
     var continuation: CheckedContinuation<URL, Error>?
     let result = URL(string: "http://192.168.1.8:1234/hls/session/master.m3u8")!
-    func prepare(_ original: String) async throws -> URL {
-        prepared.append(original)
+    var preparedMaxHeights: [Int?] = []
+    func prepare(_ original: String, maxHeight: Int?) async throws -> URL {
+        prepared.append(original); preparedMaxHeights.append(maxHeight)
         if failure { throw InputError("Preparation failed.") }
         if suspend { return try await withCheckedThrowingContinuation { continuation = $0 } }
         workspaceState.hosting = true
@@ -176,9 +177,10 @@ final class WorkspaceSessionTests: XCTestCase {
         let cast = FakeCastClient(); let host = FakeHostClient()
         let session = WorkspaceSession(cast: cast, host: host)
         let original = "https://media.test/master.json?t=private&pm=browser"
-        session.draft.url = original; session.draft.prepareOnIPad = true
+        session.draft.url = original; session.draft.prepareOnIPad = true; session.draft.maxHeight = 720
         await session.load()
         XCTAssertEqual(host.prepared, [original])
+        XCTAssertEqual(host.preparedMaxHeights, [720])
         XCTAssertEqual(cast.loads.first?.url, host.result.absoluteString)
         XCTAssertEqual(cast.loads.first?.mime, "application/vnd.apple.mpegurl")
         XCTAssertEqual(cast.loads.first?.fmp4, true)

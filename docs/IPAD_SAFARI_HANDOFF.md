@@ -25,10 +25,10 @@ TV media, or clears the current host on import. This supersedes the earlier
 clipboard-only description above; Copy transfer/Paste remains the fallback.
 
 Normal inspection already collects exposed track URLs and associated subtitle
-resource entries. One associated subtitle with a known valid language is now
-preselected; multiple/unknown-language results remain manual choices. Choose
-No subtitle to omit it. If none is available, expand the watch help and use the
-existing off/on workflow. No automatic request interception or player internals
+resource entries. When associated subtitles are found, one is preselected (the
+first with a known valid language, otherwise the first, sent as `und`). Choose
+No subtitle to omit it. Find video also starts a subtitle watch for the tab; if
+none is available, toggle captions off/on in the player and Refresh. No automatic request interception or player internals
 were added, and absent results are never guessed.
 
 The explicit click builds `universalvidcaster://import#<encoded-transfer>` and
@@ -95,8 +95,9 @@ is recorded above, separately from these automated checks.
 
 1. In **iPad Safari**, open/start the target video. Open the extension and select
    **Find video** (or **Refresh** after inspection).
-2. If captions are wanted but missing, open **Advanced options**, use **Watch new subtitle requests**, close
-   the popup, toggle subtitles off/on in the player, then reopen and inspect.
+2. If captions are wanted but missing, close the popup (Find video already
+   started watching the tab), toggle subtitles off/on in the player, then reopen
+   and choose **Refresh**.
 3. Choose the video and optional subtitle. No language entry is required: the
    detected language is used when available; otherwise the transfer uses `und`.
    **Prepare on iPad** is the default. If the link does not meet its requirements,

@@ -39,7 +39,7 @@ import Combine
         workspaceState = WorkspaceHostState(hosting: playing, endsAt: playing ? Date().addingTimeInterval(1800) : nil,
                                             message: "Design preview · no playlist listener running.")
     }
-    func prepare(_ original: String) async throws -> URL {
+    func prepare(_ original: String, maxHeight: Int?) async throws -> URL {
         workspaceState.hosting = true; workspaceState.endsAt = Date().addingTimeInterval(1800)
         return URL(string: "http://preview.example.test/hls/example.m3u8")!
     }

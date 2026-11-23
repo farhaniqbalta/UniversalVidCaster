@@ -68,8 +68,11 @@ The critical uncertainty is serving playlists after app suspension.
 Implemented areas: `apps/ipad/Sources/ManifestPreparation.swift`,
 `LocalManifestServer.swift`, `ForegroundManifestHost.swift`, native preparation
 and loopback server tests, and the existing app's iPad-hosting toggle/button.
-The first implementation preloads all referenced playlists within its bounds,
-rather than selecting only one variant. Large variant graphs can be rejected.
+By default (TV quality: Auto) it preloads all referenced playlists within its
+bounds, rather than selecting only one variant. Large variant graphs can be
+rejected. A TV quality cap drops master variants taller than the cap (keeping
+those without `RESOLUTION`, and the lowest if none fit) before fetching, so the
+Default Media Receiver can only choose among the remaining variants.
 
 ### Acceptance sequence
 

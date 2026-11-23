@@ -74,7 +74,9 @@ when changing its HTML/CSS/TypeScript.
 3. Use the official Cast button to select an existing Cast TV on the same network.
 4. Choose **Direct** for receiver-accessible media or **Prepare on iPad** for the
    observed signed HLS master. Cast explicitly. iPad preparation sets HLS/fMP4/VOD
-   automatically. An arbitrary webpage URL is not a media input.
+   automatically. With Prepare on iPad, **TV quality** (Auto / ≤ 1080p / ≤ 720p /
+   ≤ 480p) removes taller variants from the served master playlist; Auto lets the
+   TV choose. The choice is kept across Safari imports and applies on the next load. An arbitrary webpage URL is not a media input.
 5. After playback starts, the app can be backgrounded; the user reported a
    several-hour movie playing normally this way. Return to the app for controls.
    Setup and Now Playing are side by side in wide windows; use the mini-player
@@ -99,8 +101,9 @@ Changing inputs does not alter an already-playing track; reload to attach or omi
 it. The TV fetches captions directly. No in-session subtitle toggle, translation,
 SRT conversion, or timing adjustment is implemented.
 
-If Safari finds no matching subtitle, use its subtitle watch, close the popup,
-toggle website captions off/on, then reopen and Refresh. Association is
+Safari preselects a found subtitle and Find video starts watching the tab. If
+Safari finds no matching subtitle, close the popup, toggle website captions
+off/on, then reopen and Refresh. Association is
 provider-specific and does not prove exact timing or universal discovery.
 
 Player controls include Play/Pause, Stop, a seek slider, and ±5 and ±15 seconds where

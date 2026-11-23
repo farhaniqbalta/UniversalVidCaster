@@ -74,3 +74,28 @@ export function collectSubtitles(doc: Document, mediaUrls: string[], resources: 
   }
   return Array.from(found.values());
 }
+
+type WatchEntry = { name: string; startTime: number };
+export interface SubtitleWatch { vtt: WatchEntry[]; media: WatchEntry[]; observer: PerformanceObserver }
+type WatchScope = { __uvcSubtitleWatch?: SubtitleWatch };
+
+// Separate capped lists: video segment requests (also under /v/) must never
+// push subtitle requests out during long playback.
+export function ensureSubtitleWatch(scope: WatchScope, limit = 50): SubtitleWatch {
+  if (scope.__uvcSubtitleWatch) return scope.__uvcSubtitleWatch;
+  const watch: SubtitleWatch = { vtt: [], media: [], observer: undefined! };
+  const keep = (list: WatchEntry[], entry: WatchEntry) => { list.push(entry); if (list.length > limit) list.shift(); };
+  watch.observer = new PerformanceObserver(list => {
+    for (const entry of list.getEntries()) {
+      try {
+        const url = new URL(entry.name);
+        if (!/^https?:$/.test(url.protocol)) continue;
+        if (/\.vtt$/i.test(url.pathname)) keep(watch.vtt, { name: entry.name, startTime: entry.startTime });
+        else if (/^\/v\/[^/]+\//.test(url.pathname)) keep(watch.media, { name: entry.name, startTime: entry.startTime });
+      } catch { /* Ignore non-URL resources. */ }
+    }
+  });
+  watch.observer.observe({ type: 'resource', buffered: true });
+  scope.__uvcSubtitleWatch = watch;
+  return watch;
+}

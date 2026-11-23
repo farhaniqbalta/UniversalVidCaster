@@ -5,6 +5,7 @@ struct PlaybackDraft {
     var title = ""
     var start = "0:00"
     var prepareOnIPad = false
+    var maxHeight: Int? // nil = Auto: the TV picks among all variants
     var mime = ""
     var fmp4 = false
     var live = false

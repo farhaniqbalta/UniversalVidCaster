@@ -24,6 +24,31 @@ final class ManifestPreparationTests: XCTestCase {
         XCTAssertTrue(bodies.contains("https://other.test/style.css?t=keep%2Bown&pm=browser"))
     }
 
+    func testQualityCapDropsTallerVariantsWithoutFetchingThem() async throws {
+        var fetched: [String] = []
+        let preparer = ManifestPreparation { url in
+            fetched.append(url.path)
+            if url.path == "/master.json" {
+                return "#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=5,RESOLUTION=1920x1080\nhd.json\n#EXT-X-STREAM-INF:BANDWIDTH=3,RESOLUTION=1280x720\nmid.json\n#EXT-X-STREAM-INF:BANDWIDTH=1,RESOLUTION=854x480\nlow.json"
+            }
+            return "#EXTM3U\n#EXTINF:6,\nseg.ts\n#EXT-X-ENDLIST"
+        }
+        let prepared = try await preparer.prepare(master: master, origin: origin, maxHeight: 720)
+        let root = String(decoding: prepared.pages[prepared.entry.path]!, as: UTF8.self)
+        XCTAssertFalse(fetched.contains("/hd.json"))
+        XCTAssertEqual(Set(fetched), ["/master.json", "/mid.json", "/low.json"])
+        XCTAssertFalse(root.contains("1920x1080"))
+        XCTAssertTrue(root.contains("1280x720") && root.contains("854x480"))
+    }
+
+    func testQualityCapHelperKeepsLowestWhenNoneFitAndLeavesAutoUntouched() {
+        let lines = ["#EXTM3U", "#EXT-X-STREAM-INF:RESOLUTION=1920x1080", "hd.m3u8", "#EXT-X-STREAM-INF:RESOLUTION=1280x720", "mid.m3u8"]
+        XCTAssertEqual(ManifestPreparation.capVariants(lines, maxHeight: 480), ["#EXTM3U", "#EXT-X-STREAM-INF:RESOLUTION=1280x720", "mid.m3u8"])
+        XCTAssertEqual(ManifestPreparation.capVariants(lines, maxHeight: 1080), lines)
+        let noResolution = ["#EXTM3U", "#EXT-X-STREAM-INF:BANDWIDTH=1", "a.m3u8", "#EXT-X-STREAM-INF:RESOLUTION=1920x1080", "hd.m3u8"]
+        XCTAssertEqual(ManifestPreparation.capVariants(noResolution, maxHeight: 720), ["#EXTM3U", "#EXT-X-STREAM-INF:BANDWIDTH=1", "a.m3u8"])
+    }
+
     func testRejectsLiveEncryptionVariablesAndNonHLS() async {
         for text in ["#EXTM3U\n#EXTINF:6,\na.ts", "#EXTM3U\n#EXT-X-KEY:METHOD=AES-128,URI=\"key\"\n#EXT-X-ENDLIST", "#EXTM3U\n{$var}\n#EXT-X-ENDLIST", "<html>bad</html>"] {
             do { _ = try await ManifestPreparation(fetch: { _ in text }).prepare(master: master, origin: origin); XCTFail("Expected rejection") }

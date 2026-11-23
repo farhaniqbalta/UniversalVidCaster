@@ -20,13 +20,20 @@ let inspectionGeneration = 0;
 let handoffSnapshot: DiagnosticSnapshot | undefined;
 const handoffVideo = document.getElementById('handoff-video') as HTMLSelectElement;
 const handoffSubtitle = document.getElementById('handoff-subtitle') as HTMLSelectElement;
+const languageTag = /^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/;
+// Found subtitles are already tied to the current media ID; prefer one with a known language.
+function defaultSubtitle(subtitles: { language: string | null }[] = []): string {
+  if (!subtitles.length) return '';
+  const known = subtitles.findIndex(subtitle => !!subtitle.language && languageTag.test(subtitle.language));
+  return String(Math.max(known, 0));
+}
 function resetMethod() {
   const method = document.getElementById('handoff-method') as HTMLSelectElement;
   method.value = 'prepare-on-ipad';
 }
 for (const id of ['handoff-video', 'handoff-subtitle', 'handoff-method']) {
   document.getElementById(id)!.addEventListener('change', () => {
-    if (id === 'handoff-video') { handoffSubtitle.value = ''; resetMethod(); }
+    if (id === 'handoff-video') { handoffSubtitle.value = defaultSubtitle(handoffSnapshot?.subtitles); resetMethod(); }
     clearOriginal();
     updateTransferView(handoffSnapshot);
     const label = document.getElementById('handoff-status')!;
@@ -42,7 +49,7 @@ function selectedTransfer(): string {
     const subtitle = handoffSubtitle.value === '' ? undefined : snapshot.subtitles?.[Number(handoffSubtitle.value)];
     return createHandoff({ url: snapshot.originalCandidateUrls[index], mimeType: snapshot.report.candidates[index].mimeType },
       (document.getElementById('handoff-method') as HTMLSelectElement).value as HandoffMethod,
-      subtitle ? { url: subtitle.url, language: subtitle.language && /^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/.test(subtitle.language) ? subtitle.language : 'und' } : undefined);
+      subtitle ? { url: subtitle.url, language: subtitle.language && languageTag.test(subtitle.language) ? subtitle.language : 'und' } : undefined);
 }
 document.getElementById('open-app')!.onclick = () => {
   const label = document.getElementById('handoff-status')!;
@@ -191,11 +198,7 @@ document.getElementById('inspect')!.onclick = async () => {
       action.onclick = () => copyValue(subtitles[index].url, generation, 'Subtitle URL');
       row.append(label, action); subtitleList.append(row);
     });
-    // One current associated caption with a known language needs no extra choice.
-    // Multiple results and unknown languages remain explicit selections.
-    if (result.candidates.length === 1 && subtitles.length === 1 && subtitles[0].language && /^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/.test(subtitles[0].language)) {
-      handoffSubtitle.value = '0';
-    }
+    handoffSubtitle.value = defaultSubtitle(subtitles);
     resetMethod();
     updateTransferView(snapshot.result);
     const diagnostics = snapshot.result.subtitleDiagnostics;
@@ -204,7 +207,7 @@ document.getElementById('inspect')!.onclick = async () => {
     }
     if (!subtitles.length) list('subtitles', [diagnostics?.observedVttUrls.length
       ? 'Subtitle URLs were observed, but could not be associated safely with this video. The redacted report includes their paths for diagnosis.'
-      : 'No associated subtitle found. Click Watch new subtitle requests, close this popup, switch subtitles off/on in the player, then reopen and Inspect / Refresh page.']);
+      : 'No associated subtitle found yet. This tab is now being watched: close this popup, switch subtitles off/on in the player, then reopen and Refresh.']);
     list('limitations', result.limitations);
     list('videos', result.videos.map(video => {
       const sources = video.sources.map(source => `${source.method}: ${source.scheme} ${source.url} (MIME attribute: ${source.mimeAttribute ?? 'unknown'}; hint: ${source.mimeHint ?? 'unknown'})`).join('\n');
@@ -223,48 +226,18 @@ document.getElementById('inspect')!.onclick = async () => {
     document.getElementById('handoff-section')!.setAttribute('aria-busy', 'false');
   }
 };
-document.getElementById('watch-subtitles')!.onclick = async () => {
-  const label = document.getElementById('subtitle-watch-status')!;
-  try {
-    const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
-    if (tab?.id === undefined) throw new Error();
-    await browser.scripting.executeScript({ target: { tabId: tab.id }, func: () => {
-      const scope = globalThis as typeof globalThis & { __uvcSubtitleWatch?: {
-        entries: { name: string; startTime: number }[]; observer: PerformanceObserver; timer: number;
-      } };
-      const previous = scope.__uvcSubtitleWatch;
-      previous?.observer.disconnect(); if (previous) clearTimeout(previous.timer);
-      const entries: { name: string; startTime: number }[] = [];
-      const observer = new PerformanceObserver(list => {
-        for (const entry of list.getEntries()) {
-          try {
-            const url = new URL(entry.name);
-            if (!/^https?:$/.test(url.protocol) || !(/\.vtt$/i.test(url.pathname) || /^\/v\/[^/]+\//.test(url.pathname))) continue;
-            entries.push({ name: entry.name, startTime: entry.startTime });
-            if (entries.length > 512) entries.shift();
-          } catch { /* Ignore non-URL resources. */ }
-        }
-      });
-      observer.observe({ type: 'resource', buffered: false });
-      const timer = setTimeout(() => { observer.disconnect(); delete scope.__uvcSubtitleWatch; }, 5 * 60 * 1000);
-      scope.__uvcSubtitleWatch = { entries, observer, timer };
-    } });
-    label.textContent = 'Watching this tab for up to 5 minutes. Close popup, switch subtitles off/on, then reopen and inspect. A full page reload ends this watch; start it again after reload.';
-  } catch { label.textContent = 'Could not start watching. Allow website access and retry.'; }
-};
 document.getElementById('stop-subtitle-watch')!.onclick = async () => {
   const label = document.getElementById('subtitle-watch-status')!;
   try {
     const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
     if (tab?.id === undefined) throw new Error();
     await browser.scripting.executeScript({ target: { tabId: tab.id }, func: () => {
-      const scope = globalThis as typeof globalThis & { __uvcSubtitleWatch?: { observer: PerformanceObserver; timer: number } };
-      const watch = scope.__uvcSubtitleWatch;
-      watch?.observer.disconnect(); if (watch) clearTimeout(watch.timer);
+      const scope = globalThis as typeof globalThis & { __uvcSubtitleWatch?: { observer: PerformanceObserver } };
+      scope.__uvcSubtitleWatch?.observer.disconnect();
       delete scope.__uvcSubtitleWatch;
     } });
-    label.textContent = 'Watch stopped and captured entries cleared. Inspect again to refresh results.';
-  } catch { label.textContent = 'Could not stop watch in this tab. It expires automatically after 5 minutes.'; }
+    label.textContent = 'Watch stopped and captured entries cleared. The next Refresh starts watching again.';
+  } catch { label.textContent = 'Could not stop watch in this tab. Reloading the page also ends it.'; }
 };
 document.getElementById('native')!.onclick = async () => {
   try {

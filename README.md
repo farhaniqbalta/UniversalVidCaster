@@ -23,8 +23,10 @@ not a universal website/device compatibility guarantee.
 The user also reported normal movie playback for several hours after leaving the
 iPad app in the background. The TV fetches actual media directly from source
 servers. No Mac playlist host, cloud
-service, or additional TV app is needed for this path. Safari capture may require
-starting a subtitle watch and toggling captions off/on in the website player.
+service, or additional TV app is needed for this path. Find video also starts a
+subtitle watch for the tab; if no subtitle is found, toggle captions off/on in
+the website player and Refresh. A **TV quality** cap (Auto / ≤ 1080p / ≤ 720p /
+≤ 480p) is available for Prepare on iPad.
 Automatic playback on import, token renewal, live/encrypted HLS preparation, transcoding,
 and mirroring are not implemented.
 
