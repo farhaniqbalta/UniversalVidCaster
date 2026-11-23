@@ -120,13 +120,16 @@ report adds `subtitleDiagnostics` with track/resource/current-ID/match counts an
 up to 20 redacted observed VTT paths. The user's earlier empty-observations report
 did not contain those diagnostics, so it did not establish which cause applied.
 
-For missing resource history: select **Watch new subtitle requests**, close the
-popup, switch subtitles off/on in the current player, reopen the popup, and inspect.
-The explicit watch uses Resource Timing's PerformanceObserver in the permitted
-document, not request interception or private player access. It keeps at most
-512 relevant URL observations in isolated-world memory for five minutes; Stop
-subtitle watch clears captured entries. Starting again resets the watch. Full
-page reload/navigation destroys that document's watch. No captured signed URL is
+For missing resource history: **Find video** starts a subtitle watch for the tab
+(once per document). Close the popup, switch subtitles off/on in the current
+player, reopen the popup, and choose **Refresh**. The watch uses Resource Timing's
+PerformanceObserver (`buffered: true`) in the permitted document, not request
+interception or private player access. It keeps the last 50 `.vtt` observations
+and, separately, the last 50 `/v/...` playback observations in isolated-world
+memory, so video segment requests cannot evict subtitle requests during long
+playback. There is no time limit. **Stop watching** clears captured entries; the
+next Find/Refresh starts a new watch. Full page reload/navigation destroys that
+document's watch until the next Find/Refresh. No captured signed URL is
 logged, persisted, or sent to native messaging. Ordinary inspection can still see
 the browser's own history after the watch stops. If a player makes no new request,
 uses an uninspected frame, or URLs cannot be associated, detection may remain empty.

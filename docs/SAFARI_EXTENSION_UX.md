@@ -4,14 +4,16 @@
 
 The popup places video and optional subtitle selection first. One video is shown
 as a selected summary; multiple candidates require an explicit selection. Playback
-method and subtitle watch controls are under Advanced options; troubleshooting
+method and the Stop watching control are under Advanced options; troubleshooting
 remains separate. Prepare on iPad is the default. If a link fails its existing
 preparation validation, Advanced opens with guidance to choose Direct media.
 The native app still reviews the transfer and starts casting only on
 the user's action. Physical iPad validation remains pending.
 
 The popup clears previous selections and private fallback values when scanning
-again. Subtitle selection requires no language input: valid detected tags are
+again. When subtitles are found, one is selected automatically (the
+first with a valid language tag, otherwise the first; it stays selected when
+the video changes). No language input is required: valid detected tags are
 retained, and an unavailable or invalid language uses `und` (undetermined).
 Unsupported preparation choices block transfer with an explanation. Original links remain private until an explicit
 copy or the manual clipboard fallback; reports remain redacted.
@@ -19,7 +21,7 @@ copy or the manual clipboard fallback; reports remain redacted.
 Validation on 2026-11-07: 93 web tests, TypeScript checks, the extension
 resource build, and the web harness build passed. A real Safari layout and
 device playback have not been checked for this revision. On iPad, verify the
-800px popover and constrained windows, selection and subtitle watch/stop,
+800px popover and constrained windows, selection, automatic subtitle selection and Stop watching,
 default preparation and Direct fallback, app opening and clipboard fallback,
 permissions, light/dark modes, larger text, keyboard, and VoiceOver.
 
@@ -63,7 +65,8 @@ windows and iPhone presentation still need separate confirmation.
 
 1. **Find video** (then **Refresh**): explicit inspection remains user-triggered.
 2. Choose a video, playback method, and optional associated subtitle. A single
-   candidate is preselected; multiple candidates require choosing one.
+   candidate is preselected; multiple candidates require choosing one. A found
+   subtitle is preselected; choose No subtitle to omit it.
 3. Subtitle language appears only when a subtitle is selected. Invalid language
    disables transfer; no subtitle remains a valid video-only choice.
 4. **Copy transfer for iPad** remains accessible at the bottom of the panel.
@@ -126,6 +129,6 @@ Run `npm run build:safari-probe`, then build/run the iPad app in Xcode (or the
 macOS extension target for desktop). Source changes alone do not update the installed
 extension. The current generated resources are already rebuilt in this workspace.
 
-On iPad Safari, test Find video, selection with/without subtitles, subtitle watch,
+On iPad Safari, test Find video, selection with/without subtitles, subtitle watch across long playback,
 copy confirmation, app Paste, and casting. Also test narrow windows, light/dark,
 larger text, keyboard focus, permission failure, and manual clipboard fallback.
